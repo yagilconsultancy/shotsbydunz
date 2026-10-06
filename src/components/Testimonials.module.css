@@ -1,0 +1,23 @@
+.grid {
+  display: grid;
+  gap: 40px;
+}
+
+.quote {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+  padding-left: 20px;
+  border-left: 2px solid var(--amber);
+}
+
+.quote p {
+  font-size: var(--step-2);
+  line-height: 1.35;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

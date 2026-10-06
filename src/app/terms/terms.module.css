@@ -1,0 +1,45 @@
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.jump a {
+  padding: 8px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: var(--step--1);
+}
+
+.h2 {
+  font-size: var(--step-4);
+  margin-bottom: 32px;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.4em;
+  display: grid;
+  gap: 32px;
+  max-width: 780px;
+}
+
+.list > li::marker {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--amber);
+}
+
+.list h3 {
+  font-size: var(--step-2);
+  margin-bottom: 10px;
+}
+
+.list ul {
+  margin: 0;
+  padding-left: 1.1em;
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+}

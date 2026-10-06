@@ -1,0 +1,368 @@
+.kicker {
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--booth);
+  margin-bottom: var(--space-4);
+}
+
+.heroLine {
+  font-size: var(--step-1);
+  max-width: 38ch;
+  margin-bottom: var(--space-6);
+  color: rgba(240, 233, 223, 0.88);
+}
+
+.h2 {
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.h3 {
+  font-size: var(--step-2);
+  margin-bottom: var(--space-4);
+}
+
+.story {
+  display: grid;
+  gap: var(--space-7);
+  padding-block: clamp(var(--space-8), 11vw, var(--space-10));
+  align-items: center;
+}
+
+.storyImage {
+  width: 100%;
+  max-width: 520px;
+}
+
+.storyText {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.events {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--step-2);
+  color: var(--booth);
+}
+
+.paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+
+.pkgHead {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-7);
+}
+
+.pkgLede {
+  color: var(--paper-muted);
+  font-size: var(--step-1);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #e3d8ce;
+  vertical-align: middle;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  padding-top: 28px;
+  border-bottom: 2px solid var(--paper-ink);
+}
+
+.table thead th[scope="col"]:not(:first-child),
+.table td {
+  width: 22%;
+  text-align: center;
+}
+
+.table tfoot :global(.btn) {
+  padding: 0 14px;
+  min-height: 44px;
+  font-size: var(--step--1);
+}
+
+@media (min-width: 768px) {
+  .table th,
+  .table td {
+    padding: 14px 16px;
+  }
+
+  .table thead th[scope="col"]:not(:first-child),
+  .table td {
+    width: 30%;
+    text-align: left;
+  }
+
+  .table tfoot :global(.btn) {
+    padding: 0 26px;
+    min-height: 50px;
+    font-size: var(--step-0);
+  }
+}
+
+.table [data-highlight="true"] {
+  background: #fde7ef;
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--booth);
+  color: var(--booth-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pkgName {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.pkgPrice {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.table tbody th {
+  font-weight: 500;
+  font-size: var(--step--1);
+}
+
+@media (min-width: 768px) {
+  .table tbody th {
+    font-size: var(--step-0);
+  }
+}
+
+.yes,
+.no {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--step--1);
+}
+
+.yes::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper-ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23f5efe7' stroke-width='2'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+
+.no {
+  color: #a3959c;
+}
+
+.no::before {
+  content: "";
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.yes,
+.no {
+  font-size: 0;
+}
+
+.table tfoot td {
+  border-bottom: 0;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.extras {
+  display: grid;
+  gap: var(--space-7);
+  margin-top: var(--space-8);
+}
+
+.addOns {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #ddd2c8;
+}
+
+.addOns li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 14px 0;
+  border-bottom: 1px solid #ddd2c8;
+}
+
+.terms {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  color: var(--paper-muted);
+}
+
+.terms h3 {
+  color: var(--paper-ink);
+}
+
+.printsHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+
+.prints {
+  display: grid;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+.printsStrips {
+  --strip-w: min(27vw, 150px);
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 28px);
+}
+
+.specs {
+  margin: var(--space-8) 0 0;
+  max-width: 760px;
+  border-top: 1px solid var(--line);
+}
+
+.specs div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.specs dt {
+  font-weight: 600;
+}
+
+.specs dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.bundle {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--booth);
+  border-bottom: 1px solid var(--booth);
+  align-items: center;
+  justify-items: start;
+}
+
+.bundle h2 {
+  margin-bottom: var(--space-4);
+}
+
+.faq {
+  max-width: 860px;
+  border-top: 1px solid var(--line);
+}
+
+.faq details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq summary {
+  cursor: pointer;
+  padding: 22px 0;
+  font-size: var(--step-1);
+  font-weight: 500;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  color: var(--booth);
+  font-size: 1.4em;
+  line-height: 1;
+  transition: transform 200ms var(--ease-out);
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq details p {
+  padding-bottom: 22px;
+  max-width: 62ch;
+}
+
+@media (min-width: 768px) {
+  .story {
+    grid-template-columns: minmax(300px, 520px) 1fr;
+    gap: var(--space-9);
+  }
+
+  .extras {
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-9);
+  }
+
+  .specs div {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .bundle {
+    grid-template-columns: 1fr auto;
+  }
+
+  .prints {
+    grid-template-columns: 1fr 1.1fr;
+  }
+}

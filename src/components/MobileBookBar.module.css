@@ -1,0 +1,21 @@
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  background: rgba(17, 13, 18, 0.92);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+
+.btn {
+  width: 100%;
+}
+
+@media (min-width: 1100px) {
+  .bar {
+    display: none;
+  }
+}

@@ -1,0 +1,131 @@
+.head {
+  display: grid;
+  gap: var(--space-5);
+  padding-top: clamp(var(--space-7), 7vw, var(--space-9));
+  padding-bottom: clamp(var(--space-6), 4vw, var(--space-7));
+}
+
+.back {
+  width: fit-content;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: var(--step--1);
+}
+
+.back::before {
+  content: "← ";
+}
+
+.title {
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.credits {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4) var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.credits dt {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.credits dd {
+  margin: 0;
+}
+
+.player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 88svh;
+  background: #000;
+}
+
+.player[data-orientation="tall"] {
+  aspect-ratio: auto;
+  height: min(88svh, 980px);
+}
+
+.player iframe,
+.cover {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.runtime {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--space-4);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(17, 13, 18, 0.7);
+  backdrop-filter: blur(6px);
+  font-size: 0.8rem;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-7);
+  padding-block: clamp(var(--space-8), 9vw, var(--space-9));
+}
+
+.story {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 30ch;
+}
+
+.side {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+  justify-items: start;
+}
+
+.quote {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.quote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--step-2);
+  line-height: 1.25;
+}
+
+.quote footer {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.next {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-8) clamp(var(--space-8), 10vw, var(--space-10));
+}
+
+@media (min-width: 768px) {
+  .credits {
+    grid-template-columns: repeat(5, auto);
+    justify-content: start;
+    column-gap: var(--space-8);
+  }
+
+  .body {
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-9);
+  }
+}

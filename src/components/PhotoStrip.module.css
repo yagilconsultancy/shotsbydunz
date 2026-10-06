@@ -1,0 +1,27 @@
+.strip {
+  display: grid;
+  gap: 7px;
+  width: var(--strip-w, 140px);
+  padding: 9px 9px 12px;
+  background: var(--paper);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    0 18px 36px -12px rgba(0, 0, 0, 0.45);
+}
+
+.frame {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background-color: #b9a9ad;
+  background-size: cover;
+}
+
+.caption {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--paper-ink);
+  text-align: center;
+  padding-top: 3px;
+}

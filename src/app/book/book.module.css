@@ -1,0 +1,29 @@
+.wrap {
+  display: grid;
+  gap: 40px;
+  padding-top: clamp(40px, 6vw, 80px);
+  padding-bottom: clamp(64px, 10vw, 128px);
+  align-items: start;
+}
+
+.intro {
+  display: grid;
+  gap: 16px;
+}
+
+.formCol {
+  max-width: 760px;
+  width: 100%;
+}
+
+@media (min-width: 1000px) {
+  .wrap {
+    grid-template-columns: 1fr 1.6fr;
+    gap: 80px;
+  }
+
+  .intro {
+    position: sticky;
+    top: calc(var(--header-h) + 40px);
+  }
+}

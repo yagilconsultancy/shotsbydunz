@@ -1,0 +1,282 @@
+.form {
+  display: grid;
+  gap: 28px;
+}
+
+.progress {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.progress li {
+  display: grid;
+  gap: 8px;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+
+.progress li[data-state="done"] .bar,
+.progress li[data-state="current"] .bar {
+  background: var(--amber);
+}
+
+.progress li[data-state="current"] {
+  color: var(--bone);
+  font-weight: 600;
+}
+
+.stepLabel {
+  display: none;
+}
+
+.stepTitle {
+  font-size: var(--step-4);
+  outline: none;
+}
+
+.fields {
+  display: grid;
+  gap: 24px;
+}
+
+.row {
+  display: grid;
+  gap: 24px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field label,
+.fieldset legend {
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--bone);
+  font: 400 1rem / 1.4 var(--font-body);
+  color-scheme: dark;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(242, 179, 61, 0.25);
+}
+
+.field [aria-invalid="true"] {
+  border-color: var(--tally);
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.fieldset legend {
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.hint {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.error {
+  font-size: var(--step--1);
+  color: #ff8a86;
+  font-weight: 500;
+}
+
+.checks {
+  display: grid;
+  gap: 8px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.check:has(input:checked) {
+  border-color: var(--amber);
+  background: rgba(242, 179, 61, 0.08);
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--amber);
+  flex: none;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  position: relative;
+  cursor: pointer;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+}
+
+.pill span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+}
+
+.pill input:checked + span {
+  background: var(--bone);
+  color: var(--ink);
+  border-color: var(--bone);
+}
+
+.pill input:focus-visible + span {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.summary {
+  padding: 22px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+}
+
+.summary h3 {
+  font-size: var(--step-2);
+}
+
+.summary dl {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.summary dl div {
+  display: grid;
+  gap: 2px;
+}
+
+.summary dt {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.summary dd {
+  margin: 0;
+}
+
+.policy {
+  display: block;
+}
+
+.small {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.sendError {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: rgba(232, 67, 63, 0.12);
+  border: 1px solid var(--tally);
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.nextBtn {
+  flex: 1;
+}
+
+@media (min-width: 640px) {
+  .stepLabel {
+    display: block;
+  }
+
+  .row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .checks {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .summary dl div {
+    grid-template-columns: 110px 1fr;
+    gap: 16px;
+  }
+
+  .nextBtn {
+    flex: none;
+    margin-left: auto;
+    min-width: 220px;
+  }
+}

@@ -1,0 +1,124 @@
+.kicker {
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  max-width: 14ch;
+}
+
+.intro {
+  padding-block: clamp(var(--space-8), 10vw, var(--space-10)) 0;
+}
+
+.introText {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.4vw, 2.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 30ch;
+}
+
+.h2 {
+  font-size: var(--step-3);
+  margin-bottom: var(--space-6);
+}
+
+.offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.offer {
+  display: grid;
+  gap: var(--space-1) var(--space-6);
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--bone);
+}
+
+.offerName {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  transition: color 160ms ease;
+}
+
+.offerSummary {
+  color: var(--muted);
+}
+
+.offerMeta {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  font-size: var(--step--1);
+}
+
+.price {
+  color: var(--amber);
+  font-weight: 600;
+  font-size: var(--step-0);
+}
+
+.note {
+  margin-top: var(--space-5);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.workHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.work {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-7) var(--space-5);
+  align-items: start;
+}
+
+.cta {
+  display: grid;
+  gap: var(--space-6);
+  padding-bottom: clamp(var(--space-8), 10vw, var(--space-10));
+}
+
+.ctaTitle {
+  font-size: var(--step-4);
+  font-weight: 400;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .offer:hover .offerName {
+    color: var(--amber);
+  }
+}
+
+@media (min-width: 900px) {
+  .offer {
+    grid-template-columns: minmax(280px, 1.1fr) 1.3fr auto;
+    align-items: baseline;
+  }
+
+  .offerMeta {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .work {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

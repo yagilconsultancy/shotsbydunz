@@ -17,11 +17,13 @@ import {
   packageOptions,
   referralSources,
   serviceOptions,
+  songMixOptions,
   validateStep,
   type Booking,
   type Errors,
 } from "@/lib/booking";
 import { policies } from "@/content/site";
+import Turnstile, { turnstileOn } from "./Turnstile";
 import styles from "./BookingForm.module.css";
 
 const steps = ["About you", "What you need", "Your event", "The details"];
@@ -42,6 +44,8 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
   const [errors, setErrors] = useState<Errors>({});
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
+  const [token, setToken] = useState("");
+  const [attempt, setAttempt] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -93,19 +97,22 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
     const e = validateStep(step, data);
     setErrors(e);
     if (Object.keys(e).length) return;
+    if (turnstileOn && !token) return setSendError("Please complete the quick check above the button.");
     setSending(true);
     setSendError("");
     try {
       const res = await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstile: token }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
+        setToken("");
+        setAttempt((n) => n + 1);
         if (json.errors) {
           setErrors(json.errors);
-          const firstStep = [["name", "email", "phone"], ["services", "boothPackage", "videos", "hours"], ["date", "location", "eventType"]].findIndex((keys) =>
+          const firstStep = [["name", "email", "phone", "contactMethod"], ["services", "boothPackage", "videos", "hours"], ["date", "startTime", "location", "eventType", "guests", "songMix"]].findIndex((keys) =>
             keys.some((k) => k in json.errors),
           );
           if (firstStep >= 0) setStep(firstStep);
@@ -113,7 +120,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         setSendError(json.message || "Your request didn’t send. Check your connection and try again.");
         return;
       }
-      router.push(`/book/thanks?name=${encodeURIComponent(data.name.split(" ")[0])}`);
+      router.push("/book/thanks");
     } catch {
       setSendError("Your request didn’t send. Check your connection and try again.");
     } finally {
@@ -284,7 +291,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                   Song mix <span className={styles.optional}>optional</span>
                 </legend>
                 <div className={styles.pills}>
-                  {["One song", "Two-song mix", "No preference"].map((m) => (
+                  {songMixOptions.map((m) => (
                     <label key={m} className={styles.pill}>
                       <input type="radio" name="songMix" checked={data.songMix === m} onChange={() => set("songMix", m)} />
                       <span>{m}</span>
@@ -371,6 +378,10 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                 I’ve read and agree to the{" "}
                 <Link href={booth && !video ? "/terms#booth" : "/terms"} target="_blank" className="text-link">
                   terms and conditions
+                </Link>{" "}
+                and the{" "}
+                <Link href="/privacy" target="_blank" className="text-link">
+                  privacy policy
                 </Link>
                 .
               </span>
@@ -379,6 +390,8 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
           </div>
         </div>
       )}
+
+      {step === steps.length - 1 && <Turnstile key={attempt} onToken={setToken} />}
 
       {sendError && (
         <p className={styles.sendError} role="alert">

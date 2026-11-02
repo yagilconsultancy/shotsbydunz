@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Frame from "./Frame";
+import { getLenis } from "@/lib/motion";
 import type { Still } from "@/content/portfolio";
 import styles from "./StillsGallery.module.css";
 
@@ -11,6 +12,7 @@ export default function StillsGallery({ stills, title }: { stills: Still[]; titl
 
   const show = (i: number) => {
     setOpen(i);
+    getLenis()?.stop();
     dialogRef.current?.showModal();
   };
   const close = () => dialogRef.current?.close();
@@ -42,8 +44,12 @@ export default function StillsGallery({ stills, title }: { stills: Still[]; titl
       <dialog
         ref={dialogRef}
         className={styles.dialog}
+        data-lenis-prevent
         aria-label={`${title} photos`}
-        onClose={() => setOpen(null)}
+        onClose={() => {
+          setOpen(null);
+          getLenis()?.start();
+        }}
         onClick={(e) => e.target === dialogRef.current && close()}
       >
         {open !== null && (

@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { connection } from "next/server";
 import "@fontsource-variable/bodoni-moda/opsz.css";
 import "@fontsource-variable/instrument-sans";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileBookBar from "@/components/MobileBookBar";
 import PreviewBanner from "@/components/PreviewBanner";
+import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/content/site";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -33,7 +36,9 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Pages render per request so each one carries the nonce from src/proxy.ts.
+  await connection();
   return (
     <html lang="en-CA">
       <body>
@@ -45,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main">{children}</main>
         <Footer />
         <MobileBookBar />
+        <SmoothScroll />
       </body>
     </html>
   );

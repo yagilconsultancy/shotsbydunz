@@ -10,6 +10,7 @@ Yagil is a designer and PM, not a programmer. Explain commands in plain language
 - Content (text, prices, videos, policies) lives only in `src/content/`. Pages read from there; don't hard-code copy in components.
 - Placeholder content is marked with a `SAMPLE` comment and listed in `docs/CONTENT-TRACKER.md`. When replacing one, remove the comment and tick the tracker.
 - Booking rules live in `src/lib/booking.ts` and are checked in the browser and again in `src/app/api/booking/route.ts`. Change both behaviours through that one file.
+- Motion: use the data attributes in `docs/DESIGN-SYSTEM.md` (`data-reveal`, `data-parallax`, `data-speed`) and the components in `src/components/bits/`. Don't add new animation libraries. Everything must still work with reduced motion.
 - Colours and type come from the tokens in `src/app/globals.css`. Don't add new hex values in components.
 - Write code like a person would: no banner comments, no comments that repeat the code, comments only for the "why".
 - Before saying a change is done: `npm run lint` and `npm run build` both pass, and the page has been checked at phone and desktop widths.

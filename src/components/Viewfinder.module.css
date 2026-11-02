@@ -98,7 +98,7 @@
   padding: 0 calc(var(--gutter) + 12px) clamp(56px, 9vw, 104px);
 }
 
-.content > * {
+.content > *:not([data-split]) {
   animation: rise 1s var(--ease-out) both;
 }
 

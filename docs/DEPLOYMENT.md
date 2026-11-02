@@ -26,6 +26,9 @@ Commands are for PowerShell in the VS Code terminal. Run them one line at a time
    - `NEXT_PUBLIC_PREVIEW_MODE` = `true`
    - `NEXT_PUBLIC_SITE_URL` = the Vercel address (you can fill this in after the first deploy, then redeploy)
 6. Deploy. Vercel gives you a link like `shotsbydunz.vercel.app`. That's the link to share with Dunz.
+7. Work through `docs/security/ACCOUNT-CHECKLIST.md` (two-factor logins, protected `main`, firewall rate limit).
+
+Until Resend is set up, the live forms tell visitors to email or text Dunz instead of sending. That's deliberate: see `docs/security/FINDINGS-1.md`.
 
 ## Every change after that
 

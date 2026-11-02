@@ -8,7 +8,7 @@ export default function PillarPanels() {
     <ul className={styles.panels}>
       {pillars.map((p) => (
         <li key={p.id}>
-          <Link href={p.href} className={styles.panel} data-pillar={p.id}>
+          <Link href={p.href} className={styles.panel} data-pillar={p.id} data-parallax>
             <Frame src={p.image} alt={p.imageAlt} className={styles.image} label={p.name} />
             <span className={styles.text}>
               <span className={styles.name}>{p.name}</span>

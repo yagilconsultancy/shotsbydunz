@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import { rowsToHtml, rowsToText, sendMail } from "@/lib/mail";
+import { guardForm } from "@/lib/security";
 import { site } from "@/content/site";
 
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => ({}));
+  const guard = await guardForm(req, "contact");
+  if (!guard.ok) return guard.response;
+  const body = guard.body;
   const name = typeof body.name === "string" ? body.name.trim().slice(0, 120) : "";
   const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : "";
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 4000) : "";
@@ -24,10 +27,15 @@ export async function POST(req: Request) {
   const sent = await sendMail({
     to: process.env.BOOKING_TO_EMAIL || site.email,
     replyTo: email,
-    subject: `Website message from ${name}`,
+    subject: "New message from the website",
     html: rowsToHtml("New message", rows),
     text: rowsToText(rows),
   });
+  if (sent.notConfigured)
+    return NextResponse.json(
+      { message: `The contact form isn’t switched on yet, so this message wasn’t sent. Please email ${site.email} or text ${site.phone}.` },
+      { status: 503 },
+    );
   if (!sent.ok) return NextResponse.json({ message: `Your message didn’t send. Email ${site.email} directly.` }, { status: 502 });
   return NextResponse.json({ ok: true });
 }

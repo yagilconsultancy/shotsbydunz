@@ -56,6 +56,18 @@ Sizes (`--step--1` to `--step-5`) scale with screen width. The hero heading is t
 
 ## Motion
 
+Smooth scrolling (Lenis) and scroll effects (GSAP) live in `src/components/SmoothScroll.tsx`. Pages switch effects on with data attributes rather than code:
+
+| Attribute | Effect |
+| --- | --- |
+| `data-reveal` | Fades and lifts into view once, in a short stagger with its neighbours |
+| `data-parallax` | The photo inside drifts slower than the page (the frame must clip it) |
+| `data-speed="0.1"` | The element drifts by that share of the screen height; negative drifts up |
+| `data-hero-media` / `data-hero-copy` | Set inside `Viewfinder`: the hero photo eases away and the headline lifts off as you scroll past |
+
+Headlines use `SplitText` (letters for short titles, words for long ones). Long statements use `ScrollReveal`, which sharpens word by word as you scroll. All of it is off for reduced motion, and smooth scrolling is off on touch screens.
+
+
 One orchestrated moment: on load, the hero photo settles from a slight zoom while the headline and buttons rise in sequence, then the recording light blinks and the timecode runs. Photos zoom 3 to 4% on hover with a mouse only. Everything else changes only in response to the visitor (hover, menu, form steps). Visitors who turn on reduced motion get no animation.
 
 ## Buttons and copy

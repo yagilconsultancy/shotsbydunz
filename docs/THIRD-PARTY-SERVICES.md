@@ -10,8 +10,19 @@ Everything outside our own code that the site depends on, or will. Each one need
 | Domain (e.g. shotsbydunz.com) | The real web address and a matching email sender | Launch | Waiting on Dunz: does she own one? | About $15 to $25 CAD a year |
 | Vimeo or YouTube | Hosts portfolio and showreel videos | Real portfolio | Waiting on Dunz's videos | YouTube free; Vimeo Starter about $12 USD a month (no ads, cleaner player) |
 | Google Analytics or Vercel Analytics | Visits, bookings started and finished | Measuring the goals in the PRD | Not started | Free |
-| Cloudflare Turnstile | Stronger spam protection than the hidden field | Only if spam starts arriving | Not needed yet | Free |
+| Cloudflare Turnstile | Invisible bot check on the booking and contact forms | Recommended before launch (Findings 1) | Code ready and switched off; turns on when its two keys are added to Vercel | Free |
+| Vercel Firewall | Rate limit on the form addresses (`/api/*`) | Launch | Settings only, see `docs/security/ACCOUNT-CHECKLIST.md` | Free on Hobby |
 | Stripe or Square | Online deposit payment | Later phase | Not started; Dunz uses e-transfer today | About 2.9% + 30¢ per payment |
+
+## Code libraries
+
+These are installed with `npm install` and need no account.
+
+| Library | What it does on the site | Licence |
+| --- | --- | --- |
+| GSAP (`gsap`, `@gsap/react`) | Scroll effects (ScrollTrigger) and headline animation (SplitText) | Free GSAP "no charge" licence, including commercial sites |
+| Lenis (`lenis`) | Smooth scrolling | MIT |
+| React Bits (copied into `src/components/bits/`) | SplitText, ScrollReveal, Noise (film grain), Magnet | MIT with Commons Clause: fine to use in this website; the components can't be resold on their own. Keep `src/components/bits/LICENSE.md` |
 
 ## Setting up Resend (when we get there)
 
@@ -25,6 +36,13 @@ Everything outside our own code that the site depends on, or will. Each one need
 5. Redeploy. Send a test booking and check both inboxes.
 
 Never put the API key in the code or commit it. It only goes in Vercel and in your local `.env.local`, which git ignores.
+
+## Setting up Cloudflare Turnstile (when we get there)
+
+1. Create a free Cloudflare account and open Turnstile, then Add widget.
+2. Name it ShotsByDunz, add the hostnames (`shotsbydunz.vercel.app`, later the real domain, and `localhost` for testing) and choose Managed.
+3. In Vercel, Project, Settings, Environment Variables, add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (the site key) and `TURNSTILE_SECRET_KEY` (the secret key, marked Sensitive).
+4. Redeploy. A small check appears above the Send buttons and the server refuses forms without a valid pass.
 
 ## Accounts and ownership
 

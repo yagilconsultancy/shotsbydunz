@@ -56,6 +56,7 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | FAQ | `/faq` | Questions grouped by Booking, Coverage, Delivery, Music, SBD Booths. Includes FAQ structured data for Google |
 | Contact | `/contact` | Call and text buttons, email, socials, service area, hours, short message form |
 | Terms | `/terms` | Video terms (from Dunz's T&C) and booth terms |
+| Privacy | `/privacy` | What the forms collect, why, who else handles it, how long it's kept and how to have it deleted (PIPEDA). Draft for Dunz to confirm |
 | Not found | any bad link | Friendly 404 with links back |
 
 Every page has a sticky "Book Me" button: in the header on desktop, as a bar at the bottom on phones. On the booth page the phone bar becomes "Check booth availability".
@@ -75,18 +76,20 @@ Rules the form enforces, in the browser and again on the server:
 
 - Video bookings need at least 48 hours' notice; anything including a booth needs 72 hours.
 - Required fields as listed above; email and phone must look valid.
-- Terms must be accepted.
+- Every menu field (contact method, booth package, hours, event type, song mix, budget, how they found Dunz) only accepts its listed options. Dates must be real calendar dates no more than two years ahead; start time and guest count must be real values.
+- Terms must be accepted; the checkbox links to the terms and the privacy policy.
 - A hidden "website" field catches spam bots; anything that fills it is silently dropped.
+- The server accepts the forms only from the site itself, as JSON, up to 16 KB, and at most 5 times in 10 minutes from one address. Cloudflare Turnstile adds a bot check when its keys are set.
 
 Links can pre-fill the form: `/book?service=event-videography`, `/book?service=booth&package=unlimited-prints`, `/book?event=weddings`, `/book?service=booth&bundle=1`.
 
 When a request is sent:
 
-- Dunz gets an email with every field, with reply-to set to the client.
-- The client gets a confirmation email with their services, date, location and deposit rules.
+- Dunz gets an email with every field, with reply-to set to the client. The subject names the event type and date only.
+- The client gets a confirmation email in fixed wording with their chosen services, booth package, date and deposit rules. It never repeats anything typed into the form, so the site can't be used to send someone else's words to a stranger.
 - The visitor lands on `/book/thanks`.
 
-Until Resend is set up, both emails are printed in the terminal (or the Vercel log) instead of being sent. The form still works end to end.
+Until Resend is set up, the deployed site says plainly that online booking isn't switched on yet and asks the visitor to email or text Dunz, so no request is silently lost and no details are written to the hosting logs. On a developer's computer (`npm run dev`) the emails are printed in the terminal instead.
 
 ## Business rules shown on the site
 

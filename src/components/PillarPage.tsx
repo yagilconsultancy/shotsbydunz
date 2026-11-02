@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Viewfinder from "./Viewfinder";
 import WorkTile from "./WorkTile";
+import SplitText from "./bits/SplitText";
+import ScrollReveal from "./bits/ScrollReveal";
 import { getPillar, type PillarId } from "@/content/pillars";
 import { services } from "@/content/services";
 import { projectsFor } from "@/content/portfolio";
@@ -16,11 +18,11 @@ export default function PillarPage({ id, heading }: { id: Exclude<PillarId, "boo
     <>
       <Viewfinder image={pillar.image} imageAlt={pillar.imageAlt} label={pillar.name} size="tall">
         <p className={styles.kicker}>{pillar.name}</p>
-        <h1 className={styles.title}>{heading}</h1>
+        <SplitText tag="h1" className={styles.title} text={heading} splitType="words" stagger={0.07} delay={0.25} />
       </Viewfinder>
 
       <section className={`container ${styles.intro}`}>
-        <p className={styles.introText}>{pillar.intro}</p>
+        <ScrollReveal className={styles.introText}>{pillar.intro}</ScrollReveal>
       </section>
 
       <section className="container section-tight" aria-labelledby="offer">
@@ -29,7 +31,7 @@ export default function PillarPage({ id, heading }: { id: Exclude<PillarId, "boo
         </h2>
         <ul className={styles.offers}>
           {list.map((s) => (
-            <li key={s.slug}>
+            <li key={s.slug} data-reveal>
               <Link href={`/services/${s.slug}`} className={styles.offer}>
                 <span className={styles.offerName}>{s.name}</span>
                 <span className={styles.offerSummary}>{s.summary}</span>
@@ -58,7 +60,9 @@ export default function PillarPage({ id, heading }: { id: Exclude<PillarId, "boo
           </div>
           <div className={styles.work}>
             {work.map((p) => (
-              <WorkTile key={p.slug} project={p} />
+              <div key={p.slug} data-reveal>
+                <WorkTile project={p} />
+              </div>
             ))}
           </div>
         </section>

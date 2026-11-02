@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Frame from "@/components/Frame";
 import WorkTile from "@/components/WorkTile";
 import StillsGallery from "@/components/StillsGallery";
+import SplitText from "@/components/bits/SplitText";
 import { getProject, projects } from "@/content/portfolio";
 import { getPillar } from "@/content/pillars";
 import styles from "./project.module.css";
@@ -37,8 +38,8 @@ export default async function ProjectPage({ params }: Params) {
         <Link href={`/portfolio?category=${pillar.id}`} className={styles.back}>
           {pillar.name}
         </Link>
-        <h1 className={styles.title}>{project.title}</h1>
-        <dl className={styles.credits}>
+        <SplitText tag="h1" className={styles.title} text={project.title} delay={0.1} stagger={0.03} />
+        <dl className={styles.credits} data-reveal>
           <div>
             <dt>Client</dt>
             <dd>{project.client}</dd>
@@ -62,7 +63,7 @@ export default async function ProjectPage({ params }: Params) {
         </dl>
       </header>
 
-      <div className={styles.player} data-orientation={project.orientation}>
+      <div className={styles.player} data-orientation={project.orientation} data-parallax>
         {project.video ? (
           <iframe src={project.video} title={project.title} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
         ) : (

@@ -1,4 +1,5 @@
 import Frame from "./Frame";
+import Noise from "./bits/Noise";
 import Timecode from "./Timecode";
 import styles from "./Viewfinder.module.css";
 
@@ -19,8 +20,11 @@ export default function Viewfinder({ children, image, imageAlt, videoSrc, label 
         {videoSrc ? (
           <video src={videoSrc} poster={image} autoPlay muted loop playsInline aria-hidden="true" />
         ) : (
-          <Frame src={image} alt={imageAlt} priority className={styles.still} />
+          <div className={styles.still} data-hero-media>
+            <Frame src={image} alt={imageAlt} priority className={styles.still} />
+          </div>
         )}
+        <Noise opacity={0.09} fps={12} size={1.2} dust={0.12} />
       </div>
       <div className={styles.hud} aria-hidden="true">
         <span className={styles.rec}>
@@ -32,7 +36,9 @@ export default function Viewfinder({ children, image, imageAlt, videoSrc, label 
         </span>
         <span className={styles.lbl}>{label}</span>
       </div>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content} data-hero-copy>
+        {children}
+      </div>
     </section>
   );
 }

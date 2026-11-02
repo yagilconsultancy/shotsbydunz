@@ -1,30 +1,34 @@
 type Mail = { to: string; subject: string; html: string; text: string; replyTo?: string };
 
-// Sends through Resend when RESEND_API_KEY is set. Without a key (local development or the
-// preview before email is set up) the message is printed to the server log instead, so the
-// form still works end to end.
-export async function sendMail(mail: Mail): Promise<{ ok: boolean; logged?: boolean }> {
+export type MailResult = { ok: boolean; notConfigured?: boolean };
+
+// Without a Resend key, local development prints the message so the form can be tested end
+// to end. A deployed site refuses instead: pretending to send would lose real enquiries, and
+// printing them would put visitors' details in the hosting logs.
+export async function sendMail(mail: Mail): Promise<MailResult> {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.BOOKING_FROM_EMAIL;
   if (!key || !from) {
-    console.log(`[mail not configured] To: ${mail.to}\nSubject: ${mail.subject}\n\n${mail.text}`);
-    return { ok: true, logged: true };
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[mail not configured] To: ${mail.to}\nSubject: ${mail.subject}\n\n${mail.text}`);
+      return { ok: true };
+    }
+    return { ok: false, notConfigured: true };
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from,
-      to: [mail.to],
-      subject: mail.subject,
-      html: mail.html,
-      text: mail.text,
-      reply_to: mail.replyTo,
-    }),
-  });
-  if (!res.ok) console.error("Resend error", res.status, await res.text());
-  return { ok: res.ok };
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, html: mail.html, text: mail.text, reply_to: mail.replyTo }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) console.error("Resend error", res.status);
+    return { ok: res.ok };
+  } catch {
+    console.error("Resend unreachable");
+    return { ok: false };
+  }
 }
 
 export function escapeHtml(s: string) {

@@ -4,6 +4,8 @@ import Viewfinder from "@/components/Viewfinder";
 import Frame from "@/components/Frame";
 import PhotoStrip from "@/components/PhotoStrip";
 import Steps from "@/components/Steps";
+import SplitText from "@/components/bits/SplitText";
+import Magnet from "@/components/bits/Magnet";
 import { boothAddOns, boothEvents, boothPackages, boothSpecs, boothSteps } from "@/content/booths";
 import { faqGroups } from "@/content/faq";
 import { policies, site } from "@/content/site";
@@ -25,24 +27,33 @@ export default function BoothsPage() {
     <div className={styles.page}>
       <Viewfinder image="/images/booth-setup.jpg" imageAlt="The SBD booth styled with a sequin backdrop and balloon garland" label="SBD Booth" size="tall" focus="70% 40%">
         <p className={styles.kicker}>A ShotsByDunz experience</p>
-        <h1 className={styles.title}>SBD Booth</h1>
+        <SplitText tag="h1" className={styles.title} text="SBD Booth" delay={0.3} stagger={0.05} />
         <p className={styles.heroLine}>Props, prints and instant sharing, styled to your night and run by our attendant.</p>
         <div className="btn-row">
-          <Link href="/book?service=booth" className="btn btn-booth">
-            Check your date
-          </Link>
+          <Magnet>
+            <Link href="/book?service=booth" className="btn btn-booth">
+              Check your date
+            </Link>
+          </Magnet>
           <a href="#packages" className="btn btn-ghost">
             Packages from $350
           </a>
         </div>
       </Viewfinder>
 
-      <section className={`container ${styles.story}`} aria-labelledby="night">
-        <Frame src="/images/booth-wedding.jpg" alt="Newlyweds and friends laughing at the booth" ratio="4 / 5" className={styles.storyImage} label="At the booth" />
+      <section className={`container ${styles.story}`} aria-label="At the booth">
+        <div className={styles.storyImage} data-parallax>
+          <Frame src="/images/booth-wedding.jpg" alt="Newlyweds and friends laughing at the booth" ratio="4 / 5" label="At the booth" />
+        </div>
         <div className={styles.storyText}>
-          <h2 id="night" className={styles.h2}>
-            Your guests take the night home with them.
-          </h2>
+          <SplitText
+            tag="h2"
+            className={styles.h2}
+            text="Your guests take the night home with them."
+            splitType="words"
+            stagger={0.06}
+            onScroll
+          />
           <p className="lede">
             The booth becomes the room’s meeting point. Guests send photos, GIFs and boomerangs to their phones in
             seconds, walk away with prints and keychains, and leave you a guest book full of faces and messages.
@@ -64,7 +75,7 @@ export default function BoothsPage() {
             <p className={styles.pkgLede}>Both run for 3 hours with an attendant on site. Add hours and extras below.</p>
           </div>
 
-          <div className={styles.tableWrap}>
+          <div className={styles.tableWrap} data-reveal>
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -143,11 +154,19 @@ export default function BoothsPage() {
           </a>
         </div>
         <div className={styles.prints}>
-          <Frame src="/images/booth-prints.jpg" alt="Printed strips and photo keychains on a table" ratio="4 / 5" className={styles.printsImage} label="Prints and keychains" />
+          <div className={styles.printsImage} data-parallax>
+            <Frame src="/images/booth-prints.jpg" alt="Printed strips and photo keychains on a table" ratio="4 / 5" label="Prints and keychains" />
+          </div>
           <div className={styles.printsStrips}>
-            <PhotoStrip images={["/images/booth-wedding.jpg"]} caption="Amara & Tobi" tilt={-5} />
-            <PhotoStrip images={["/images/rooftop-birthday.jpg"]} caption="Kemi at 30" tilt={3} />
-            <PhotoStrip images={["/images/studio-launch.jpg"]} caption="Glow Studio" tilt={-2} />
+            <div data-speed="0.1">
+              <PhotoStrip images={["/images/booth-wedding.jpg"]} caption="Amara & Tobi" tilt={-5} />
+            </div>
+            <div data-speed="-0.05">
+              <PhotoStrip images={["/images/rooftop-birthday.jpg"]} caption="Kemi at 30" tilt={3} />
+            </div>
+            <div data-speed="0.16">
+              <PhotoStrip images={["/images/studio-launch.jpg"]} caption="Glow Studio" tilt={-2} />
+            </div>
           </div>
         </div>
       </section>
@@ -170,7 +189,7 @@ export default function BoothsPage() {
       </section>
 
       <section className="container section-tight" aria-labelledby="bundle">
-        <div className={styles.bundle}>
+        <div className={styles.bundle} data-reveal>
           <div>
             <h2 id="bundle" className={styles.h2}>
               Film the night, too

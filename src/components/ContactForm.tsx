@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
+import Turnstile, { turnstileOn } from "./Turnstile";
 import styles from "./BookingForm.module.css";
 
 type Fields = { name: string; email: string; message: string; website: string };
@@ -10,6 +12,8 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<Partial<Fields>>({});
   const [state, setState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   const [failMsg, setFailMsg] = useState("");
+  const [token, setToken] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   const set = (k: keyof Fields, v: string) => {
     setData((d) => ({ ...d, [k]: v }));
@@ -18,14 +22,20 @@ export default function ContactForm() {
 
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
+    if (turnstileOn && !token) {
+      setFailMsg("Please complete the quick check above the button.");
+      return setState("failed");
+    }
     setState("sending");
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, turnstile: token }),
     }).catch(() => null);
     const json = res ? await res.json().catch(() => ({})) : {};
     if (res?.ok) return setState("sent");
+    setToken("");
+    setAttempt((n) => n + 1);
     if (json.errors) setErrors(json.errors);
     setFailMsg(json.message || (json.errors ? "" : "Your message didn’t send. Check your connection and try again."));
     setState("failed");
@@ -63,6 +73,14 @@ export default function ContactForm() {
         <textarea id="c-msg" rows={5} value={data.message} onChange={(e) => set("message", e.target.value)} aria-invalid={!!errors.message} aria-describedby={errors.message ? "c-msg-e" : undefined} />
         {errors.message && <p id="c-msg-e" className={styles.error}>{errors.message}</p>}
       </div>
+      <p className={styles.small}>
+        Your details are only used to reply to you. See the{" "}
+        <Link href="/privacy" className="text-link">
+          privacy policy
+        </Link>
+        .
+      </p>
+      <Turnstile key={attempt} onToken={setToken} />
       {failMsg && (
         <p className={styles.sendError} role="alert">
           {failMsg}

@@ -24,7 +24,7 @@
   z-index: -1;
 }
 
-.image :global(img) {
+.image {
   transition: transform 900ms var(--ease-out);
 }
 
@@ -72,7 +72,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .panel:hover .image :global(img) {
+  .panel:hover .image {
     transform: scale(1.04);
   }
 }

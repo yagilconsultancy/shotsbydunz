@@ -6,7 +6,7 @@ export default function Steps({ steps, accent = "amber" }: { steps: Step[]; acce
   return (
     <ol className={styles.steps} data-accent={accent}>
       {steps.map((s, i) => (
-        <li key={s.title} className={styles.step}>
+        <li key={s.title} className={styles.step} data-reveal>
           <span className={styles.num} aria-hidden="true">
             {i + 1}
           </span>

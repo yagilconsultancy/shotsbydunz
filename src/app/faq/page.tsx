@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { faqGroups } from "@/content/faq";
 import styles from "./faq.module.css";
 
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
   description: "Deposits, travel, turnaround, music, raw footage and SBD Booths, answered.",
 };
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -51,7 +53,7 @@ export default function FaqPage() {
           ))}
         </div>
       </section>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>
   );
 }

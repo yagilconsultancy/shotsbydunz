@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-10-10: security hardening (Findings 1)
+
+- Forms are accepted only from the site itself, as JSON, up to 16 KB, and at most 5 times in 10 minutes per visitor address. Malformed requests get a polite error instead of crashing.
+- Every menu field only accepts its listed options; dates must be real and no more than two years ahead.
+- The client confirmation email is fixed wording plus their menu choices, so nothing typed can be relayed to a stranger. Dunz's email subject no longer includes typed text.
+- Without email set up, the deployed site says so and gives Dunz's email and number, instead of claiming "Request sent". Visitor details are no longer written to the hosting logs.
+- Security headers on every response: content security policy with a per-page nonce, HTTPS only, no framing, no MIME sniffing, strict referrer, camera/microphone/location blocked, and noindex while in preview. Pages now render per request so each carries its nonce.
+- Optional Cloudflare Turnstile bot check, switched on by two Vercel environment variables.
+- The thank-you page no longer shows a name from the web address.
+- New privacy policy page (`/privacy`, draft for Dunz), linked from the footer, the booking terms checkbox and the contact form.
+- New `docs/security/ACCOUNT-CHECKLIST.md` for GitHub, Vercel, Resend and Cloudflare settings.
+
+## 2026-10-10: motion (GSAP, Lenis, React Bits)
+
+- Smooth scrolling with Lenis, driven by GSAP's clock so scroll effects stay in sync. Switched off on touch screens (native scrolling) and for visitors who turn on reduced motion.
+- GSAP ScrollTrigger effects, opted into with data attributes: sections and work tiles fade up into view (`data-reveal`), photos drift inside their frames (`data-parallax`), photo strips and the portrait float at different speeds (`data-speed`), and the hero photo eases away while its headline lifts off as you scroll past.
+- React Bits components in `src/components/bits/` (adapted, licence kept): SplitText for page headlines, ScrollReveal for the home statement and pillar intros, Noise for moving film grain over the hero photos, and Magnet on the main Book Me buttons (mouse only).
+- Menus and the photo lightbox pause smooth scrolling while open.
+- Added a favicon.
+
 ## 2026-10-05: editorial redesign
 
 - New structure around three connected experiences: Photo & Film (`/photo-film`), Content (`/content`) and SBD Booth (`/booths`). Services page renamed Rates and moved into the main navigation.

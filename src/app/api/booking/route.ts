@@ -11,19 +11,17 @@ import {
   type Booking,
 } from "@/lib/booking";
 import { rowsToHtml, rowsToText, sendMail } from "@/lib/mail";
+import { guardForm } from "@/lib/security";
 import { policies, site } from "@/content/site";
 
 const clip = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const list = (v: unknown, allowed: string[]) =>
-  Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && allowed.includes(x)) : [];
+  Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === "string" && allowed.includes(x)))] : [];
 
 export async function POST(req: Request) {
-  let body: Record<string, unknown>;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ message: "That request couldn’t be read. Refresh the page and try again." }, { status: 400 });
-  }
+  const guard = await guardForm(req, "booking");
+  if (!guard.ok) return guard.response;
+  const body = guard.body;
 
   // Bots fill in the hidden "website" field; people never see it.
   if (clip(body.website)) return NextResponse.json({ ok: true });
@@ -87,11 +85,19 @@ export async function POST(req: Request) {
   const toOwner = await sendMail({
     to: owner,
     replyTo: b.email,
-    subject: `New booking request: ${b.eventType} on ${b.date} (${b.name})`,
+    subject: `New booking request: ${b.eventType} on ${b.date}`,
     html: rowsToHtml("New booking request", rows),
     text: rowsToText(rows),
   });
 
+  if (toOwner.notConfigured) {
+    return NextResponse.json(
+      {
+        message: `Online booking isn’t switched on yet, so this request wasn’t sent. Please email ${site.email} or text ${site.phone} with your date and what you need.`,
+      },
+      { status: 503 },
+    );
+  }
   if (!toOwner.ok) {
     return NextResponse.json(
       { message: `Your request didn’t send. Please try again, or email ${site.email} directly.` },
@@ -99,6 +105,8 @@ export async function POST(req: Request) {
     );
   }
 
+  // This goes to whatever address was typed in, so it carries fixed wording and menu choices
+  // only. Nothing the visitor wrote can be relayed to a stranger through Dunz's sender.
   const deposit = [hasVideo(b) && `Video: ${policies.video.deposit}.`, hasBooth(b) && `Booth: ${policies.booth.deposit}.`]
     .filter(Boolean)
     .join(" ");
@@ -106,17 +114,15 @@ export async function POST(req: Request) {
     ["Services", rows[4][1]],
     ["Booth package", rows[5][1]],
     ["Event date", b.date],
-    ["Location", b.location],
     ["Deposit", deposit],
   ];
+  const intro = "Thanks for your booking request. I’ll reply within 24 hours with availability and your quote. If you didn’t send this, you can ignore this email.";
   await sendMail({
     to: b.email,
     replyTo: owner,
     subject: `${site.name}: we got your booking request`,
-    html:
-      `<p style="font-family:Arial,sans-serif;font-size:15px">Hi ${b.name.split(" ")[0].replace(/[<>&]/g, "")}, thanks for reaching out. I’ll reply within 24 hours with availability and your quote.</p>` +
-      rowsToHtml("Your request", clientRows),
-    text: `Hi ${b.name.split(" ")[0]}, thanks for reaching out. I’ll reply within 24 hours with availability and your quote.\n\n${rowsToText(clientRows)}`,
+    html: `<p style="font-family:Arial,sans-serif;font-size:15px">${intro}</p>` + rowsToHtml("Your request", clientRows),
+    text: `${intro}\n\n${rowsToText(clientRows)}`,
   });
 
   return NextResponse.json({ ok: true });

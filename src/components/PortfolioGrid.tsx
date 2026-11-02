@@ -26,7 +26,7 @@ export default function PortfolioGrid({ initial }: { initial: CategoryId }) {
       </div>
       <div className={styles.grid}>
         {filtered.map((p, i) => (
-          <div key={p.slug} className={styles.item} data-orientation={p.orientation} data-lead={i === 0 ? "true" : undefined}>
+          <div key={p.slug} data-reveal className={styles.item} data-orientation={p.orientation} data-lead={i === 0 ? "true" : undefined}>
             <WorkTile project={p} priority={i < 2} size={i === 0 ? "large" : "default"} />
           </div>
         ))}

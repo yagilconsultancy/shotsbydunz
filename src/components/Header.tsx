@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
+import Magnet from "./bits/Magnet";
+import { getLenis } from "@/lib/motion";
 import { nav } from "@/content/site";
 import styles from "./Header.module.css";
 
@@ -19,6 +21,8 @@ export default function Header() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    if (open) getLenis()?.stop();
+    else getLenis()?.start();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenOn(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -43,9 +47,11 @@ export default function Header() {
           ))}
         </nav>
         <div className={styles.actions}>
-          <Link href="/book" className={`btn btn-primary ${styles.book}`}>
-            Book Me
-          </Link>
+          <Magnet>
+            <Link href="/book" className={`btn btn-primary ${styles.book}`}>
+              Book Me
+            </Link>
+          </Magnet>
           <button
             type="button"
             className={styles.menuBtn}
@@ -58,7 +64,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-      <div id="mobile-menu" className={styles.sheet} data-open={open} hidden={!open}>
+      <div id="mobile-menu" className={styles.sheet} data-open={open} hidden={!open} data-lenis-prevent>
         <nav aria-label="Mobile" className="container">
           {[{ href: "/", label: "Home" }, ...nav, { href: "/contact", label: "Contact" }].map((item) => (
             <Link

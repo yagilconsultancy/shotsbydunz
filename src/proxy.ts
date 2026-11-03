@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
     `img-src 'self' data: blob:${supabaseUrl ? ` ${supabaseUrl}` : ""}`,
     "font-src 'self'",
     "media-src 'self'",
-    `connect-src 'self' ${turnstile}`,
+    `connect-src 'self' ${turnstile}${supabaseUrl ? ` ${supabaseUrl}` : ""}`,
     `frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com ${turnstile}`,
     "worker-src 'self' blob:",
     "object-src 'none'",

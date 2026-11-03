@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Viewfinder from "@/components/Viewfinder";
 import Frame from "@/components/Frame";
+import StillsGallery from "@/components/StillsGallery";
+import { folderPhotos, photo } from "@/lib/media";
+import { getFolder } from "@/content/media-folders";
 import PhotoStrip from "@/components/PhotoStrip";
 import Steps from "@/components/Steps";
 import SplitText from "@/components/bits/SplitText";
@@ -20,12 +23,19 @@ export const metadata: Metadata = {
 const digital = boothPackages[0].includes;
 const rows = [...digital, "Unlimited 2×6 and 4×6 prints", "Online gallery"];
 
-export default function BoothsPage() {
+export default async function BoothsPage() {
   const boothFaq = faqGroups.find((g) => g.title === "SBD Booths")?.items ?? [];
+  const [hero, atBooth, prints, gallery] = await Promise.all([
+    photo("booth-hero"),
+    photo("booth-pair", 0),
+    photo("booth-pair", 1),
+    folderPhotos("booth-gallery"),
+  ]);
+  const strips = [0, 1, 2].map((i) => gallery[i] ?? getFolder("booth-gallery")!.fallback[i]);
 
   return (
     <div className={styles.page}>
-      <Viewfinder image="/images/booth-setup.jpg" imageAlt="The SBD booth styled with a sequin backdrop and balloon garland" label="SBD Booth" size="tall" focus="70% 40%">
+      <Viewfinder image={hero.src} imageAlt={hero.alt} label="SBD Booth" size="tall" focus="70% 40%">
         <p className={styles.kicker}>A ShotsByDunz experience</p>
         <SplitText tag="h1" className={styles.title} text="SBD Booth" delay={0.3} stagger={0.05} />
         <p className={styles.heroLine}>Props, prints and instant sharing, styled to your night and run by our attendant.</p>
@@ -43,7 +53,7 @@ export default function BoothsPage() {
 
       <section className={`container ${styles.story}`} aria-label="At the booth">
         <div className={styles.storyImage} data-parallax>
-          <Frame src="/images/booth-wedding.jpg" alt="Newlyweds and friends laughing at the booth" ratio="4 / 5" label="At the booth" />
+          <Frame src={atBooth.src} alt={atBooth.alt} ratio="4 / 5" label="At the booth" />
         </div>
         <div className={styles.storyText}>
           <SplitText
@@ -155,21 +165,33 @@ export default function BoothsPage() {
         </div>
         <div className={styles.prints}>
           <div className={styles.printsImage} data-parallax>
-            <Frame src="/images/booth-prints.jpg" alt="Printed strips and photo keychains on a table" ratio="4 / 5" label="Prints and keychains" />
+            <Frame src={prints.src} alt={prints.alt} ratio="4 / 5" label="Prints and keychains" />
           </div>
           <div className={styles.printsStrips}>
             <div data-speed="0.1">
-              <PhotoStrip images={["/images/booth-wedding.jpg"]} caption="Amara & Tobi" tilt={-5} />
+              <PhotoStrip images={[strips[0].src]} caption={strips[0].caption ?? ""} tilt={-5} />
             </div>
             <div data-speed="-0.05">
-              <PhotoStrip images={["/images/rooftop-birthday.jpg"]} caption="Kemi at 30" tilt={3} />
+              <PhotoStrip images={[strips[1].src]} caption={strips[1].caption ?? ""} tilt={3} />
             </div>
             <div data-speed="0.16">
-              <PhotoStrip images={["/images/studio-launch.jpg"]} caption="Glow Studio" tilt={-2} />
+              <PhotoStrip images={[strips[2].src]} caption={strips[2].caption ?? ""} tilt={-2} />
             </div>
           </div>
         </div>
       </section>
+
+      {gallery.length > 0 && (
+        <section className="container section-tight" aria-labelledby="booth-gallery">
+          <h2 id="booth-gallery" className={styles.h2}>
+            From the booth
+          </h2>
+          <StillsGallery
+            title="SBD Booth"
+            stills={gallery.map((g) => ({ src: g.src, alt: g.alt, orientation: g.orientation ?? "square" }))}
+          />
+        </section>
+      )}
 
       <section className="container section-tight" aria-labelledby="how">
         <div className="section-head">

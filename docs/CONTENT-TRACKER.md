@@ -8,8 +8,9 @@ Everything on the site that is still placeholder. Search the code for `SAMPLE` t
 | --- | --- | --- |
 | [ ] **All photos in `public/images`** | Used across every page | **AI-generated stand-ins.** They must all be replaced with Dunz's real work before launch. The portrait in particular is not her |
 | [ ] Showreel video for the home page hero | `src/app/page.tsx` (`<Viewfinder>` takes a `videoSrc`) | Still photo with the viewfinder overlay |
-| [ ] Real portfolio videos (Vimeo or YouTube links) | `src/content/portfolio.ts`, `video` field on each project | 8 sample projects; project pages say a sample still is shown |
-| [ ] Portfolio project names, clients, dates, stories, quotes | `src/content/portfolio.ts` | Invented |
+| [ ] Real portfolio videos (Vimeo or YouTube links) | **Dunz, in the dashboard:** Media, then Portfolio projects, then Video link | 8 sample projects; project pages say a sample still is shown |
+| [ ] Portfolio project names, clients, dates, stories, quotes | **Dunz, in the dashboard:** Media, then Portfolio projects (`src/content/portfolio.ts` is only the fallback) | Invented |
+| [ ] Every site photo (home, doors, about, booth page, link preview) | **Dunz, in the dashboard:** Media, then each folder | AI-generated samples in `public/images` |
 | [ ] Event photography: offered? Starting price? | `src/content/services.ts` | Added at $300 as a sample |
 | [ ] Her story, approach and off-camera facts | `src/content/about.ts` | Written in her voice as a sample |
 | [ ] 3 to 5 client reviews | `src/content/about.ts`, `testimonials` | Invented |
@@ -19,7 +20,7 @@ Everything on the site that is still placeholder. Search the code for `SAMPLE` t
 | [ ] Phone number for video bookings | `src/content/site.ts`, `phone` | Booth number +1 548 468 2830 |
 | [ ] Business hours | `src/content/site.ts`, `hours` | Mon to Sat, 10am to 7pm |
 | [ ] Booth space, setup time, indoor/outdoor | `src/content/booths.ts`, `boothSpecs` | Typical industry values |
-| [ ] Booth photos for the gallery | `src/app/booths/page.tsx` | 6 placeholder boxes |
+| [ ] Booth photos for the gallery and photo strips | **Dunz, in the dashboard:** Media, then SBD Booth page: gallery | Gallery hidden until she adds photos; strips use samples |
 | [ ] Booth rescheduling and cancellation terms | `src/content/terms.ts`, `boothTerms` | "Being finalised" |
 | [ ] Booking lead time: 48 or 72 hours for video | `src/lib/booking.ts`, `minimumHours` | 48 for video, 72 if a booth is included |
 | [ ] Video plus booth bundle price | `src/app/booths/page.tsx` | "Bundle price", no amount |

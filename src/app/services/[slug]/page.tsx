@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import WorkTile from "@/components/WorkTile";
 import { getService, rawFootage, services } from "@/content/services";
-import { projects } from "@/content/portfolio";
+import { getProjects } from "@/lib/media";
 import { faqGroups } from "@/content/faq";
 import styles from "./service.module.css";
 
@@ -25,7 +25,7 @@ export default async function ServicePage({ params }: Params) {
   const service = getService(slug);
   if (!service) notFound();
 
-  const examples = projects.filter((p) => p.pillars.includes(service.pillar)).slice(0, 4);
+  const examples = (await getProjects()).filter((p) => p.pillars.includes(service.pillar)).slice(0, 4);
   const isCustom = service.startingFrom === "Quote";
   const faqs = faqGroups.flatMap((g) => g.items).filter((f) => /turnaround|revisions|music|raw/i.test(f.q)).slice(0, 3);
 

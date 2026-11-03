@@ -37,7 +37,7 @@ The left sidebar inside a project:
 | SQL Editor | Run database commands | Claude gives you scripts to paste here during setup |
 | Database | Tables, columns, backups, access rules | Mostly leave it alone. Backups live here (Pro plan) |
 | **Authentication** | Who can sign in | Users: check that Dunz's email is the only one. URL Configuration: the site address for magic links |
-| **Storage** | Files | The `deposit-proofs` bucket. It must show **Private**, never Public |
+| **Storage** | Files | `deposit-proofs` must always show **Private**. `site-media` is **Public** on purpose: it holds the photos shown on the website |
 | Edge Functions, Realtime | Advanced features | Not used here |
 | **Advisors**, Security Advisor | Automatic security check | Open it after any change. It should show no red errors |
 | Logs | What happened and when | For troubleshooting with Claude |
@@ -62,13 +62,14 @@ Database changes come as numbered files in `docs/supabase/`. Run each one once, 
 | File | What it does | Run? |
 | --- | --- | --- |
 | `001_booking_setup.sql` | Tables, private proof storage, access rules | Done 2 Nov 2026 |
-| `002_keychains.sql` | Adds the keychain quantity | Run before testing the booking flow |
+| `002_keychains.sql` | Adds the keychain quantity | Done 2 Nov 2026 |
+| `003_media.sql` | Photo folders, portfolio projects, the public `site-media` storage, and a copy of the 8 sample projects | Run before testing the Media tab |
 
 ## Your monthly check (5 minutes)
 
 1. Home: project is running, and usage is well under the free limits (500 MB database, 1 GB files).
 2. Advisors, then Security Advisor: no red errors.
-3. Storage: `deposit-proofs` is still Private.
+3. Storage: `deposit-proofs` is still Private (`site-media` is meant to be Public).
 4. Authentication, then Users: only Dunz (and you, if added) can sign in.
 
 ## Setup day (we do this together after "Approved 2")

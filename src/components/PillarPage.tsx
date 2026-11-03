@@ -3,20 +3,21 @@ import Viewfinder from "./Viewfinder";
 import WorkTile from "./WorkTile";
 import SplitText from "./bits/SplitText";
 import ScrollReveal from "./bits/ScrollReveal";
-import { getPillar, type PillarId } from "@/content/pillars";
+import { getPillar, pillars, type PillarId } from "@/content/pillars";
 import { services } from "@/content/services";
-import { projectsFor } from "@/content/portfolio";
+import { filterProjects, getProjects, photo } from "@/lib/media";
 import { policies } from "@/content/site";
 import styles from "./PillarPage.module.css";
 
-export default function PillarPage({ id, heading }: { id: Exclude<PillarId, "booth">; heading: string }) {
+export default async function PillarPage({ id, heading }: { id: Exclude<PillarId, "booth">; heading: string }) {
   const pillar = getPillar(id);
   const list = services.filter((s) => s.pillar === id);
-  const work = projectsFor(id).slice(0, 4);
+  const [all, door] = await Promise.all([getProjects(), photo("doors", pillars.indexOf(pillar))]);
+  const work = filterProjects(all, id).slice(0, 4);
 
   return (
     <>
-      <Viewfinder image={pillar.image} imageAlt={pillar.imageAlt} label={pillar.name} size="tall">
+      <Viewfinder image={door.src} imageAlt={door.alt} label={pillar.name} size="tall">
         <p className={styles.kicker}>{pillar.name}</p>
         <SplitText tag="h1" className={styles.title} text={heading} splitType="words" stagger={0.07} delay={0.25} />
       </Viewfinder>

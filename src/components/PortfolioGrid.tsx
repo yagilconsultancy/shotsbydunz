@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import WorkTile from "./WorkTile";
-import { categories, projectsFor, type CategoryId } from "@/content/portfolio";
+import { categories, type CategoryId, type Project } from "@/content/portfolio";
+import type { PillarId } from "@/content/pillars";
 import styles from "./PortfolioGrid.module.css";
 
-export default function PortfolioGrid({ initial }: { initial: CategoryId }) {
+export default function PortfolioGrid({ initial, projects }: { initial: CategoryId; projects: Project[] }) {
   const [active, setActive] = useState<CategoryId>(initial);
+  const projectsFor = (id: CategoryId) => (id === "all" ? projects : projects.filter((p) => p.pillars.includes(id as PillarId)));
   const filtered = projectsFor(active);
 
   const choose = (id: CategoryId) => {

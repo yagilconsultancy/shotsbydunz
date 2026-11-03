@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-03: photos and portfolio in the dashboard (Plan 3)
+
+- **Media tab** in `/admin` with 9 labelled photo folders (home, doors, about, booth page, link preview). Each shows where its photos appear, what goes in it, the shape, how many it holds and the accepted files.
+- **Replacing a photo:** Replace, Undo to previous, and a required description. Photos are shrunk on Dunz's device (longest side 2,400 px, JPEG) and uploaded straight to Supabase storage with a one-file pass. The server then checks each file is a real image before it goes live.
+- **Wrong files get a clear message:** video files (use YouTube or Vimeo), camera RAW files, PDFs and others.
+- **Portfolio projects** are now managed in the dashboard: add, edit, reorder, hide and delete (with a confirm tick), plus a cover photo, a gallery of up to 20, and a YouTube or Vimeo link. Links become privacy-friendly embeds, and anything else is refused.
+- **Site pages** read photos and projects from the database. If the database is unreachable or not set up, they fall back to the built-in photos and sample projects.
+- **SBD Booth page:**
+  - New gallery section; it only appears once Dunz adds photos.
+  - The photo strips take their event names from the gallery.
+- The link preview picture can be changed.
+- `docs/supabase/003_media.sql`: tables, public `site-media` storage, and a copy of the 8 sample projects.
+
 ## 2026-11-03: booking flow (Plan 2)
 
 - **Booth-only bookings** are fixed price. A fifth form step, Deposit, shows the price breakdown and the 50% deposit. It also shows the e-transfer details with a reference code (`SBD-XXXXXX`, which is also the security answer). The client must upload the e-transfer screenshot or PDF before submitting.

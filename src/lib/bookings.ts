@@ -44,7 +44,7 @@ export type Proof = { bytes: Uint8Array; ext: string; type: string };
 export async function readProof(file: File): Promise<Proof | { error: string }> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = sniffProof(bytes);
-  if (!kind) return { error: "That file isn't a JPG, PNG, HEIC or PDF. Upload a screenshot of your e-transfer." };
+  if (!kind || kind.ext === "webp") return { error: "That file isn't a JPG, PNG, HEIC or PDF. Upload a screenshot of your e-transfer." };
   return { bytes, ...kind };
 }
 

@@ -22,6 +22,14 @@ export const site = {
   },
 };
 
+// Shown on the deposit step. The email is from Dunz's terms; the rest is SAMPLE until she confirms.
+export const etransfer = {
+  email: "shotsbydunz@gmail.com",
+  name: "ShotsByDunz", // SAMPLE: the name her bank shows
+  autodeposit: false, // SAMPLE: if false, clients also need a security question and answer
+  question: "What is the booking reference?", // SAMPLE
+};
+
 export const nav = [
   { href: "/photo-film", label: "Photo & Film" },
   { href: "/content", label: "Content" },

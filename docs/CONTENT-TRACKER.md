@@ -26,7 +26,9 @@ Everything on the site that is still placeholder. Search the code for `SAMPLE` t
 | [ ] Drone footage or second shooter? | Not on the site | Left out until she confirms |
 | [ ] Logo and brand colours | `src/components/Logo.tsx`, `src/app/globals.css` | Text wordmark with a red recording dot; colours chosen by us |
 | [ ] Privacy policy wording (retention periods, sharing work on social media) | `src/content/privacy.ts` | Drafted by YAGIL to PIPEDA principles |
-| [ ] Domain name | Vercel and `NEXT_PUBLIC_SITE_URL` | None yet |
+| [ ] E-transfer name, autodeposit on or off, security question | `src/content/site.ts`, `etransfer` | Name "ShotsByDunz", autodeposit off, question "What is the booking reference?" |
+| [ ] Booth balance payment method | `src/content/terms.ts`, `docs/PRD.md` | "To confirm" |
+| [ ] Domain name connected to the site | Vercel, Domains | shotsbydunz.ca registered under YAGIL at Cloudflare; used for email, not yet pointed at the site |
 
 ## Confirmed and live
 

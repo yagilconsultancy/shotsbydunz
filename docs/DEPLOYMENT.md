@@ -22,9 +22,13 @@ Commands are for PowerShell in the VS Code terminal. Run them one line at a time
    When asked for a password, use your GitHub Personal Access Token (classic, `repo` scope), the same kind you use for GPHS.
 
 4. On vercel.com, sign in with GitHub, choose Add New, Project, and import `shotsbydunz`. Leave the build settings as they are.
-5. Before clicking Deploy, open Environment Variables and add:
+5. Before clicking Deploy, open Environment Variables and add (Production and Preview):
    - `NEXT_PUBLIC_PREVIEW_MODE` = `true`
-   - `NEXT_PUBLIC_SITE_URL` = the Vercel address (you can fill this in after the first deploy, then redeploy)
+   - `RESEND_API_KEY` (Secret), `BOOKING_FROM_EMAIL` = `bookings@shotsbydunz.ca`, `BOOKING_TO_EMAIL`
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` (Secret)
+   - `ADMIN_EMAILS` = the emails allowed into `/admin`
+   - Optional: `NEXT_PUBLIC_SITE_URL` once the real domain is live, `CRON_SECRET`, Turnstile keys
+   - A value marked Secret can't change environments later; add a second copy for Preview if needed
 6. Deploy. Vercel gives you a link like `shotsbydunz.vercel.app`. That's the link to share with Dunz.
 7. Work through `docs/security/ACCOUNT-CHECKLIST.md` (two-factor logins, protected `main`, firewall rate limit).
 

@@ -52,7 +52,9 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | Project | `/portfolio/[project]` | Title, credits (client, event, year, location, role), full-width film or cover, story, quote, photo lightbox, next project |
 | SBD Booths | `/booths` | Booth hero, five features, both packages with prices, add-ons, event types, gallery, how it works, space and setup needs, video plus booth bundle, booth FAQ |
 | Book Me | `/book` | Four-step booking form (below) |
-| Request sent | `/book/thanks` | Confirmation and what happens next |
+| Request sent | `/book/thanks` | Confirmation and what happens next (separate wording after a booth deposit) |
+| Pay deposit | `/deposit/[link]` | Private 7-day link from a quote or a "new screenshot" request: quote, e-transfer details, proof upload |
+| Dashboard | `/admin` | Dunz's bookings: sign-in by email link, lists, day view, booking page with proof and actions. Not in search results |
 | FAQ | `/faq` | Questions grouped by Booking, Coverage, Delivery, Music, SBD Booths. Includes FAQ structured data for Google |
 | Contact | `/contact` | Call and text buttons, email, socials, service area, hours, short message form |
 | Terms | `/terms` | Video terms (from Dunz's T&C) and booth terms |
@@ -63,33 +65,40 @@ Every page has a sticky "Book Me" button: in the header on desktop, as a bar at 
 
 ## Booking form
 
-Steps, in order:
+Every booking is made on the website. Steps, in order:
 
 1. **About you**: name, email, phone (all required), best way to reach you.
-2. **What you need**: services (one or more, required), booth package (required if booth chosen), number of videos (required if video chosen), hours (required), add-ons (raw footage for video, booth add-ons for booth).
-3. **Your event**: date (required), start time, venue or city (required), event type (required), guest count (booth only), song choices and song mix (video only).
-4. **The details**: ideas, schedule of the day (video only), reference links, budget, how they found Dunz, a summary of the request with the deposit rules, and a required terms checkbox.
+2. **What you need**: services (one or more, required), booth package (required if booth chosen), number of videos (required if video chosen), hours (required), add-ons (raw footage for video; keychains with a quantity of 50 or more, guest books and prints upgrade for booth).
+3. **Your event**: date and start time (required), venue or city (required), event type (required), guest count (booth only), song choices and song mix (video only).
+4. **The details**: ideas, schedule of the day (video only), reference links, budget, how they found Dunz, a summary with the price or deposit rules, and a required terms and privacy checkbox.
+5. **Deposit** (booth only): price breakdown, 50% deposit, e-transfer details with a reference code like `SBD-7KQ4P2` (also the security answer if autodeposit is off), and a required upload of the e-transfer screenshot or PDF.
 
 Services come before the date on purpose: the earliest allowed date depends on what's booked.
 
-Rules the form enforces, in the browser and again on the server:
+### Two paths
+
+- **Booth only (fixed price):** the site works out the total (package + hours over 3 at $100 + add-ons) and the 50% deposit. The client pays and uploads proof before submitting. Status: Deposit to check.
+- **Anything with video (quote first):** the client sends a request with no payment. Dunz sends a quote from the dashboard (total, deposit, optional note). The client gets a 7-day private link to pay the deposit and upload proof. Status: Requested, then Quote sent, then Deposit to check.
+
+Dunz checks her bank and confirms. Statuses: Requested → Quote sent → Deposit to check → Confirmed → Balance paid → Delivered, plus Proof needs fixing, Declined and Cancelled. Dates stay open: several bookings can share a date, and the booking page lists the others on that day so Dunz can spot clashes.
+
+### Rules the form enforces, in the browser and again on the server
 
 - Video bookings need at least 48 hours' notice; anything including a booth needs 72 hours.
-- Required fields as listed above; email and phone must look valid.
-- Every menu field (contact method, booth package, hours, event type, song mix, budget, how they found Dunz) only accepts its listed options. Dates must be real calendar dates no more than two years ahead; start time and guest count must be real values.
-- Terms must be accepted; the checkbox links to the terms and the privacy policy.
-- A hidden "website" field catches spam bots; anything that fills it is silently dropped.
-- The server accepts the forms only from the site itself, as JSON, up to 16 KB, and at most 5 times in 10 minutes from one address. Cloudflare Turnstile adds a bot check when its keys are set.
+- Required fields as listed above; email and phone must look valid; every menu field only accepts its listed options; dates must be real and no more than two years ahead.
+- Proof files: JPG, PNG, HEIC or PDF, checked by their contents, up to 4 MB (Vercel's upload limit is 4.5 MB).
+- A hidden "website" field catches spam bots.
+- The server accepts forms only from the site itself, at most 5 times in 10 minutes from one address. Cloudflare Turnstile adds a bot check when its keys are set.
 
 Links can pre-fill the form: `/book?service=event-videography`, `/book?service=booth&package=unlimited-prints`, `/book?event=weddings`, `/book?service=booth&bundle=1`.
 
-When a request is sent:
+### Emails
 
-- Dunz gets an email with every field, with reply-to set to the client. The subject names the event type and date only.
-- The client gets a confirmation email in fixed wording with their chosen services, booth package, date and deposit rules. It never repeats anything typed into the form, so the site can't be used to send someone else's words to a stranger.
-- The visitor lands on `/book/thanks`.
+Each step emails the client and Dunz. Client emails use fixed wording plus menu choices, dates, amounts and Dunz's own notes; nothing the visitor typed. Dunz's emails carry every field and a link to the booking in her dashboard.
 
-Until Resend is set up, the deployed site says plainly that online booking isn't switched on yet and asks the visitor to email or text Dunz, so no request is silently lost and no details are written to the hosting logs. On a developer's computer (`npm run dev`) the emails are printed in the terminal instead.
+### Data
+
+Bookings and a history of every change live in Supabase (Canada). Proof files sit in a private bucket and Dunz sees them through links that expire after 5 minutes. Browsers can't read the database; only the website's server can, after checking that the visitor is signed in and on the `ADMIN_EMAILS` list.
 
 ## Business rules shown on the site
 
@@ -102,7 +111,7 @@ Until Resend is set up, the deployed site says plainly that online booking isn't
 | Rush | Not offered | Not offered |
 | Revisions | 1 free, extra charged | n/a |
 | Travel | $50 outside London, more for longer trips | Same |
-| Payment | E-transfer to shotsbydunz@gmail.com | To confirm |
+| Payment | E-transfer to shotsbydunz@gmail.com | E-transfer deposit (balance method to confirm) |
 
 Booth packages: Digital Experience $350, Unlimited Prints Experience $450 (both 3 hours). Booth add-ons: extra hour $100, keychains $5 each (min. 50), photo guest book $120, audio guest book $150 for 2 hours, unlimited prints upgrade $150. Raw footage: single clip $30, full video $50, selected clips from $50, all footage from $150.
 

@@ -25,9 +25,12 @@ export const referralSources = ["Instagram", "TikTok", "Google", "Friend or fami
 export const hourOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"];
 export const songMixOptions = ["One song", "Two-song mix", "No preference"];
 
+// Extra booth hours come from the hours field, so the "Additional hour" add-on isn't offered twice.
 export const addOnOptions = [
   ...rawFootage.map((r) => ({ id: `raw-${r.name.toLowerCase().replace(/[^a-z]+/g, "-")}`, label: `${r.name} (${r.price})`, group: "video" as const })),
-  ...boothAddOns.map((a) => ({ id: a.id, label: `${a.name} (${a.price})`, group: "booth" as const })),
+  ...boothAddOns
+    .filter((a) => a.id !== "extra-hour")
+    .map((a) => ({ id: a.id, label: `${a.name} (${a.price})`, group: "booth" as const })),
 ];
 
 export const packageOptions = boothPackages.map((p) => ({ id: p.id, label: `${p.name} ($${p.price})` }));
@@ -47,6 +50,7 @@ export type Booking = {
   videos: string;
   hours: string;
   addOns: string[];
+  keychains: string;
   songs: string;
   songMix: string;
   schedule: string;
@@ -73,6 +77,7 @@ export const emptyBooking: Booking = {
   videos: "1",
   hours: "",
   addOns: [],
+  keychains: "50",
   songs: "",
   songMix: "",
   schedule: "",
@@ -85,6 +90,48 @@ export const emptyBooking: Booking = {
 
 export const hasVideo = (b: Pick<Booking, "services">) => b.services.some((s) => s !== "booth");
 export const hasBooth = (b: Pick<Booking, "services">) => b.services.includes("booth");
+
+// Booth-only bookings have fixed prices, so they pay the deposit straight away. Anything
+// with video is quoted by Dunz first.
+export const isFixedPrice = (b: Pick<Booking, "services">) => hasBooth(b) && !hasVideo(b);
+
+export const BOOTH_DEPOSIT = 0.5;
+export const VIDEO_DEPOSIT = 0.7;
+
+export type PriceLine = { label: string; cents: number };
+
+export function boothPrice(b: Pick<Booking, "boothPackage" | "hours" | "addOns" | "keychains">) {
+  const pkg = boothPackages.find((p) => p.id === b.boothPackage);
+  if (!pkg) return null;
+  const lines: PriceLine[] = [{ label: `${pkg.name}, ${pkg.hours} hours`, cents: pkg.price * 100 }];
+  const hours = b.hours === "10+" ? 10 : Number(b.hours);
+  const extraHour = boothAddOns.find((a) => a.id === "extra-hour")!;
+  if (hours > pkg.hours) {
+    const extra = hours - pkg.hours;
+    lines.push({ label: `${extra} extra ${extra === 1 ? "hour" : "hours"}`, cents: extra * extraHour.amount * 100 });
+  }
+  for (const id of b.addOns) {
+    const a = boothAddOns.find((x) => x.id === id);
+    if (!a || a.id === "extra-hour") continue;
+    if (a.id === "keychains") {
+      const qty = Number(b.keychains);
+      lines.push({ label: `${qty} photo keychains`, cents: qty * a.amount * 100 });
+    } else lines.push({ label: a.name, cents: a.amount * 100 });
+  }
+  const totalCents = lines.reduce((t, l) => t + l.cents, 0);
+  return { lines, totalCents, depositCents: Math.round(totalCents * BOOTH_DEPOSIT) };
+}
+
+export const money = (cents: number) =>
+  `$${(cents / 100).toLocaleString("en-CA", { minimumFractionDigits: cents % 100 ? 2 : 0, maximumFractionDigits: 2 })}`;
+
+// Short enough to type into an e-transfer message; no 0/O or 1/I to misread.
+const refAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+export const refPattern = /^SBD-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/;
+export function newRef() {
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  return "SBD-" + Array.from(bytes, (n) => refAlphabet[n % refAlphabet.length]).join("");
+}
 
 // Video needs 48 hours' notice and the booth needs 72, so the earliest date depends on what's booked.
 export function minimumHours(b: Pick<Booking, "services">) {
@@ -132,6 +179,13 @@ export function validateStep(step: number, b: Booking, now = new Date()): Errors
     if (hasVideo(b) && !(/^\d{1,2}$/.test(b.videos) && Number(b.videos) >= 1 && Number(b.videos) <= 50))
       e.videos = "Enter how many videos you need, from 1 to 50.";
     if (!oneOf(b.hours, hourOptions)) e.hours = "Choose how many hours of coverage you need.";
+    if (hasBooth(b) && b.addOns.includes("keychains")) {
+      const min = boothAddOns.find((a) => a.id === "keychains")!.minQty!;
+      if (!(/^\d{1,4}$/.test(b.keychains) && Number(b.keychains) >= min && Number(b.keychains) <= 2000))
+        e.keychains = `Keychains come in orders of ${min} or more.`;
+    }
+    if (b.boothPackage === "unlimited-prints" && b.addOns.includes("prints-upgrade"))
+      e.addOns = "Unlimited prints are already in this package. Untick the upgrade.";
   }
   if (step === 2) {
     if (!b.date) e.date = "Choose your event date.";
@@ -141,7 +195,7 @@ export function validateStep(step: number, b: Booking, now = new Date()): Errors
       e.date = `${hasBooth(b) ? "Booth bookings need 72" : "Video bookings need 48"} hours' notice. Choose a later date, or message me to check last-minute availability.`;
     if (!b.location.trim()) e.location = "Enter the venue or city.";
     if (!oneOf(b.eventType, eventTypes)) e.eventType = "Choose the type of event.";
-    if (b.startTime && !timeRe.test(b.startTime)) e.startTime = "Enter a start time like 2:00 PM.";
+    if (!timeRe.test(b.startTime)) e.startTime = "Choose a start time.";
     if (b.guests && !(/^\d{1,4}$/.test(b.guests) && Number(b.guests) >= 1)) e.guests = "Enter the number of guests.";
     if (!optionalOneOf(b.songMix, songMixOptions)) e.songMix = "Choose a song mix.";
   }

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-03: booking flow (Plan 2)
+
+- **Booth-only bookings** are fixed price. A fifth form step, Deposit, shows the price breakdown and the 50% deposit. It also shows the e-transfer details with a reference code (`SBD-XXXXXX`, which is also the security answer). The client must upload the e-transfer screenshot or PDF before submitting.
+- **Bookings with video** are quote first. The request is stored, Dunz sends a quote from her dashboard, and the client gets a private 7-day link (`/deposit/...`) to pay the deposit and upload proof.
+- **Start time** is now required. Booth hours over 3 are priced at $100 each, and photo keychains take a quantity (50 or more).
+- **Dashboard at `/admin`:**
+  - Dunz signs in with a one-time email link, and only emails in `ADMIN_EMAILS` get in.
+  - Views: Needs you, Upcoming, All, and a single day.
+  - Each booking page shows the details, the deposit proof (through 5-minute links), other bookings that day, and a history of every change.
+  - Actions: Send quote, Confirm, Ask for a new screenshot, Decline, Mark balance paid, Mark delivered, Cancel. Every action emails the client in fixed wording.
+- **Storage:** bookings are kept in Supabase (Canada). Proof files sit in a private bucket and are checked by their contents, up to 4 MB.
+- **Upkeep:** a daily Vercel scheduled call keeps the free Supabase project awake.
+- **Copy and settings:**
+  - Privacy policy now covers proof uploads and Supabase.
+  - Fixed the "I reply within 24 hours. with availability" sentence on the Book and thank-you pages.
+  - The email sender name is added in code.
+  - Private pages are kept out of search results.
+
 ## 2026-11-03: Next.js security update (Findings 2)
 
 - Next.js upgraded from 16.3.8 to 16.4.2. This fixes three advisories, including one critical issue in the image optimizer.

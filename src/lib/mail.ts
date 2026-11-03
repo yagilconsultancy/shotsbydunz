@@ -7,7 +7,9 @@ export type MailResult = { ok: boolean; notConfigured?: boolean };
 // printing them would put visitors' details in the hosting logs.
 export async function sendMail(mail: Mail): Promise<MailResult> {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.BOOKING_FROM_EMAIL;
+  const address = process.env.BOOKING_FROM_EMAIL?.trim();
+  // Vercel can mangle the space in "Name <email>", so the variable holds the bare address.
+  const from = address && !address.includes("<") ? `ShotsByDunz <${address}>` : address;
   if (!key || !from) {
     if (process.env.NODE_ENV === "development") {
       console.log(`[mail not configured] To: ${mail.to}\nSubject: ${mail.subject}\n\n${mail.text}`);

@@ -32,12 +32,13 @@ export const boothPackages = [
   },
 ];
 
+// amount is in dollars and drives the deposit the booking form works out; price is the label.
 export const boothAddOns = [
-  { id: "extra-hour", name: "Additional hour", price: "$100 per hour" },
-  { id: "keychains", name: "Photo keychains", price: "$5 each, minimum 50" },
-  { id: "photo-guestbook", name: "Photo guest book", price: "$120" },
-  { id: "audio-guestbook", name: "Audio guest book", price: "$150 for 2 hours" },
-  { id: "prints-upgrade", name: "Unlimited prints upgrade", price: "$150" },
+  { id: "extra-hour", name: "Additional hour", price: "$100 per hour", amount: 100 },
+  { id: "keychains", name: "Photo keychains", price: "$5 each, minimum 50", amount: 5, minQty: 50 },
+  { id: "photo-guestbook", name: "Photo guest book", price: "$120", amount: 120 },
+  { id: "audio-guestbook", name: "Audio guest book", price: "$150 for 2 hours", amount: 150 },
+  { id: "prints-upgrade", name: "Unlimited prints upgrade", price: "$150", amount: 150 },
 ];
 
 export const boothEvents = [

@@ -3,6 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 // A fresh nonce per page view means only scripts Next.js itself writes into the page can run,
 // so an injected <script> is refused by the browser even if one ever got through.
 export function proxy(request: NextRequest) {
+  // The site serves its photos as plain files, so Next.js's image resizer is never needed.
+  // Closing it removes the route behind GHSA-2464-fhr4-w9xw (Findings 2).
+  if (request.nextUrl.pathname.startsWith("/_next/image")) return new NextResponse(null, { status: 404 });
+
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const dev = process.env.NODE_ENV === "development";
   const turnstile = "https://challenges.cloudflare.com";
@@ -33,6 +37,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/_next/image",
     {
       source: "/((?!api|_next/static|_next/image|images|icon.svg|favicon.ico|robots.txt|sitemap.xml).*)",
       missing: [

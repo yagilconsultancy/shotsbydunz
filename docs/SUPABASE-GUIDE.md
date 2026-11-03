@@ -26,7 +26,7 @@ Neon or Cloudflare would mean two or three accounts stitched together. Supabase 
 Sign in at supabase.com/dashboard.
 
 - **Organization** (top level) holds billing and team members. Make one called **YAGIL Digital Studio**.
-- **Project** holds one database and its storage. Ours is **shotsbydunz**, in region **Canada (Central)**, which keeps Canadian clients' data in Canada.
+- **Project** holds one database and its storage. Ours is **shotsbydunz-ca**, in region **Canada (Central)** (`ca-central-1`), which keeps Canadian clients' data in Canada. When creating a project, pick the specific region: the default "Americas" means the US. (The first project was created in us-west-2 by mistake and replaced on 3 Nov 2026.)
 
 The left sidebar inside a project:
 
@@ -61,9 +61,9 @@ Database changes come as numbered files in `docs/supabase/`. Run each one once, 
 
 | File | What it does | Run? |
 | --- | --- | --- |
-| `001_booking_setup.sql` | Tables, private proof storage, access rules | Done 2 Nov 2026 |
-| `002_keychains.sql` | Adds the keychain quantity | Done 2 Nov 2026 |
-| `003_media.sql` | Photo folders, portfolio projects, the public `site-media` storage, and a copy of the 8 sample projects | Run before testing the Media tab |
+| `001_booking_setup.sql` | Tables, private proof storage, access rules | Done (re-run on shotsbydunz-ca 3 Nov 2026) |
+| `002_keychains.sql` | Adds the keychain quantity | Done (re-run on shotsbydunz-ca 3 Nov 2026) |
+| `003_media.sql` | Photo folders, portfolio projects, the public `site-media` storage, and a copy of the 8 sample projects | Done 3 Nov 2026 |
 
 ## Your monthly check (5 minutes)
 

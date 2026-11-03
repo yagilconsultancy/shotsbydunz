@@ -5,26 +5,23 @@ import Frame from "@/components/Frame";
 import WorkTile from "@/components/WorkTile";
 import StillsGallery from "@/components/StillsGallery";
 import SplitText from "@/components/bits/SplitText";
-import { getProject, projects } from "@/content/portfolio";
+import { getProjectBySlug, getProjects } from "@/lib/media";
 import { getPillar } from "@/content/pillars";
 import styles from "./project.module.css";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
-}
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return {};
   return { title: project.title, description: project.story, openGraph: { images: [project.cover] } };
 }
 
 export default async function ProjectPage({ params }: Params) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const projects = await getProjects();
+  const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
   const pillar = getPillar(project.pillars[0]);

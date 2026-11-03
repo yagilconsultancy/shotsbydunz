@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Frame from "@/components/Frame";
+import { photo } from "@/lib/media";
 import { about } from "@/content/about";
 import { site } from "@/content/site";
 import styles from "./about.module.css";
@@ -10,11 +11,12 @@ export const metadata: Metadata = {
   description: "Meet Dunz, the videographer behind ShotsByDunz and SBD Booths in London, Ontario.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [portrait, bts] = await Promise.all([photo("dunz-portrait"), photo("about-bts")]);
   return (
     <>
       <section className={`container ${styles.hero}`}>
-        <Frame src="/images/dunz-portrait.jpg" alt="Dunz filming at an evening event" ratio="4 / 5" priority className={styles.photo} label="Dunz" />
+        <Frame src={portrait.src} alt={portrait.alt} ratio="4 / 5" priority className={styles.photo} label="Dunz" />
         <div className={styles.heroText}>
           <h1 className={styles.title}>{about.headline}</h1>
           <div className="prose lede">
@@ -41,7 +43,7 @@ export default function AboutPage() {
 
       <section className="section-tight container" aria-labelledby="offcam">
         <div className={styles.offCam}>
-          <Frame src="/images/fashion-bts.jpg" alt="Behind the scenes on a studio shoot" ratio="9 / 16" className={styles.bts} label="On set" />
+          <Frame src={bts.src} alt={bts.alt} ratio="9 / 16" className={styles.bts} label="On set" />
           <div className={styles.offText}>
             <h2 id="offcam">Off camera</h2>
             <ul className={styles.facts}>

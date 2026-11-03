@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PortfolioGrid from "@/components/PortfolioGrid";
 import { categories, type CategoryId } from "@/content/portfolio";
+import { getProjects } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "Work",
@@ -20,7 +21,7 @@ export default async function PortfolioPage({ searchParams }: Props) {
         <p className="lede">Weddings, birthdays, launches and brands from the last year. Open any project for the film and the story behind it.</p>
       </section>
       <section className="container" style={{ paddingBottom: "clamp(64px, 10vw, 144px)" }}>
-        <PortfolioGrid initial={initial} />
+        <PortfolioGrid initial={initial} projects={await getProjects()} />
       </section>
     </>
   );

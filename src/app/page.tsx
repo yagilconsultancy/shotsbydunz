@@ -8,7 +8,7 @@ import Frame from "@/components/Frame";
 import SplitText from "@/components/bits/SplitText";
 import ScrollReveal from "@/components/bits/ScrollReveal";
 import Magnet from "@/components/bits/Magnet";
-import { projects } from "@/content/portfolio";
+import { getProjects, photo } from "@/lib/media";
 import { testimonials } from "@/content/about";
 import { boothPackages } from "@/content/booths";
 import { site } from "@/content/site";
@@ -23,13 +23,20 @@ const howItWorks = [
 
 const layout = ["a", "b", "c", "d", "e", "f"];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [projects, hero, portrait, stripA, stripB] = await Promise.all([
+    getProjects(),
+    photo("home-hero"),
+    photo("dunz-portrait"),
+    photo("home-booth", 0),
+    photo("home-booth", 1),
+  ]);
   const featured = projects.filter((p) => p.featured).slice(0, 6);
   const lead = testimonials[0];
 
   return (
     <>
-      <Viewfinder image="/images/hero-wedding.jpg" imageAlt="Guests dancing around a couple under warm string lights">
+      <Viewfinder image={hero.src} imageAlt={hero.alt}>
         <p className={styles.kicker}>Photo, film and photobooths in {site.city}</p>
         <SplitText tag="h1" className={styles.heroTitle} text="Nights worth keeping." delay={0.35} />
         <div className="btn-row">
@@ -54,7 +61,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className={styles.portrait} data-speed="0.08">
-          <Frame src="/images/dunz-portrait.jpg" alt="Dunz filming at an evening event" ratio="4 / 5" label="Dunz" />
+          <Frame src={portrait.src} alt={portrait.alt} ratio="4 / 5" label="Dunz" />
         </div>
       </section>
 
@@ -110,10 +117,10 @@ export default function HomePage() {
           </div>
           <div className={styles.strips}>
             <div data-speed="0.12">
-              <PhotoStrip images={["/images/booth-wedding.jpg"]} caption="Amara & Tobi" tilt={-7} />
+              <PhotoStrip images={[stripA.src]} caption={stripA.caption ?? ""} tilt={-7} />
             </div>
             <div data-speed="-0.06">
-              <PhotoStrip images={["/images/rooftop-birthday.jpg"]} caption="Kemi at 30" tilt={4} />
+              <PhotoStrip images={[stripB.src]} caption={stripB.caption ?? ""} tilt={4} />
             </div>
           </div>
         </div>

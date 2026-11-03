@@ -11,9 +11,14 @@ export default async function DashLayout({ children }: { children: React.ReactNo
   return (
     <section className={`container ${styles.wrap}`}>
       <div className={styles.top}>
-        <Link href="/admin" className={styles.home}>
-          Bookings
-        </Link>
+        <nav className={styles.sections} aria-label="Dashboard">
+          <Link href="/admin" className={styles.home}>
+            Bookings
+          </Link>
+          <Link href="/admin/media" className={styles.home}>
+            Media
+          </Link>
+        </nav>
         <form action={signOut} className={styles.who}>
           <span className="muted">{email}</span>
           <button type="submit" className="btn btn-ghost">

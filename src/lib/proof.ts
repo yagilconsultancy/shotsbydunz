@@ -9,6 +9,7 @@ export function sniffProof(bytes: Uint8Array): Sniffed | null {
   if (at(0, 0xff, 0xd8, 0xff)) return { ext: "jpg", type: "image/jpeg" };
   if (at(0, 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return { ext: "png", type: "image/png" };
   if (at(0, 0x25, 0x50, 0x44, 0x46, 0x2d)) return { ext: "pdf", type: "application/pdf" };
+  if (at(0, 0x52, 0x49, 0x46, 0x46) && at(8, 0x57, 0x45, 0x42, 0x50)) return { ext: "webp", type: "image/webp" };
   if (at(4, 0x66, 0x74, 0x79, 0x70)) {
     const brand = String.fromCharCode(...bytes.slice(8, 12));
     if (["heic", "heix", "hevc", "heim", "heis", "mif1", "msf1", "heif"].includes(brand)) return { ext: "heic", type: "image/heic" };

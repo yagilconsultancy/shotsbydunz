@@ -55,6 +55,7 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | Request sent | `/book/thanks` | Confirmation and what happens next (separate wording after a booth deposit) |
 | Pay deposit | `/deposit/[link]` | Private 7-day link from a quote or a "new screenshot" request: quote, e-transfer details, proof upload |
 | Dashboard | `/admin` | Dunz's bookings: sign-in by email link, lists, day view, booking page with proof and actions. Not in search results |
+| Media | `/admin/media` | Dunz's photo folders (replace, undo, descriptions) and portfolio projects (add, edit, reorder, hide, delete, cover, gallery, video link) |
 | FAQ | `/faq` | Questions grouped by Booking, Coverage, Delivery, Music, SBD Booths. Includes FAQ structured data for Google |
 | Contact | `/contact` | Call and text buttons, email, socials, service area, hours, short message form |
 | Terms | `/terms` | Video terms (from Dunz's T&C) and booth terms |

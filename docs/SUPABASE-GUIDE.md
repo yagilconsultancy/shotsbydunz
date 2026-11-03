@@ -55,6 +55,15 @@ Older projects show "anon" and "service_role" keys instead. They work the same w
 
 If the secret key is ever exposed: go to Project Settings, then API Keys, create a new secret key, update Vercel, then delete the old one.
 
+## Database updates
+
+Database changes come as numbered files in `docs/supabase/`. Run each one once, in order: open the SQL Editor, click **New query**, paste the file and click **Run**.
+
+| File | What it does | Run? |
+| --- | --- | --- |
+| `001_booking_setup.sql` | Tables, private proof storage, access rules | Done 2 Nov 2026 |
+| `002_keychains.sql` | Adds the keychain quantity | Run before testing the booking flow |
+
 ## Your monthly check (5 minutes)
 
 1. Home: project is running, and usage is well under the free limits (500 MB database, 1 GB files).

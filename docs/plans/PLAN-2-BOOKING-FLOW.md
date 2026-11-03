@@ -1,6 +1,6 @@
 # Plan 2: Booking flow
 
-Written 1 November 2026 by Claude for YAGIL Digital Studio. Status: **approved 1 November 2026.** Setup in progress (domain registered at Cloudflare).
+Written 1 November 2026 by Claude for YAGIL Digital Studio. Status: **built 3 November 2026** on branch `feature/booking-flow`; testing with Yagil next. Setup done: domain, Resend, Supabase, Vercel keys.
 
 ## Decisions so far (Yagil, 1 Nov 2026)
 
@@ -58,7 +58,7 @@ Off-ramps: **Declined**, **Cancelled**, and **Proof needs fixing**. With "Proof 
 
 - **Proof files:**
   - Stored in a private Supabase storage area, never public. Dunz sees them through links that expire after a few minutes.
-  - Only JPG, PNG, HEIC or PDF up to 10 MB are accepted. The file type is checked on the server, not just by its name.
+  - Only JPG, PNG, HEIC or PDF up to 4 MB are accepted (Vercel refuses uploads over 4.5 MB; e-transfer screenshots are well under that). The file type is checked on the server, not just by its name.
 - **Data access:**
   - The database blocks direct access from browsers. Only the website's server can read or write bookings.
   - The master Supabase key lives only in Vercel, marked Sensitive.

@@ -16,7 +16,7 @@ export default async function BookPage({ searchParams }: Props) {
     <section className={`container ${styles.wrap}`}>
       <div className={styles.intro}>
         <h1>Book Me</h1>
-        <p className="lede">Four quick steps. {site.replyPromise} with availability and a quote.</p>
+        <p className="lede">A few quick steps. Booth packages are paid by deposit as you book; for video and content I reply within 24 hours with a quote.</p>
         <p className="muted">
           Rather talk first? Call or text <a href={site.phoneHref} className="text-link">{site.phone}</a>.
         </p>

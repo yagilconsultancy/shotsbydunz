@@ -1,30 +1,43 @@
 import { NextResponse } from "next/server";
 import {
   addOnOptions,
+  boothPrice,
   emptyBooking,
   hasBooth,
   hasVideo,
-  labelFor,
-  packageOptions,
+  isFixedPrice,
+  newRef,
+  refPattern,
   serviceOptions,
   validateAll,
   type Booking,
 } from "@/lib/booking";
-import { rowsToHtml, rowsToText, sendMail } from "@/lib/mail";
-import { guardForm } from "@/lib/security";
-import { policies, site } from "@/content/site";
+import { guardUpload } from "@/lib/security";
+import { dbConfigured, db, siteUrl } from "@/lib/supabase";
+import { logEvent, readProof, uploadProof } from "@/lib/bookings";
+import { proofProblem } from "@/lib/proof";
+import { sendMail } from "@/lib/mail";
+import { clientEmails, ownerEmails } from "@/lib/booking-emails";
+import type { BookingRow } from "@/lib/booking-status";
+import { site } from "@/content/site";
 
 const clip = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const list = (v: unknown, allowed: string[]) =>
   Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === "string" && allowed.includes(x)))] : [];
+const orNull = (s: string) => s || null;
+
+const fail = (message: string, status: number, errors?: Record<string, string>) => NextResponse.json({ message, errors }, { status });
 
 export async function POST(req: Request) {
-  const guard = await guardForm(req, "booking");
+  const guard = await guardUpload(req, "booking");
   if (!guard.ok) return guard.response;
-  const body = guard.body;
+  const { body, file } = guard;
 
   // Bots fill in the hidden "website" field; people never see it.
-  if (clip(body.website)) return NextResponse.json({ ok: true });
+  if (clip(body.website)) {
+    console.warn("Booking dropped by the spam trap");
+    return NextResponse.json({ ok: true, kind: "request" });
+  }
 
   const b: Booking = {
     ...emptyBooking,
@@ -33,15 +46,16 @@ export async function POST(req: Request) {
     phone: clip(body.phone, 40),
     contactMethod: clip(body.contactMethod, 40),
     date: clip(body.date, 10),
-    startTime: clip(body.startTime, 10),
+    startTime: clip(body.startTime, 5),
     location: clip(body.location, 300),
     eventType: clip(body.eventType, 60),
-    guests: clip(body.guests, 10),
+    guests: clip(body.guests, 4),
     services: list(body.services, serviceOptions.map((s) => s.id)),
     boothPackage: clip(body.boothPackage, 40),
-    videos: clip(body.videos, 4),
-    hours: clip(body.hours, 4),
+    videos: clip(body.videos, 2),
+    hours: clip(body.hours, 3),
     addOns: list(body.addOns, addOnOptions.map((a) => a.id)),
+    keychains: clip(body.keychains, 4),
     songs: clip(body.songs, 500),
     songMix: clip(body.songMix, 40),
     schedule: clip(body.schedule),
@@ -53,77 +67,93 @@ export async function POST(req: Request) {
   };
 
   const errors = validateAll(b);
-  if (Object.keys(errors).length) {
-    return NextResponse.json({ message: "Some details need fixing before this can be sent.", errors }, { status: 422 });
+  if (Object.keys(errors).length) return fail("Some details need fixing before this can be sent.", 422, errors as Record<string, string>);
+
+  if (!dbConfigured())
+    return fail(`Online booking isn’t switched on yet, so this wasn’t sent. Please email ${site.email} or text ${site.phone}.`, 503);
+
+  const fixed = isFixedPrice(b);
+  const price = fixed ? boothPrice(b) : null;
+  let proof = null;
+  if (fixed) {
+    const ref = clip(body.ref, 10);
+    if (!refPattern.test(ref)) return fail("Your booking reference is missing. Refresh the page and start again.", 400);
+    const problem = proofProblem(file);
+    if (problem) return fail(problem, 422, { proof: problem });
+    const read = await readProof(file!);
+    if ("error" in read) return fail(read.error, 422, { proof: read.error });
+    proof = read;
   }
 
-  const rows: [string, string][] = [
-    ["Name", b.name],
-    ["Email", b.email],
-    ["Phone", b.phone],
-    ["Contact by", b.contactMethod],
-    ["Services", b.services.map((s) => labelFor(serviceOptions, s)).join(", ")],
-    ["Booth package", hasBooth(b) ? labelFor(packageOptions, b.boothPackage) : ""],
-    ["Number of videos", hasVideo(b) ? b.videos : ""],
-    ["Hours", b.hours],
-    ["Add-ons", b.addOns.map((a) => labelFor(addOnOptions, a)).join(", ")],
-    ["Event date", b.date],
-    ["Start time", b.startTime],
-    ["Location", b.location],
-    ["Event type", b.eventType],
-    ["Guests", b.guests],
-    ["Songs", b.songs],
-    ["Song mix", b.songMix],
-    ["Schedule", b.schedule],
-    ["Ideas and requests", b.details],
-    ["References", b.references],
-    ["Budget", b.budget],
-    ["Found via", b.referral],
-  ];
+  const booth = hasBooth(b);
+  const row = {
+    ref: fixed ? clip(body.ref, 10) : newRef(),
+    status: fixed ? "deposit_submitted" : "requested",
+    pricing: fixed ? "fixed" : "quote",
+    name: b.name,
+    email: b.email,
+    phone: b.phone,
+    contact_method: b.contactMethod,
+    services: b.services,
+    booth_package: booth ? b.boothPackage : null,
+    videos: hasVideo(b) ? Number(b.videos) : null,
+    hours: b.hours,
+    add_ons: b.addOns.filter((a) => {
+      const group = addOnOptions.find((o) => o.id === a)?.group;
+      return (group === "booth" && booth) || (group === "video" && hasVideo(b));
+    }),
+    keychains: booth && b.addOns.includes("keychains") ? Number(b.keychains) : null,
+    event_date: b.date,
+    start_time: b.startTime,
+    location: b.location,
+    event_type: b.eventType,
+    guests: b.guests ? Number(b.guests) : null,
+    songs: orNull(b.songs),
+    song_mix: orNull(b.songMix),
+    schedule: orNull(b.schedule),
+    details: orNull(b.details),
+    reference_links: orNull(b.references),
+    budget: orNull(b.budget),
+    referral: orNull(b.referral),
+    total_cents: price?.totalCents ?? null,
+    deposit_cents: price?.depositCents ?? null,
+  };
 
+  let saved: BookingRow | null = null;
+  for (let attempt = 0; attempt < 3 && !saved; attempt++) {
+    const { data, error } = await db().from("bookings").insert(row).select("*").single();
+    if (!error) saved = data as BookingRow;
+    else if (error.code === "23505" && !fixed) row.ref = newRef();
+    else if (error.code === "23505") return fail("That booking reference was already used. Refresh the page and start again.", 409);
+    else {
+      console.error("Booking insert failed", error.code);
+      return fail(`Your booking didn’t save. Please try again, or email ${site.email}.`, 502);
+    }
+  }
+  if (!saved) return fail(`Your booking didn’t save. Please try again, or email ${site.email}.`, 502);
+
+  if (proof) {
+    const path = await uploadProof(saved.id, proof);
+    if (!path) {
+      await db().from("bookings").delete().eq("id", saved.id);
+      return fail("Your screenshot couldn’t be saved. Please try again.", 502);
+    }
+    const now = new Date().toISOString();
+    await db().from("bookings").update({ proof_path: path, proof_uploaded_at: now }).eq("id", saved.id);
+    saved = { ...saved, proof_path: path, proof_uploaded_at: now };
+  }
+
+  await logEvent(saved.id, fixed ? "booked with deposit proof" : "requested", "client");
+
+  // The booking is saved either way, so a failed email only gets logged.
+  const link = `${siteUrl()}/admin/b/${saved.id}`;
   const owner = process.env.BOOKING_TO_EMAIL || site.email;
-  const toOwner = await sendMail({
-    to: owner,
-    replyTo: b.email,
-    subject: `New booking request: ${b.eventType} on ${b.date}`,
-    html: rowsToHtml("New booking request", rows),
-    text: rowsToText(rows),
-  });
+  const o = fixed ? ownerEmails.newDeposit(saved, link) : ownerEmails.newRequest(saved, link);
+  const c = fixed ? clientEmails.depositReceived(saved) : clientEmails.requestReceived(saved);
+  await Promise.all([
+    sendMail({ to: owner, replyTo: saved.email, ...o }),
+    sendMail({ to: saved.email, replyTo: owner, ...c }),
+  ]);
 
-  if (toOwner.notConfigured) {
-    return NextResponse.json(
-      {
-        message: `Online booking isn’t switched on yet, so this request wasn’t sent. Please email ${site.email} or text ${site.phone} with your date and what you need.`,
-      },
-      { status: 503 },
-    );
-  }
-  if (!toOwner.ok) {
-    return NextResponse.json(
-      { message: `Your request didn’t send. Please try again, or email ${site.email} directly.` },
-      { status: 502 },
-    );
-  }
-
-  // This goes to whatever address was typed in, so it carries fixed wording and menu choices
-  // only. Nothing the visitor wrote can be relayed to a stranger through Dunz's sender.
-  const deposit = [hasVideo(b) && `Video: ${policies.video.deposit}.`, hasBooth(b) && `Booth: ${policies.booth.deposit}.`]
-    .filter(Boolean)
-    .join(" ");
-  const clientRows: [string, string][] = [
-    ["Services", rows[4][1]],
-    ["Booth package", rows[5][1]],
-    ["Event date", b.date],
-    ["Deposit", deposit],
-  ];
-  const intro = "Thanks for your booking request. I’ll reply within 24 hours with availability and your quote. If you didn’t send this, you can ignore this email.";
-  await sendMail({
-    to: b.email,
-    replyTo: owner,
-    subject: `${site.name}: we got your booking request`,
-    html: `<p style="font-family:Arial,sans-serif;font-size:15px">${intro}</p>` + rowsToHtml("Your request", clientRows),
-    text: `${intro}\n\n${rowsToText(clientRows)}`,
-  });
-
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, kind: fixed ? "deposit" : "request" });
 }

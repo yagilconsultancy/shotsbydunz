@@ -1,0 +1,289 @@
+.wrap {
+  padding-block: var(--space-6) var(--space-9);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.home {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  color: var(--bone);
+  text-decoration: none;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--step--1);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.tabs a {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--bone);
+  text-decoration: none;
+  font-size: var(--step--1);
+}
+
+.tabs a[aria-current="page"] {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+.dayPick {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.dayPick input,
+.money input,
+.field textarea {
+  background: var(--surface);
+  color: var(--bone);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+}
+
+.dayTitle {
+  font-size: var(--step-2);
+  margin-bottom: var(--space-4);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--bone);
+  text-decoration: none;
+}
+
+.row > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row .muted {
+  font-size: var(--step--1);
+}
+
+@media (hover: hover) {
+  .row:hover {
+    background: var(--surface);
+  }
+}
+
+.when {
+  font-weight: 600;
+}
+
+.badge {
+  justify-self: end;
+  font-size: var(--step--1);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+
+.badge[data-status="requested"],
+.badge[data-status="deposit_submitted"] {
+  background: var(--amber);
+  color: var(--amber-ink);
+  border-color: var(--amber);
+}
+
+.badge[data-status="confirmed"],
+.badge[data-status="balance_paid"] {
+  border-color: var(--bone);
+}
+
+.badge[data-status="declined"],
+.badge[data-status="cancelled"] {
+  color: var(--muted);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.flash {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--amber);
+  border-radius: 6px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.name {
+  font-size: var(--step-3);
+  margin: var(--space-1) 0;
+}
+
+.cols {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 900px) {
+  .cols {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.panel h2 {
+  font-size: var(--step-1);
+  margin: 0 0 var(--space-4);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.form:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.money {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.money label,
+.field label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--step--1);
+}
+
+.money input {
+  width: 140px;
+}
+
+.field,
+.field textarea {
+  width: 100%;
+}
+
+.more summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: var(--step--1);
+  margin-top: var(--space-2);
+}
+
+.dl {
+  margin: 0;
+}
+
+.dl div {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dl dt {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.dl dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.proof {
+  display: block;
+  max-width: 100%;
+  max-height: 520px;
+  border-radius: 6px;
+  margin-bottom: var(--space-3);
+}
+
+.mini {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr auto;
+  }
+  .row > span:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .dayPick {
+    margin-left: 0;
+  }
+  .dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

@@ -13,6 +13,10 @@ import {
   hasBooth,
   hasVideo,
   hourOptions,
+  isFixedPrice,
+  boothPrice,
+  money,
+  newRef,
   labelFor,
   packageOptions,
   referralSources,
@@ -24,9 +28,12 @@ import {
 } from "@/lib/booking";
 import { policies } from "@/content/site";
 import Turnstile, { turnstileOn } from "./Turnstile";
+import EtransferBox from "./EtransferBox";
+import ProofUpload from "./ProofUpload";
+import { proofProblem } from "@/lib/proof";
 import styles from "./BookingForm.module.css";
 
-const steps = ["About you", "What you need", "Your event", "The details"];
+const baseSteps = ["About you", "What you need", "Your event", "The details"];
 
 type Prefill = { service?: string; pkg?: string; event?: string; bundle?: boolean };
 
@@ -45,6 +52,9 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
   const [token, setToken] = useState("");
+  const [ref, setRef] = useState("");
+  const [proof, setProof] = useState<File | null>(null);
+  const [proofError, setProofError] = useState("");
   const [attempt, setAttempt] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -88,31 +98,37 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
       first?.focus();
       return;
     }
+    if (step === baseSteps.length - 1 && !ref) setRef(newRef());
     setStep((s) => s + 1);
   };
 
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (step < steps.length - 1) return next();
-    const e = validateStep(step, data);
+    const e = validateStep(Math.min(step, baseSteps.length - 1), data);
     setErrors(e);
     if (Object.keys(e).length) return;
+    if (fixed) {
+      const problem = proofProblem(proof);
+      setProofError(problem ?? "");
+      if (problem) return;
+    }
     if (turnstileOn && !token) return setSendError("Please complete the quick check above the button.");
     setSending(true);
     setSendError("");
     try {
-      const res = await fetch("/api/booking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, turnstile: token }),
-      });
+      const form = new FormData();
+      form.append("data", JSON.stringify({ ...data, ref: fixed ? ref : undefined, turnstile: token }));
+      if (fixed && proof) form.append("proof", proof);
+      const res = await fetch("/api/booking", { method: "POST", body: form });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
         setToken("");
         setAttempt((n) => n + 1);
+        if (json.errors?.proof) setProofError(json.errors.proof);
         if (json.errors) {
           setErrors(json.errors);
-          const firstStep = [["name", "email", "phone", "contactMethod"], ["services", "boothPackage", "videos", "hours"], ["date", "startTime", "location", "eventType", "guests", "songMix"]].findIndex((keys) =>
+          const firstStep = [["name", "email", "phone", "contactMethod"], ["services", "boothPackage", "videos", "hours", "addOns", "keychains"], ["date", "startTime", "location", "eventType", "guests", "songMix"], ["budget", "referral", "agree"]].findIndex((keys) =>
             keys.some((k) => k in json.errors),
           );
           if (firstStep >= 0) setStep(firstStep);
@@ -120,7 +136,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         setSendError(json.message || "Your request didn’t send. Check your connection and try again.");
         return;
       }
-      router.push("/book/thanks");
+      router.push(json.kind === "deposit" ? "/book/thanks?type=deposit" : "/book/thanks");
     } catch {
       setSendError("Your request didn’t send. Check your connection and try again.");
     } finally {
@@ -130,6 +146,9 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
 
   const video = hasVideo(data);
   const booth = hasBooth(data);
+  const fixed = isFixedPrice(data);
+  const steps = fixed ? [...baseSteps, "Deposit"] : baseSteps;
+  const price = fixed ? boothPrice(data) : null;
   const visibleAddOns = addOnOptions.filter((a) => (a.group === "video" && video) || (a.group === "booth" && booth));
 
   return (
@@ -243,7 +262,14 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                   </label>
                 ))}
               </div>
+              {errors.addOns && <p className={styles.error}>{errors.addOns}</p>}
             </fieldset>
+          )}
+
+          {booth && data.addOns.includes("keychains") && (
+            <Field id="keychains" label="How many keychains?" error={errors.keychains} hint="Minimum 50.">
+              <input id="keychains" type="number" min={50} max={2000} inputMode="numeric" value={data.keychains} onChange={(e) => set("keychains", e.target.value)} />
+            </Field>
           )}
         </div>
       )}
@@ -259,7 +285,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
             >
               <input id="date" type="date" min={earliestDate(data)} value={data.date} onChange={(e) => set("date", e.target.value)} />
             </Field>
-            <Field id="startTime" label="Start time" optional>
+            <Field id="startTime" label="Start time" error={errors.startTime}>
               <input id="startTime" type="time" value={data.startTime} onChange={(e) => set("startTime", e.target.value)} />
             </Field>
           </div>
@@ -360,15 +386,34 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                 <dt>Where</dt>
                 <dd>{data.location}</dd>
               </div>
-              <div>
-                <dt>Deposit</dt>
-                <dd>
-                  {video && <span className={styles.policy}>Video: {policies.video.deposit}. {policies.video.balance}.</span>}
-                  {booth && <span className={styles.policy}>Booth: {policies.booth.deposit}. {policies.booth.balance}.</span>}
-                </dd>
-              </div>
+              {price ? (
+                <>
+                  <div>
+                    <dt>Total</dt>
+                    <dd>{money(price.totalCents)}</dd>
+                  </div>
+                  <div>
+                    <dt>Deposit</dt>
+                    <dd>
+                      {money(price.depositCents)} now (50%). {policies.booth.balance}.
+                    </dd>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <dt>Deposit</dt>
+                  <dd>
+                    {video && <span className={styles.policy}>Video: {policies.video.deposit}. {policies.video.balance}.</span>}
+                    {booth && <span className={styles.policy}>Booth: {policies.booth.deposit}. {policies.booth.balance}.</span>}
+                  </dd>
+                </div>
+              )}
             </dl>
-            <p className={styles.small}>This is a request, not a payment. I’ll confirm availability and send your quote first.</p>
+            <p className={styles.small}>
+              {fixed
+                ? "Next you’ll pay the deposit by e-transfer and upload proof. Your date is secured once I confirm the payment."
+                : "This is a request, not a payment. I’ll check availability and send your quote. You pay the deposit after you accept it."}
+            </p>
           </section>
 
           <div data-field="agree">
@@ -391,6 +436,42 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </div>
       )}
 
+      {step === 4 && price && (
+        <div className={styles.fields}>
+          <section className={styles.summary} aria-label="Price">
+            <h3>Your booth booking</h3>
+            <table className={styles.priceTable}>
+              <tbody>
+                {price.lines.map((l) => (
+                  <tr key={l.label}>
+                    <td>{l.label}</td>
+                    <td>{money(l.cents)}</td>
+                  </tr>
+                ))}
+                <tr className={styles.total}>
+                  <td>Total</td>
+                  <td>{money(price.totalCents)}</td>
+                </tr>
+                <tr className={styles.total}>
+                  <td>Deposit due now (50%)</td>
+                  <td>{money(price.depositCents)}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p className={styles.small}>{policies.booth.travel}; any travel fee is added to the balance.</p>
+          </section>
+          <EtransferBox reference={ref} depositCents={price.depositCents} />
+          <ProofUpload
+            file={proof}
+            error={proofError}
+            onFile={(f) => {
+              setProof(f);
+              setProofError("");
+            }}
+          />
+        </div>
+      )}
+
       {step === steps.length - 1 && <Turnstile key={attempt} onToken={setToken} />}
 
       {sendError && (
@@ -406,7 +487,15 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
           </button>
         )}
         <button type="submit" className={`btn ${booth && !video ? "btn-booth" : "btn-primary"} ${styles.nextBtn}`} disabled={sending}>
-          {step < steps.length - 1 ? "Continue" : sending ? "Sending…" : "Send booking request"}
+          {step < steps.length - 1
+            ? step === baseSteps.length - 1 && fixed
+              ? "Continue to deposit"
+              : "Continue"
+            : sending
+              ? "Sending…"
+              : fixed
+                ? "Submit booking and proof"
+                : "Send booking request"}
         </button>
       </div>
     </form>

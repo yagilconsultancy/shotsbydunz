@@ -6,7 +6,7 @@ import styles from "./MobileBookBar.module.css";
 
 export default function MobileBookBar() {
   const pathname = usePathname();
-  if (pathname.startsWith("/book")) return null;
+  if (pathname.startsWith("/book") || pathname.startsWith("/admin") || pathname.startsWith("/deposit")) return null;
   const isBooth = pathname.startsWith("/booths");
 
   return (

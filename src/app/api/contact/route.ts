@@ -11,7 +11,10 @@ export async function POST(req: Request) {
   const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : "";
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 4000) : "";
 
-  if (typeof body.website === "string" && body.website) return NextResponse.json({ ok: true });
+  if (typeof body.website === "string" && body.website) {
+    console.warn("Message dropped by the spam trap");
+    return NextResponse.json({ ok: true });
+  }
 
   const errors: Record<string, string> = {};
   if (!name) errors.name = "Enter your name.";

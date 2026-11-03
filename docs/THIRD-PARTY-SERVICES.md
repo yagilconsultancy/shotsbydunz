@@ -6,8 +6,10 @@ Everything outside our own code that the site depends on, or will. Each one need
 | --- | --- | --- | --- | --- |
 | GitHub | Stores the code and its history | Everything | **Next step.** Create a private repo `shotsbydunz` under `yagilconsultancy` | Free |
 | Vercel | Hosts the site, gives a shareable preview link, rebuilds on every merge to `main` | Client preview, launch | **Next step.** Sign in with GitHub, import the repo | Free (Hobby) to start |
-| Resend | Sends booking and contact emails | Booking emails actually arriving | Code ready, account not created | Free up to 3,000 emails a month |
-| Domain (e.g. shotsbydunz.com) | The real web address and a matching email sender | Launch | Waiting on Dunz: does she own one? | About $15 to $25 CAD a year |
+| Resend | Sends booking, quote, confirmation and sign-in emails from shotsbydunz.ca | Every booking email | **Live.** Domain verified; keys `shotsbydunz-website` (Vercel) and `shotsbydunz-supabase-auth` (Supabase SMTP) | Free up to 3,000 emails a month |
+| Domain shotsbydunz.ca | Email sender now; the site address at launch | Email, launch | **Registered** under YAGIL at Cloudflare Registrar, auto-renew on | At cost, about $10 to $20 CAD a year |
+| Supabase | Bookings database, private proof storage, Dunz's dashboard sign-in | Booking flow | **Live.** Organization yagilconsultancy, project shotsbydunz, Canada (Central). See `docs/SUPABASE-GUIDE.md` | Free; Pro about $25 USD a month at launch |
+| Vercel Cron | Calls `/api/cron/keepalive` once a day so Supabase's free plan doesn't pause | Booking flow | Set in `vercel.json`; optional `CRON_SECRET` | Free |
 | Vimeo or YouTube | Hosts portfolio and showreel videos | Real portfolio | Waiting on Dunz's videos | YouTube free; Vimeo Starter about $12 USD a month (no ads, cleaner player) |
 | Google Analytics or Vercel Analytics | Visits, bookings started and finished | Measuring the goals in the PRD | Not started | Free |
 | Cloudflare Turnstile | Invisible bot check on the booking and contact forms | Recommended before launch (Findings 1) | Code ready and switched off; turns on when its two keys are added to Vercel | Free |

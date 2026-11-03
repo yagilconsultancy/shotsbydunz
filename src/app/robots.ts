@@ -7,5 +7,8 @@ export default function robots(): MetadataRoute.Robots {
   if (process.env.NEXT_PUBLIC_PREVIEW_MODE === "true") {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
-  return { rules: { userAgent: "*", allow: "/" }, sitemap: `${base}/sitemap.xml` };
+  return {
+    rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/deposit", "/auth", "/api"] },
+    sitemap: `${base}/sitemap.xml`,
+  };
 }

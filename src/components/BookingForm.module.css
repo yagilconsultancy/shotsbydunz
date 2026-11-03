@@ -189,12 +189,10 @@
   outline-offset: 2px;
 }
 
+/* display: none, not off-screen: browsers' autofill fills off-screen fields, which made real
+   bookings look like spam. Bots reading the HTML still find and fill it. */
 .honey {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+  display: none;
 }
 
 .summary {
@@ -279,4 +277,34 @@
     margin-left: auto;
     min-width: 220px;
   }
+}
+
+.ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.08em;
+}
+
+.file {
+  padding: 12px;
+}
+
+.priceTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+
+.priceTable td {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.priceTable td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.priceTable tr.total td {
+  font-weight: 600;
+  border-bottom: 0;
 }

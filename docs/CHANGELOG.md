@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-11-03: branded booking emails
+
+- **New look for every booking email** (`src/lib/email-layout.ts`):
+  - dark ShotsByDunz header with the email type
+  - large serif headline and a progress bar (Request, Quote, Deposit, Confirmed; booths use Booked, Deposit check, Confirmed)
+  - amounts in a highlighted box, Dunz's notes as a quote, one amber button
+  - booking details table, numbered "what happens next" steps, a "Talk soon, Dunz" sign-off
+  - footer with contact details and socials
+- Built with tables and inline styles so it holds up in Gmail, Apple Mail and Outlook, and on phones. Every email has a plain-text version and preview text.
+- **Confirmation email** has an "Add to my calendar" button (Google Calendar, Toronto time).
+- **Delivered email** asks for a review or an Instagram tag.
+- Dunz's own alerts use the same design, with everything the client sent and an "Open in dashboard" button.
+- Client emails still contain only fixed wording, menu choices, dates, amounts and Dunz's notes; nothing a visitor typed.
+
 ## 2026-11-03: photos and portfolio in the dashboard (Plan 3)
 
 - **Media tab** in `/admin` with 9 labelled photo folders (home, doors, about, booth page, link preview). Each shows where its photos appear, what goes in it, the shape, how many it holds and the accepted files.

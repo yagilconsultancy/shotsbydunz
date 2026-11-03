@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-03: Next.js security update (Findings 2)
+
+- Next.js upgraded from 16.3.8 to 16.4.2. This fixes three advisories, including one critical issue in the image optimizer.
+- Next.js's image resizer (`/_next/image`) is switched off in `src/proxy.ts`. The site doesn't use it.
+
 ## 2026-10-10: security hardening (Findings 1)
 
 - Forms are accepted only from the site itself, as JSON, up to 16 KB, and at most 5 times in 10 minutes per visitor address. Malformed requests get a polite error instead of crashing.

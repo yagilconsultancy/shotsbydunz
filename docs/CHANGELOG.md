@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-11-03: security fixes (Findings 3)
+
+- Dunz's sign-in cookie is now hidden from page scripts (httpOnly), HTTPS-only and SameSite Lax. It lapses after a week without use, instead of 400 days.
+- **Daily clean-up,** which keeps the privacy policy's promises:
+  - deletes deposit screenshots 12 months after the event
+  - deletes unbooked enquiries after 12 months
+  - deletes abandoned photo uploads after a day
+  
+  It runs only when Vercel calls with `CRON_SECRET`; without the secret the job just keeps Supabase awake.
+- The project Show/Hide button only returns to dashboard pages.
+- New rule in `CLAUDE.md` and the Supabase guide: every future table is locked in its own setup file. "Automatically expose new tables" is turned off in Supabase.
+- Lint tools updated (`zod` 4.6.7); 0 vulnerabilities in what visitors receive.
+- Turnstile is live on Production.
+
 ## 2026-11-03: database moved to Canada
 
 - The Supabase project was in us-west-2 (Oregon) by mistake. It was replaced by **shotsbydunz-ca** in Canada (Central), so client bookings, deposit screenshots and site photos are stored in Canada, as the privacy policy says.

@@ -9,10 +9,10 @@ Everything outside our own code that the site depends on, or will. Each one need
 | Resend | Sends booking, quote, confirmation and sign-in emails from shotsbydunz.ca | Every booking email | **Live.** Domain verified; keys `shotsbydunz-website` (Vercel) and `shotsbydunz-supabase-auth` (Supabase SMTP) | Free up to 3,000 emails a month |
 | Domain shotsbydunz.ca | Email sender now; the site address at launch | Email, launch | **Registered** under YAGIL at Cloudflare Registrar, auto-renew on | At cost, about $10 to $20 CAD a year |
 | Supabase | Bookings database, private proof storage, Dunz's dashboard sign-in | Booking flow | **Live.** Organization yagilconsultancy, project **shotsbydunz-ca**, Canada (Central). Resend key for its sign-in emails: `shotsbydunz-supabase-auth-ca`. See `docs/SUPABASE-GUIDE.md` | Free; Pro about $25 USD a month at launch |
-| Vercel Cron | Calls `/api/cron/keepalive` once a day so Supabase's free plan doesn't pause | Booking flow | Set in `vercel.json`; optional `CRON_SECRET` | Free |
+| Vercel Cron | Calls `/api/cron/keepalive` once a day: keeps Supabase's free plan awake and runs the 12-month privacy clean-up | Booking flow, privacy policy | Set in `vercel.json`; clean-up needs `CRON_SECRET` in Vercel | Free |
 | Vimeo or YouTube | Hosts portfolio and showreel videos | Real portfolio | Waiting on Dunz's videos | YouTube free; Vimeo Starter about $12 USD a month (no ads, cleaner player) |
 | Google Analytics or Vercel Analytics | Visits, bookings started and finished | Measuring the goals in the PRD | Not started | Free |
-| Cloudflare Turnstile | Invisible bot check on the booking and contact forms | Recommended before launch (Findings 1) | Code ready and switched off; turns on when its two keys are added to Vercel | Free |
+| Cloudflare Turnstile | Bot check on the booking, deposit and contact forms | Spam protection | **Live** (Production): widget "ShotsByDunz forms" for shotsbydunz.vercel.app and shotsbydunz.ca | Free |
 | Vercel Firewall | Rate limit on the form addresses (`/api/*`) | Launch | Settings only, see `docs/security/ACCOUNT-CHECKLIST.md` | Free on Hobby |
 | Stripe or Square | Online deposit payment | Later phase | Not started; Dunz uses e-transfer today | About 2.9% + 30¢ per payment |
 

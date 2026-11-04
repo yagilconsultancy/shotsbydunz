@@ -241,7 +241,9 @@ export async function setProjectHidden(fd: FormData) {
   }
   await db().from("projects").update({ hidden }).eq("id", id);
   await log(`project ${hidden ? "hidden" : "shown"}`, actor);
-  redirect(`${String(fd.get("back") ?? "/admin/media")}?m=${hidden ? "hidden" : "shown"}#projects`);
+  const to = String(fd.get("back") ?? "");
+  const safe = to === `/admin/media/projects/${id}` ? to : "/admin/media";
+  redirect(`${safe}?m=${hidden ? "hidden" : "shown"}#projects`);
 }
 
 export async function moveProject(fd: FormData) {

@@ -65,11 +65,20 @@ Database changes come as numbered files in `docs/supabase/`. Run each one once, 
 | `002_keychains.sql` | Adds the keychain quantity | Done (re-run on shotsbydunz-ca 3 Nov 2026) |
 | `003_media.sql` | Photo folders, portfolio projects, the public `site-media` storage, and a copy of the 8 sample projects | Done 3 Nov 2026 |
 
+## Locking future tables
+
+Since 3 Nov 2026, **Automatically expose new tables** is off (Project Settings → Data API). This means a new table starts with no access for anyone, the website's server included. So every new setup file must:
+- turn row level security on
+- revoke access from `anon` and `authenticated`
+- grant `select, insert, update, delete` to `service_role`
+
+Existing tables are unaffected.
+
 ## Your monthly check (5 minutes)
 
 1. Home: project is running, and usage is well under the free limits (500 MB database, 1 GB files).
 2. Advisors, then Security Advisor: no red errors.
-3. Storage: `deposit-proofs` is still Private (`site-media` is meant to be Public).
+3. Storage: `deposit-proofs` is still Private (`site-media` is meant to be Public). Check **Home → Usage**: file storage should stay well under 1 GB. A sudden jump means spam uploads; tell Claude.
 4. Authentication, then Users: only Dunz (and you, if added) can sign in.
 
 ## Setup day (we do this together after "Approved 2")

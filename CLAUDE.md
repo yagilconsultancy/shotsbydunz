@@ -17,3 +17,5 @@ Yagil is a designer and PM, not a programmer. Explain commands in plain language
 - Update `docs/CHANGELOG.md` with every pull request, and `docs/PRD.md` when pages or rules change.
 - Any new outside service (email, analytics, payments, video hosting) gets an entry in `docs/THIRD-PARTY-SERVICES.md`, and Yagil is told before it's set up.
 - Secrets go in `.env.local` and Vercel environment variables only. Never commit them.
+- Database changes are numbered files in `docs/supabase/` that Yagil runs once in the SQL Editor. Every new table must `enable row level security`, `revoke all ... from anon, authenticated` and `grant select, insert, update, delete ... to service_role` in the same file: the project no longer exposes new tables automatically.
+- Security work follows the Findings process: record it in `docs/security/FINDINGS-<n>.md`, and change nothing until Yagil approves.

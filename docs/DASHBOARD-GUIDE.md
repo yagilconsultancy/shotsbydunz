@@ -6,7 +6,7 @@ Your bookings live at **/admin** on the website, for example `shotsbydunz.vercel
 
 1. Go to `/admin` and enter your email.
 2. Open the "sign in" email on the **same phone or computer** and tap the link. It works once, within an hour.
-3. You stay signed in on that device. Tap **Sign out** on shared computers.
+3. You stay signed in on that device while you use it. After a week without using the dashboard, you get a new sign-in link the same way. Tap **Sign out** on shared computers.
 
 Only emails on the approved list can sign in. YAGIL adds or removes people.
 

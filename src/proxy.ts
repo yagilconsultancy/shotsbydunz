@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { authCookieOptions, shapeAuthCookie } from "@/lib/auth-cookies";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -10,12 +11,13 @@ async function refreshSession(request: NextRequest) {
   if (!supabaseUrl || !supabaseKey) return [];
   const toSet: { name: string; value: string; options: Record<string, unknown> }[] = [];
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
+    cookieOptions: authCookieOptions,
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (list) => {
         list.forEach((c) => {
           request.cookies.set(c.name, c.value);
-          toSet.push(c);
+          toSet.push({ ...c, options: shapeAuthCookie(c.options) });
         });
       },
     },

@@ -27,7 +27,9 @@ Commands are for PowerShell in the VS Code terminal. Run them one line at a time
    - `RESEND_API_KEY` (Secret), `BOOKING_FROM_EMAIL` = `bookings@shotsbydunz.ca`, `BOOKING_TO_EMAIL`
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` (Secret)
    - `ADMIN_EMAILS` = the emails allowed into `/admin`
-   - Optional: `NEXT_PUBLIC_SITE_URL` once the real domain is live, `CRON_SECRET`, Turnstile keys
+   - `CRON_SECRET` (Secret, Production): a long random string; Vercel sends it to the daily clean-up job
+   - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` (Production only)
+   - Later: `NEXT_PUBLIC_SITE_URL` once the real domain is live
    - A value marked Secret can't change environments later; add a second copy for Preview if needed
 6. Deploy. Vercel gives you a link like `shotsbydunz.vercel.app`. That's the link to share with Dunz.
 7. Work through `docs/security/ACCOUNT-CHECKLIST.md` (two-factor logins, protected `main`, firewall rate limit).

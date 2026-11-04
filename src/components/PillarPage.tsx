@@ -3,6 +3,7 @@ import Viewfinder from "./Viewfinder";
 import WorkTile from "./WorkTile";
 import SplitText from "./bits/SplitText";
 import ScrollReveal from "./bits/ScrollReveal";
+import OfferList from "./OfferList";
 import { getPillar, pillars, type PillarId } from "@/content/pillars";
 import { services } from "@/content/services";
 import { filterProjects, getProjects, photo } from "@/lib/media";
@@ -13,7 +14,13 @@ export default async function PillarPage({ id, heading }: { id: Exclude<PillarId
   const pillar = getPillar(id);
   const list = services.filter((s) => s.pillar === id);
   const [all, door] = await Promise.all([getProjects(), photo("doors", pillars.indexOf(pillar))]);
-  const work = filterProjects(all, id).slice(0, 4);
+  const mine = filterProjects(all, id);
+  const work = mine.slice(0, 4);
+  // Each offer borrows a photo from this section's own projects, so the preview shows real work.
+  const offers = list.map((s, i) => {
+    const p = mine.length ? mine[i % mine.length] : null;
+    return { ...s, image: p ? { src: p.cover, alt: p.coverAlt } : { src: door.src, alt: door.alt } };
+  });
 
   return (
     <>
@@ -30,23 +37,16 @@ export default async function PillarPage({ id, heading }: { id: Exclude<PillarId
         <h2 id="offer" className={styles.h2}>
           What you can book
         </h2>
-        <ul className={styles.offers}>
-          {list.map((s) => (
-            <li key={s.slug} data-reveal>
-              <Link href={`/services/${s.slug}`} className={styles.offer}>
-                <span className={styles.offerName}>{s.name}</span>
-                <span className={styles.offerSummary}>{s.summary}</span>
-                <span className={styles.offerMeta}>
-                  <span className={styles.price}>{s.startingFrom === "Quote" ? "Custom quote" : `From ${s.startingFrom}`}</span>
-                  <span className="muted">{s.turnaround}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
+        <OfferList offers={offers} />
+        <ul className={styles.notes}>
+          <li>{policies.video.deposit}</li>
+          <li>{policies.video.travel}</li>
+          <li>
+            <Link href="/services" className={styles.allRates}>
+              All rates <span aria-hidden="true">›</span>
+            </Link>
+          </li>
         </ul>
-        <p className={styles.note}>
-          {policies.video.deposit}. {policies.video.travel}. <Link href="/services" className="text-link">All rates</Link>
-        </p>
       </section>
 
       {work.length > 0 && (

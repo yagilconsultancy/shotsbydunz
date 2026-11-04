@@ -1,0 +1,511 @@
+.wrap {
+  position: relative;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Each row: its hairline draws left to right, then the text rises, one row after another.
+   The hidden starting state only applies once the script is running (data-armed), so the
+   list still shows if scripts fail. Entrances are one-off animations, so hover stays instant. */
+.row {
+  position: relative;
+}
+
+.row::after,
+.row:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: left;
+}
+
+.row::after {
+  bottom: 0;
+}
+
+.row:first-child::before {
+  top: 0;
+}
+
+.list[data-armed] .row:not([data-in])::after,
+.list[data-armed] .row:not([data-in]):first-child::before {
+  transform: scaleX(0);
+}
+
+.list[data-armed] .row:not([data-in]) :is(.index, .name, .summary, .meta, .toggle) {
+  opacity: 0;
+}
+
+.list[data-armed] .row:not([data-in]) .digit > span {
+  transform: translateY(105%);
+}
+
+.row[data-in]::after,
+.row[data-in]:first-child::before {
+  animation: draw 900ms var(--ease-out) var(--d) backwards;
+}
+
+.row[data-in] :is(.index, .name, .summary, .meta, .toggle) {
+  animation: rise 700ms var(--ease-out) backwards;
+}
+
+.row[data-in] .index {
+  animation-delay: calc(var(--d) + 120ms);
+}
+
+.row[data-in] .name {
+  animation-delay: calc(var(--d) + 160ms);
+}
+
+.row[data-in] .summary {
+  animation-delay: calc(var(--d) + 240ms);
+}
+
+.row[data-in] .meta,
+.row[data-in] .toggle {
+  animation-delay: calc(var(--d) + 300ms);
+}
+
+.row[data-in] .digit > span {
+  animation: slot 600ms var(--ease-out) backwards;
+  animation-delay: calc(var(--d) + 360ms + var(--i) * 28ms);
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes slot {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+.name {
+  transition: color 200ms ease, transform 300ms var(--ease-out);
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+  letter-spacing: normal;
+}
+
+/* The whole row is one button: tap anywhere to open it. */
+.head {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "index name toggle"
+    ". summary toggle"
+    ". meta toggle";
+  gap: var(--space-1) var(--space-4);
+  align-items: baseline;
+  padding: var(--space-5) 0;
+  border: 0;
+  background: none;
+  color: var(--bone);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+/* A soft wash sweeps in from the left behind the row you're on. */
+.head::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(var(--space-4) * -1);
+  z-index: -1;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(240, 176, 63, 0.08), rgba(240, 176, 63, 0) 70%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 500ms var(--ease-out);
+}
+
+.head:active .name {
+  transform: scale(0.99);
+}
+
+.index {
+  grid-area: index;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.summary {
+  grid-area: summary;
+  color: var(--muted);
+}
+
+.meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.price {
+  display: inline-flex;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* Each character slides up out of a clipped slot, a few milliseconds after the last. */
+.digit {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.digit > span {
+  display: inline-block;
+}
+
+.turn {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* Plus that turns into a cross: hints the row opens, and shows how to close it. */
+.toggle {
+  grid-area: toggle;
+  align-self: center;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.toggle::before,
+.toggle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  margin: -0.75px 0 0 -7px;
+  background: currentColor;
+  transition: transform 400ms var(--ease-out);
+}
+
+.toggle::after {
+  transform: rotate(90deg);
+}
+
+.row[data-open] .toggle {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--amber-ink);
+}
+
+.row[data-open] .toggle::before {
+  transform: rotate(135deg);
+}
+
+.row[data-open] .toggle::after {
+  transform: rotate(225deg);
+}
+
+.row[data-open] .name {
+  color: var(--amber);
+}
+
+/* The panel opens to its natural height; grid rows animate smoothly and can be reversed mid-way. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms var(--ease-out);
+}
+
+.row[data-open] .panel {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panelBody {
+  display: grid;
+  gap: var(--space-5);
+  padding-bottom: var(--space-6);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 300ms ease, transform 400ms var(--ease-out);
+}
+
+.row[data-open] .panelBody {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
+}
+
+.photo {
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--raise);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 900ms var(--ease-out);
+}
+
+.row[data-open] .photo img {
+  transform: none;
+}
+
+.details {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+}
+
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chips li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--raise);
+  font-size: var(--step--1);
+}
+
+.cols {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.checks li {
+  position: relative;
+  padding-left: 26px;
+}
+
+.checks li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.45em;
+  width: 12px;
+  height: 7px;
+  border-left: 2px solid var(--amber);
+  border-bottom: 2px solid var(--amber);
+  transform: rotate(-45deg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--amber);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.more span {
+  font-size: 1.35em;
+  line-height: 1;
+  transition: transform 200ms var(--ease-out);
+}
+
+/* Floating photo that trails the mouse over the list. */
+.preview {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 210px;
+  aspect-ratio: 4 / 5;
+  margin: -131px 0 0 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.85;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  transition:
+    opacity 260ms ease,
+    scale 420ms var(--ease-out);
+  display: none;
+}
+
+.preview[data-show] {
+  opacity: 1;
+  scale: 1;
+}
+
+.preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  scale: 1.08;
+  transition:
+    opacity 300ms ease,
+    scale 700ms var(--ease-out);
+}
+
+.preview img[data-active] {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .preview {
+    display: block;
+  }
+
+  .head:hover::before {
+    transform: scaleX(1);
+  }
+
+  .head:hover .name {
+    transform: translateX(10px);
+    color: var(--amber);
+  }
+
+  .head:hover .toggle {
+    border-color: var(--bone);
+  }
+
+  .more:hover span {
+    transform: translateX(3px);
+  }
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: 3.2rem minmax(260px, 1.1fr) 1.3fr auto 44px;
+    grid-template-areas: "index name summary meta toggle";
+    gap: var(--space-6);
+    padding: var(--space-6) 0;
+  }
+
+  .meta {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    margin-top: 0;
+  }
+
+  .panelBody {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    gap: var(--space-7);
+    padding-left: calc(3.2rem + var(--space-6));
+  }
+
+  .photo {
+    aspect-ratio: 4 / 5;
+    max-height: 420px;
+  }
+
+  .cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row[data-in] :is(.index, .name, .summary, .meta, .toggle) {
+    animation: fade 400ms ease backwards;
+  }
+
+  .row[data-in]::after,
+  .row[data-in]:first-child::before,
+  .row[data-in] .digit > span {
+    animation: none;
+  }
+
+  .list[data-armed] .row:not([data-in]) .digit > span,
+  .list[data-armed] .row:not([data-in])::after,
+  .list[data-armed] .row:not([data-in]):first-child::before,
+  .panelBody,
+  .photo img {
+    transform: none;
+  }
+
+  .preview {
+    display: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

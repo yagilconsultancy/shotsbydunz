@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-04: Media folders match the new home page
+
+- Removed the "Home: main photo" folder from Dunz's Media dashboard. The home page now opens with portfolio projects, so that photo was never shown.
+- Folder descriptions now say where each photo sits on the new home page:
+  - the "Meet Dunz" card
+  - the pink SBD Booth card
+  - the three service cards
+- Project cover hint: the home page crops covers to a tall frame.
+- Dashboard guide updated.
+- **Findings 3 closed.** Security Advisor shows 0 errors and one warning, "Leaked password protection disabled". No action is needed: Dunz signs in by email link, not password, and the check is a Pro plan feature. Revisit at the Pro upgrade.
+
 ## 2026-11-04: home page redesign and new footer
 
 - **New opening screen (depth reel):**

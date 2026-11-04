@@ -61,10 +61,9 @@ Changed your mind? **Undo to previous** brings back the last photo.
 
 | Folder | Where it shows | Shape |
 | --- | --- | --- |
-| Home: main photo | Full screen at the top of the home page | Landscape |
-| Home and About: portrait of Dunz | Next to "I'm Dunz" and on About | Portrait |
-| Home: booth photo strips | The two tilted strips on the home page, with an event name under each | Portrait |
-| Doors: Photo & Film, Content, SBD Booth | The three tall panels on the home page, and the top of each section's page | Portrait |
+| Home and About: portrait of Dunz | The "Meet Dunz" card on the home page, and on About | Portrait |
+| Home: booth photo strips | The two tilted strips in the pink SBD Booth card on the home page, with an event name under each | Portrait |
+| Doors: Photo & Film, Content, SBD Booth | The three service cards on the home page, and the top of each section's page | Portrait |
 | About: behind the scenes | Next to "Off camera" on About | Portrait |
 | SBD Booth page: main photo | Top of the booth page | Landscape |
 | SBD Booth page: at the booth, prints | Two tall photos on the booth page | Portrait |
@@ -84,7 +83,7 @@ Changed your mind? **Undo to previous** brings back the last photo.
 - **Show it:** add a **cover photo**, then tap **Show on site**. New projects stay hidden until then.
 - **Gallery:** up to 20 photos that open full screen.
 - **Order:** the arrows on the Media page set the order on the Work page.
-- **Home page:** tick "Show on the home page" to feature a project. The first 6 ticked projects appear there.
+- **Home page:** tick "Show on the home page" to feature a project. The first 6 ticked projects open the home page as the line of projects visitors drag through. With fewer than 6 ticked, the next projects in your order fill the line.
 - **Hide:** takes a project off the site but keeps it.
 - **Delete:** removes it and its photos for good, after you tick the confirm box.
 

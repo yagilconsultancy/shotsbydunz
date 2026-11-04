@@ -30,19 +30,9 @@ export const fileTypes = "JPG, PNG or WebP. iPhone photos (HEIC) work when you u
 
 export const mediaFolders: MediaFolder[] = [
   {
-    key: "home-hero",
-    title: "Home: main photo",
-    where: "Full screen at the top of the home page, behind “Nights worth keeping.”",
-    what: "Your strongest event shot, with some calm space in the middle for the headline.",
-    shape: "landscape",
-    max: 1,
-    kind: "fixed",
-    fallback: [{ src: "/images/hero-wedding.jpg", alt: "Guests dancing around a couple under warm string lights" }],
-  },
-  {
     key: "dunz-portrait",
     title: "Home and About: portrait of Dunz",
-    where: "Next to “I’m Dunz” on the home page, and at the top of the About page.",
+    where: "The portrait card in “Meet Dunz” on the home page, and at the top of the About page.",
     what: "You, ideally holding a camera or at an event.",
     shape: "portrait",
     max: 1,
@@ -52,7 +42,7 @@ export const mediaFolders: MediaFolder[] = [
   {
     key: "home-booth",
     title: "Home: booth photo strips",
-    where: "The two tilted photo strips in the SBD Booth band on the home page.",
+    where: "The two tilted photo strips in the pink SBD Booth card on the home page.",
     what: "Fun booth moments. Faces near the middle work best, because each strip crops four frames from one photo.",
     shape: "portrait",
     max: 2,
@@ -67,7 +57,7 @@ export const mediaFolders: MediaFolder[] = [
   {
     key: "doors",
     title: "Doors: Photo & Film, Content, SBD Booth",
-    where: "The three tall panels on the home page that open each part of the site. Each photo also sits at the top of its own page.",
+    where: "The three service cards under “Three ways to book me” on the home page. Each photo also sits at the top of its own page.",
     what: "One photo that sums up each service.",
     shape: "portrait",
     max: 3,

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import DepthReel, { type ReelItem } from "@/components/DepthReel";
-import PhotoStrip from "@/components/PhotoStrip";
+import BoothShowcase from "@/components/BoothShowcase";
 import Frame from "@/components/Frame";
 import SplitText from "@/components/bits/SplitText";
 import { folderPhotos, getProjects, photo } from "@/lib/media";
 import { testimonials } from "@/content/about";
 import { boothPackages } from "@/content/booths";
 import { pillars } from "@/content/pillars";
-import { homeBooth, homeFacts, homeHero, homeIntro, howItWorks } from "@/content/home";
+import { homeBooth, homeBoothFeatures, homeFacts, homeHero, homeIntro, howItWorks } from "@/content/home";
 import { site } from "@/content/site";
 import styles from "./home.module.css";
 
@@ -107,36 +107,16 @@ export default async function HomePage() {
       </section>
 
       <section className="container" aria-labelledby="booth-title">
-        <div className={styles.booth}>
-          <div className={styles.boothText}>
-            <p className={styles.boothKicker}>SBD Booth</p>
-            <h2 id="booth-title" className={styles.boothTitle} data-reveal>
-              {homeBooth.title}
-            </h2>
-            <p className={styles.boothLede}>{homeBooth.lede}</p>
-            <dl className={styles.boothPrices}>
-              {boothPackages.map((p) => (
-                <div key={p.id}>
-                  <dt>{p.name}</dt>
-                  <dd>${p.price}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="btn-row">
-              <Link href="/booths" className="btn btn-dark">
-                Explore the booth
-              </Link>
-            </div>
-          </div>
-          <div className={styles.strips}>
-            <div data-speed="0.06">
-              <PhotoStrip images={[stripA.src]} caption={stripA.caption ?? ""} tilt={-6} />
-            </div>
-            <div data-speed="-0.03">
-              <PhotoStrip images={[stripB.src]} caption={stripB.caption ?? ""} tilt={4} />
-            </div>
-          </div>
-        </div>
+        <BoothShowcase
+          title={homeBooth.title}
+          lede={homeBooth.lede}
+          features={homeBoothFeatures}
+          packages={boothPackages}
+          strips={[
+            { src: stripA.src, caption: stripA.caption ?? "" },
+            { src: stripB.src, caption: stripB.caption ?? "" },
+          ]}
+        />
       </section>
 
       <section className="section container" aria-labelledby="how-title">

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-04: SBD Booth card on the home page plays like a booth
+
+- **When the card comes into view:**
+  1. a "Smile in 3 · 2 · 1" countdown rolls
+  2. a soft camera flash crosses the card
+  3. the two photo strips print out of a slot and swing to rest, fanned outward
+  
+  Hovering a strip straightens it. "Print again" replays the sequence.
+- **Package switcher** (Digital or Unlimited Prints, which is marked Popular and selected first) shows:
+  - the price
+  - the hours and deposit
+  - what's included
+  - a "Book ..." button that opens the booking form with the booth and that package already picked
+- Feature labels: instant sharing, unlimited prints, photo keychains and guest books.
+- Faint sequin shimmer on the pink.
+- Reduced motion: the strips are already printed, with no countdown or flash.
+- `PhotoStrip` can now skip its own tilt (`tilt={0}`).
+
 ## 2026-11-04: "What you can book" with motion (Photo & Film and Content pages)
 
 - **Rows draw in as you scroll:**

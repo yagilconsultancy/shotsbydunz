@@ -1,6 +1,6 @@
 # Security Findings 3
 
-Audited 3 November 2026 by Claude for YAGIL Digital Studio. Status: **approved 3 Nov 2026 and fixed in code** on branch `update-security-findings-3`. Three steps are left for Yagil (see "Your steps" at the end).
+Audited 3 November 2026 by Claude for YAGIL Digital Studio. Status: **closed 4 Nov 2026.** Fixed, shipped (pull request #7) and checked live.
 
 **Scope:** everything added since Findings 1:
 - the booking flow and deposit uploads
@@ -95,3 +95,15 @@ Audited 3 November 2026 by Claude for YAGIL Digital Studio. Status: **approved 3
    1. Check the live site and dashboard still work.
    2. Turn off **Project Settings → Data API → Automatically expose new tables**.
    3. Open **Advisors → Security Advisor** and send Claude a screenshot.
+
+## Closing check (4 Nov 2026)
+
+- Keep-alive without the secret answers 401. Vercel's run logged `Clean-up { proofs: 0, enquiries: 0, orphanPhotos: 0 }`.
+- "Automatically expose new tables" is off; 0 of 5 tables exposed. Site and dashboard still work.
+- Security Advisor: 0 errors. 5 info notes: tables locked with no public rules, as intended.
+- One warning: **Leaked password protection disabled**. This checks passwords against known leaks. No action, because:
+  - Dunz signs in with an email link and never uses a password.
+  - Sign-ups are off.
+  - The feature needs Supabase Pro.
+  
+  Turn it on when the project moves to Pro at launch.

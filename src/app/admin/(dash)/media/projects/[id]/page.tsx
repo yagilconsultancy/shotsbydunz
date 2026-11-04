@@ -127,7 +127,7 @@ export default async function ProjectEditor({ params, searchParams }: Props) {
           <div>
             <section className={styles.panel}>
               <h2>Cover photo</h2>
-              <p className="muted">Shown on the Work page and the home page. Landscape or portrait, to match the shape you picked. {fileTypes}</p>
+              <p className="muted">Shown on the Work page and the home page. Landscape or portrait, to match the shape you picked. The home page crops it to a tall frame, so keep the main subject near the middle. {fileTypes}</p>
               {cover && (
                 <figure className={styles.spot}>
                   <div className={styles.spotImage}>

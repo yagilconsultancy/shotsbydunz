@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-03: database moved to Canada
+
+- The Supabase project was in us-west-2 (Oregon) by mistake. It was replaced by **shotsbydunz-ca** in Canada (Central), so client bookings, deposit screenshots and site photos are stored in Canada, as the privacy policy says.
+- The three setup files were re-run, the sign-in settings and email were set up again, the keys were swapped in Vercel and `.env.local`, and the live site was redeployed and tested. No real data was lost; only test bookings existed.
+
 ## 2026-11-03: branded booking emails
 
 - **New look for every booking email** (`src/lib/email-layout.ts`):

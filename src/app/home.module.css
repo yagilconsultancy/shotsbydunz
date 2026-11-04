@@ -1,113 +1,303 @@
+/* Hero copy, laid over the depth reel */
+
 .kicker {
-  font-size: var(--step--1);
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: rgba(240, 233, 223, 0.85);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
   margin-bottom: var(--space-4);
 }
 
+/* Split by word, not letter, so the display face keeps its own kerning. */
 .heroTitle {
-  font-size: clamp(3.6rem, 12vw, 10rem);
+  font-size: clamp(3rem, 6.4vw, 6.6rem);
   font-weight: 500;
-  line-height: 0.88;
-  letter-spacing: -0.035em;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  max-width: 9ch;
+  margin-bottom: var(--space-5);
+}
+
+.heroLede {
+  font-size: var(--step-1);
+  line-height: 1.45;
+  color: rgba(240, 233, 223, 0.78);
+  max-width: 30ch;
   margin-bottom: var(--space-6);
-  max-width: 11ch;
 }
 
-.intro {
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+}
+
+/* Wide-tracked capitals for every small label, as on a fashion runway site */
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+/* Text link with a chevron: the quiet secondary action next to a filled button */
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--amber);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.chevron span {
+  font-size: 1.35em;
+  line-height: 1;
+  transition: transform 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chevron:hover {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .chevron:hover span {
+    transform: translateX(3px);
+  }
+}
+
+/* Section heading */
+
+.head {
   display: grid;
-  gap: var(--space-7);
-  padding-block: clamp(var(--space-8), 12vw, var(--space-10));
-  align-items: end;
+  gap: var(--space-4);
+  margin-bottom: clamp(var(--space-6), 4vw, var(--space-7));
 }
 
-.introText {
-  display: grid;
-  gap: var(--space-6);
-  justify-items: start;
-}
-
-.statement {
-  font-size: clamp(1.9rem, 4.2vw, 3.6rem);
-  font-weight: 400;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  max-width: 22ch;
-}
-
-.portrait {
-  width: 62%;
-  max-width: 360px;
-  justify-self: end;
-}
-
-.workHead {
+.headRow {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: clamp(var(--space-6), 5vw, var(--space-8));
 }
 
-.work {
+.headTitle {
+  font-size: clamp(2.4rem, 5vw, 4.25rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  max-width: 16ch;
+}
+
+.headLede {
+  font-size: var(--step-1);
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+/* Cards: one surface, one radius, one press response everywhere on the page */
+
+.card {
+  background: var(--surface);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.service {
+  transition: transform 100ms ease-out;
+}
+
+.service:active {
+  transform: scale(0.98);
+}
+
+/* Services */
+
+.services {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  gap: var(--space-8) var(--space-5);
-  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
 }
 
-.workItem[data-slot="a"],
-.workItem[data-slot="d"] {
-  grid-column: 1 / -1;
+.service {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 560px;
+  border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--bone);
 }
+
+.serviceText {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  padding: var(--space-6) var(--space-6) 0;
+}
+
+.serviceName {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.4vw, 2.9rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.service[data-pillar="booth"] .serviceName {
+  color: var(--booth);
+}
+
+.serviceLine {
+  color: var(--muted);
+  max-width: 30ch;
+}
+
+.serviceCue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-2);
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.serviceCue span {
+  font-size: 1.35em;
+  line-height: 1;
+}
+
+.serviceImage {
+  margin: var(--space-6) var(--space-4) var(--space-4);
+  border-radius: 16px;
+  min-height: 300px;
+}
+
+.serviceImage :global(img) {
+  position: absolute;
+  inset: 0;
+  transition: transform 700ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service:hover .serviceImage :global(img) {
+    transform: scale(1.04);
+  }
+}
+
+/* Meet Dunz: portrait and story side by side, three facts underneath */
+
+.bento {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.portraitCard {
+  aspect-ratio: 4 / 5;
+}
+
+.fill {
+  height: 100%;
+}
+
+.storyCard {
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  gap: var(--space-6);
+  padding: clamp(var(--space-6), 4vw, var(--space-8));
+}
+
+.story {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+
+.factCard {
+  display: grid;
+  align-content: end;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+}
+
+.figure {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.8vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--amber);
+}
+
+.figureLabel {
+  color: var(--muted);
+  max-width: 24ch;
+}
+
+/* SBD Booth as one large card */
 
 .booth {
+  display: grid;
+  gap: var(--space-8);
+  align-items: center;
+  padding: clamp(var(--space-6), 6vw, var(--space-9));
+  border-radius: 28px;
   background: var(--booth);
   color: var(--booth-ink);
   overflow: hidden;
 }
 
-.boothInner {
-  display: grid;
-  gap: var(--space-8);
-  padding-block: clamp(var(--space-8), 10vw, var(--space-10));
-  align-items: center;
-}
-
 .boothText {
   display: grid;
   gap: var(--space-5);
-  max-width: 620px;
+  max-width: 600px;
 }
 
 .boothKicker {
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .boothTitle {
-  font-size: clamp(2.6rem, 6.5vw, 5.4rem);
+  font-size: clamp(2.4rem, 5.4vw, 4.6rem);
   font-weight: 400;
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
 
 .boothLede {
   font-size: var(--step-1);
-  max-width: 46ch;
+  line-height: 1.5;
+  max-width: 44ch;
 }
 
 .boothPrices {
   margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5) var(--space-7);
-  padding-block: var(--space-4);
-  border-top: 1px solid rgba(42, 8, 23, 0.25);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
 }
 
 .boothPrices div {
   display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .boothPrices dt {
@@ -118,81 +308,142 @@
 .boothPrices dd {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 2.6rem;
-  line-height: 1.1;
+  font-size: 2.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
 .strips {
-  --strip-w: min(38vw, 168px);
+  --strip-w: min(36vw, 160px);
   display: flex;
   justify-content: center;
-  gap: clamp(16px, 4vw, 36px);
+  gap: clamp(16px, 4vw, 32px);
+}
+
+/* How it works */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.step {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.stepNum {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-4);
+  border-radius: 50%;
+  background: var(--amber);
+  color: var(--amber-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepTitle {
+  font-size: var(--step-2);
+  line-height: 1.1;
+}
+
+.stepBody {
+  color: var(--muted);
+}
+
+/* Quote */
+
+.quote {
+  padding-block: clamp(var(--space-7), 8vw, var(--space-10));
 }
 
 .quote blockquote {
   margin: 0;
   display: grid;
   gap: var(--space-5);
+  justify-items: center;
+  text-align: center;
 }
 
 .quote p {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(2rem, 5vw, 4.4rem);
-  line-height: 1.06;
-  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 4.6vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
   max-width: 20ch;
 }
 
 .quote footer {
   color: var(--muted);
+  font-size: var(--step--1);
 }
 
-@media (min-width: 768px) {
-  .intro {
-    grid-template-columns: 1fr minmax(260px, 360px);
-    gap: var(--space-9);
+@media (min-width: 640px) {
+  .bento {
+    grid-template-columns: repeat(6, 1fr);
   }
 
-  .portrait {
-    width: 100%;
+  .portraitCard {
+    grid-column: span 3;
   }
 
-  .boothInner {
-    grid-template-columns: 1.25fr 1fr;
+  .storyCard {
+    grid-column: span 3;
+  }
+
+  .factCard {
+    grid-column: span 2;
+    min-height: 200px;
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1000px) {
-  .work {
-    grid-template-columns: repeat(12, 1fr);
-    row-gap: var(--space-9);
+  .services {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .workItem[data-slot="a"] {
-    grid-column: 1 / 9;
+  .service {
+    min-height: 640px;
   }
 
-  .workItem[data-slot="b"] {
-    grid-column: 9 / 13;
-    margin-top: var(--space-10);
+  .portraitCard {
+    grid-column: span 2;
   }
 
-  .workItem[data-slot="c"] {
-    grid-column: 2 / 6;
+  .storyCard {
+    grid-column: span 4;
   }
 
-  .workItem[data-slot="d"] {
-    grid-column: 7 / 13;
-    margin-top: var(--space-9);
+  .booth {
+    grid-template-columns: 1.3fr 1fr;
   }
 
-  .workItem[data-slot="e"] {
-    grid-column: 1 / 5;
-    margin-top: calc(var(--space-8) * -1);
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+
+@media (max-width: 899px) {
+  .heroTitle {
+    font-size: clamp(2.6rem, 11vw, 3.6rem);
+    margin-bottom: var(--space-4);
   }
 
-  .workItem[data-slot="f"] {
-    grid-column: 6 / 10;
+  .heroLede {
+    display: none;
   }
 }

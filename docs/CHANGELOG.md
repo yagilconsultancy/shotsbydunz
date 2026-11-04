@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-04: home page redesign and new footer
+
+- **New opening screen (depth reel):**
+  - Six portfolio projects stand in a line that recedes into a blurred, darker distance.
+  - Drag, swipe, sideways trackpad swipe or the arrow keys walk the line forward, and it loops.
+  - A synced project list (side on desktop, bottom on phones), a rolling "No." counter and an "Open project" link.
+  - A fast flick travels further (Apple's momentum projection), and grabbing mid-motion never jumps.
+  - Vertical scrolling is never captured.
+  - Reduced motion: instant changes. Screen readers hear each project as it changes.
+- **The rest of the page as rounded cards:** three service cards, Meet Dunz with portrait, intro and three facts (24 hrs, 5 to 7 days, from $350), the SBD Booth card, four step cards and the quote. Labels are spaced capitals.
+- **New footer on every page:**
+  - a booking card
+  - three compact columns: brand and socials, Services and Studio links, and tap-to-contact details
+  - a slim bottom bar with Terms, Privacy, credit and Back to top
+- **Top menu bar is frosted glass**, solid for people who turn off transparency.
+- Home page copy moved to `src/content/home.ts`.
+- **Not used any more:** the Media folder "Home: main photo" (the home page now shows portfolio projects). It stays in the dashboard until Yagil decides.
+
 ## 2026-11-03: security fixes (Findings 3)
 
 - Dunz's sign-in cookie is now hidden from page scripts (httpOnly), HTTPS-only and SameSite Lax. It lapses after a week without use, instead of 400 days.

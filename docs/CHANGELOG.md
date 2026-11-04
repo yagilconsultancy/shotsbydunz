@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-11-04: "What you can book" with motion (Photo & Film and Content pages)
+
+- **Rows draw in as you scroll:**
+  - each line draws left to right
+  - number, name, description and price rise in turn
+  - prices roll up character by character
+- **With a mouse:**
+  - the row under the pointer gets an amber wash and its name slides right
+  - a photo of that kind of work trails the cursor and leans as it moves
+- **Each row opens in place** (the whole row, or its + which turns into an amber ×) to show:
+  - a photo and "Ideal for" labels
+  - "What's included" and "You get" with check marks
+  - a "Book ..." button that opens the booking form with that service already picked
+  - "Full details"
+  
+  One row is open at a time, and the opening can be reversed mid-way.
+- Deposit and travel notes are now pills, with an "All rates" link.
+- Works with keyboard and screen readers. Fades only for people who turn off motion. Still shows if scripts fail.
+
 ## 2026-11-04: Media folders match the new home page
 
 - Removed the "Home: main photo" folder from Dunz's Media dashboard. The home page now opens with portfolio projects, so that photo was never shown.

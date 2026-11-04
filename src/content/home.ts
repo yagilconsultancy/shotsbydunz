@@ -24,5 +24,12 @@ export const howItWorks = [
 
 export const homeBooth = {
   title: "The corner of the room everyone ends up in.",
-  lede: "Instant sharing, unlimited prints, keychains and guest books. Styled to your event and run by our attendant from setup to the last print.",
+  lede: "Styled to your event and run by our attendant from setup to the last print.",
 };
+
+export const homeBoothFeatures = [
+  { icon: "share", label: "Instant sharing" },
+  { icon: "print", label: "Unlimited prints" },
+  { icon: "key", label: "Photo keychains" },
+  { icon: "book", label: "Guest books" },
+] as const;

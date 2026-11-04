@@ -245,81 +245,6 @@
   max-width: 24ch;
 }
 
-/* SBD Booth as one large card */
-
-.booth {
-  display: grid;
-  gap: var(--space-8);
-  align-items: center;
-  padding: clamp(var(--space-6), 6vw, var(--space-9));
-  border-radius: 28px;
-  background: var(--booth);
-  color: var(--booth-ink);
-  overflow: hidden;
-}
-
-.boothText {
-  display: grid;
-  gap: var(--space-5);
-  max-width: 600px;
-}
-
-.boothKicker {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.boothTitle {
-  font-size: clamp(2.4rem, 5.4vw, 4.6rem);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
-}
-
-.boothLede {
-  font-size: var(--step-1);
-  line-height: 1.5;
-  max-width: 44ch;
-}
-
-.boothPrices {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-3);
-}
-
-.boothPrices div {
-  display: grid;
-  gap: var(--space-1);
-  padding: var(--space-4) var(--space-5);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-}
-
-.boothPrices dt {
-  font-size: var(--step--1);
-  font-weight: 600;
-}
-
-.boothPrices dd {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-
-.strips {
-  --strip-w: min(36vw, 160px);
-  display: flex;
-  justify-content: center;
-  gap: clamp(16px, 4vw, 32px);
-}
-
 /* How it works */
 
 .steps {
@@ -425,10 +350,6 @@
 
   .storyCard {
     grid-column: span 4;
-  }
-
-  .booth {
-    grid-template-columns: 1.3fr 1fr;
   }
 
   .steps {

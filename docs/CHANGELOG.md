@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-05: contact-sheet pattern on the home page
+
+- Below the opening screen, the black background now carries faint "+" registration marks on a 144px grid over a still film grain, like a photographer's contact sheet.
+- It's drawn with inline SVG (no image files), fades in under the opening screen, and stays still. People who switch on high contrast get the plain black.
+
 ## 2026-11-05: opening screen backdrop takes its colour from the photos
 
 - The background behind the line of projects is now the front project's photo, enlarged and blurred to soft colour under a light dark veil. It crossfades as the line moves, driven by the same position value as the cards.

@@ -44,7 +44,7 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | --- | --- | --- |
 | Photo & Film | `/photo-film` | Pillar page: photo hero, intro, "What you can book" (rows that open in place to show what's included, with a pre-filled Book button), recent work, call to book |
 | Content | `/content` | Same layout for reels, brand content and BTS |
-| Home | `/` | Depth-reel hero: six projects in a line receding into the distance, dragged, swiped or arrowed through, with a synced project list and a rolling "No." counter. Then three service cards, Meet Dunz (portrait, intro, three facts), the SBD Booth card (countdown, flash and printing photo strips, package switcher with a pre-filled Book button), four step cards, a client quote |
+| Home | `/` | Depth-reel hero: six projects in a line receding into the distance, dragged, swiped or arrowed through, full width with a rolling "No." counter (no list of what's next). Then three service cards, Meet Dunz (portrait, intro, three facts), the SBD Booth card (countdown, flash and printing photo strips, package switcher with a pre-filled Book button), four step cards, a client quote |
 | About | `/about` | Dunz's story, three-part approach, off-camera facts, BTS clip |
 | Rates | `/services` | All six services with starting prices, raw footage add-ons, deposit/delivery/revision/travel rules |
 | Service detail | `/services/[service]` | Intro, ideal for, included, deliverables, examples, raw footage prices, common questions, "Book this service" (pre-fills the form) |

@@ -12,7 +12,7 @@ export type ReelItem = { slug: string; title: string; meta: string; runtime?: st
 // On release the drag's speed is projected forward (Apple's scroll-deceleration formula) to pick
 // the landing project, and p eases there. Grabbing mid-flight starts from where p actually is.
 
-// Depth stops from -1 (leaving past the rail) to 5 (arriving out of the haze), as fractions of the stage.
+// Depth stops from -1 (leaving off the right edge) to 5 (arriving out of the haze), as fractions of the stage.
 const WIDE = {
   x: [1.25, 0.72, 0.47, 0.32, 0.21, 0.13, 0.07],
   feet: [1.06, 0.93, 0.81, 0.745, 0.7, 0.67, 0.65],
@@ -40,8 +40,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
   const N = items.length;
   const stage = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLDivElement | null)[]>([]);
-  const rows = useRef<(HTMLButtonElement | null)[]>([]);
-  const rail = useRef<HTMLDivElement>(null);
   const roll = useRef<HTMLSpanElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const target = useRef(0);
@@ -50,10 +48,9 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
 
   useEffect(() => {
     const el = stage.current;
-    const railEl = rail.current;
-    if (!el || !railEl || N < 2) return;
+    if (!el || N < 2) return;
     const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W = 0, H = 0, base = 0, row = 0, horizontal = false, table = WIDE, dirty = true, last = 0, raf = 0;
+    let W = 0, H = 0, base = 0, table = WIDE, dirty = true, last = 0, raf = 0;
     let shown = -1;
     const cache = cards.current.map(() => ({ f: "", o: "" }));
 
@@ -67,9 +64,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
         c.style.width = `${base * RATIO}px`;
         c.style.height = `${base}px`;
       });
-      horizontal = getComputedStyle(railEl).flexDirection === "row";
-      const first = rows.current[0];
-      row = first ? (horizontal ? first.offsetWidth : first.offsetHeight) : 0;
       dirty = true;
     };
 
@@ -94,13 +88,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
         if (f !== cache[i].f) c.style.filter = cache[i].f = f;
         if (o !== cache[i].o) c.style.opacity = cache[i].o = o;
         c.style.zIndex = String(100 - Math.round(d * 10));
-      });
-      const all = row * N;
-      rows.current.forEach((r, i) => {
-        if (!r) return;
-        let off = wrap(i * row - pos * row, all);
-        if (off > all - row) off -= all;
-        r.style.transform = horizontal ? `translate3d(${off.toFixed(1)}px,0,0)` : `translate3d(0,${off.toFixed(1)}px,0)`;
       });
       if (roll.current?.firstElementChild) {
         const lh = (roll.current.firstElementChild as HTMLElement).offsetHeight;
@@ -203,7 +190,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
     raf = requestAnimationFrame(frame);
     const ro = new ResizeObserver(size);
     ro.observe(el);
-    ro.observe(railEl);
     el.addEventListener("pointerenter", onEnter);
     el.addEventListener("pointerleave", onLeave);
     el.addEventListener("pointermove", onMove);
@@ -226,13 +212,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
       el.removeEventListener("keydown", onKey);
     };
   }, [N]);
-
-  // The rail takes the shortest way round the loop to the project tapped.
-  const goTo = (i: number) => {
-    let d = wrap(i - target.current, N);
-    if (d > N / 2) d -= N;
-    target.current = Math.round(target.current + d);
-  };
 
   const pad = (n: number) => String(n + 1).padStart(2, "0");
   const now = items[current];
@@ -278,30 +257,6 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
         <div ref={ring} className={styles.ring} aria-hidden="true">
           <span>Drag</span>
         </div>
-      </div>
-      <div ref={rail} className={styles.rail} aria-label="All featured projects">
-        {items.map((it, i) => (
-          <button
-            key={it.slug}
-            ref={(n) => void (rows.current[i] = n)}
-            type="button"
-            className={styles.row}
-            data-alt={i % 2 ? "" : undefined}
-            aria-current={i === current ? "true" : undefined}
-            onClick={() => goTo(i)}
-          >
-            <span className={styles.thumb}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={it.src} alt={it.alt} loading="lazy" decoding="async" />
-              {it.runtime && <span className={styles.runtime}>{it.runtime}</span>}
-            </span>
-            <span className={styles.rowText}>
-              <span className={styles.rowNum}>No. {pad(i)}</span>
-              <span className={styles.rowTitle}>{it.title}</span>
-              <span className={styles.rowMeta}>{it.meta}</span>
-            </span>
-          </button>
-        ))}
       </div>
     </section>
   );

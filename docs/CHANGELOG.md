@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-05: opening screen without the project list
+
+- Removed the side list of projects (bottom strip on phones) from the home page's opening screen. The line of projects now fills the full width, so visitors only see what's in front of them.
+- Dragging, swiping, arrow keys, the "No." counter and the "Open project" link are unchanged. Screen readers still hear each project as it changes.
+
 ## 2026-11-05: calmer home page
 
 The same restrained style as the booth page. All motion is kept.

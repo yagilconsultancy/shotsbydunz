@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import Noise from "./bits/Noise";
 import styles from "./DepthReel.module.css";
 
 export type ReelItem = { slug: string; title: string; meta: string; runtime?: string; src: string; alt: string };
@@ -40,6 +41,7 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
   const N = items.length;
   const stage = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLDivElement | null)[]>([]);
+  const glows = useRef<(HTMLImageElement | null)[]>([]);
   const roll = useRef<HTMLSpanElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const target = useRef(0);
@@ -67,8 +69,18 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
       dirty = true;
     };
 
+    const glowCache = glows.current.map(() => "");
     const paint = () => {
       const pos = p.current;
+      // The backdrop is the front photo, blurred into colour. It crossfades with the drag, so the
+      // room's light changes as each project steps forward.
+      glows.current.forEach((g, i) => {
+        if (!g) return;
+        let d = wrap(i - pos, N);
+        if (d > N / 2) d -= N;
+        const o = Math.max(0, 1 - Math.abs(d)).toFixed(3);
+        if (o !== glowCache[i]) g.style.opacity = glowCache[i] = o;
+      });
       cards.current.forEach((c, i) => {
         if (!c) return;
         let d = wrap(i - pos, N);
@@ -226,6 +238,13 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
         aria-roledescription="carousel"
         aria-label="Featured projects. Drag, swipe or use the arrow keys to change project."
       >
+        <div className={styles.ambient} aria-hidden="true">
+          {items.map((it, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={it.slug} ref={(n) => void (glows.current[i] = n)} src={it.src} alt="" decoding="async" style={{ opacity: i === 0 ? 1 : 0 }} />
+          ))}
+          <Noise opacity={0.07} fps={10} size={1.2} />
+        </div>
         <div className={styles.line} aria-hidden="true">
           {items.map((it, i) => (
             <div key={it.slug} ref={(n) => void (cards.current[i] = n)} className={styles.card} data-card={i}>

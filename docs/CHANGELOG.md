@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-05: opening screen backdrop takes its colour from the photos
+
+- The background behind the line of projects is now the front project's photo, enlarged and blurred to soft colour under a light dark veil. It crossfades as the line moves, driven by the same position value as the cards.
+- Fine film grain over it (the existing `Noise` component). It stops for people who turn off motion.
+- People who turn off transparency get the plain background.
+
 ## 2026-11-05: opening screen without the project list
 
 - Removed the side list of projects (bottom strip on phones) from the home page's opening screen. The line of projects now fills the full width, so visitors only see what's in front of them.

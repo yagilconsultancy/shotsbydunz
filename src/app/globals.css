@@ -9,8 +9,8 @@
   --amber: #f0b03f;
   --amber-ink: #231904;
   --tally: #e5443e;
-  --booth: #ff70a6;
-  --booth-ink: #2a0817;
+  --booth: #e4c48f;
+  --booth-ink: #231a0b;
   --paper: #f5efe7;
   --paper-ink: #1e191c;
   --paper-muted: #6a5d64;
@@ -272,7 +272,7 @@ button,
   }
 
   .btn-booth:hover {
-    background: #ff8db8;
+    background: #ecd3a8;
   }
 
   .btn-dark:hover {

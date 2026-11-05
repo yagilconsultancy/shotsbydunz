@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-11-05: SBD Booth page redesign, champagne booth colour
+
+- **Booth colour is now champagne** (`--booth` #e4c48f, ink #231a0b) everywhere the booth appears: this page, the home booth card, booth buttons and the footer tag.
+- **"Build your night" price builder** replaces the comparison table:
+  - pick a package card
+  - set hours with a stepper (3 included, then $100 an hour)
+  - switch add-ons on (keychain quantity from 50); the prints upgrade only shows for Digital
+  - the total and 50% deposit roll to new values, using `boothPrice` from `lib/booking.ts`
+- **"Book with these choices"** opens the booking form pre-filled with the package, hours, add-ons and keychains. The form keeps only values from its own lists (`hours`, `addons`, `keychains` link parameters).
+- **Restyled to read as designed, not templated:**
+  - an inset photo hero with one dark scrim
+  - hairline lists instead of rows of identical cards
+  - no glows, gradient fills or bouncy motion, and small radii
+  - the accent colour used sparingly
+- Hover fans the three print strips. FAQ rows open smoothly in browsers that support it.
+- Page copy moved to `src/content/booth-page.ts`.
+
 ## 2026-11-04: SBD Booth card on the home page plays like a booth
 
 - **When the card comes into view:**

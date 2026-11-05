@@ -35,7 +35,7 @@ import styles from "./BookingForm.module.css";
 
 const baseSteps = ["About you", "What you need", "Your event", "The details"];
 
-type Prefill = { service?: string; pkg?: string; event?: string; bundle?: boolean };
+type Prefill = { service?: string; pkg?: string; event?: string; bundle?: boolean; hours?: string; addons?: string; keychains?: string };
 
 const eventFromCategory: Record<string, string> = {
   weddings: "Wedding",
@@ -67,7 +67,10 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
       ...emptyBooking,
       services,
       boothPackage: packageOptions.some((p) => p.id === prefill.pkg) ? prefill.pkg! : "",
-      hours: prefill.service === "booth" || prefill.pkg ? "3" : "",
+      // Choices carried over from the booth price builder; anything not on the lists is dropped.
+      hours: hourOptions.includes(prefill.hours ?? "") ? prefill.hours! : prefill.service === "booth" || prefill.pkg ? "3" : "",
+      addOns: (prefill.addons ?? "").split(",").filter((id) => addOnOptions.some((a) => a.id === id && a.group === "booth")),
+      keychains: /^\d{1,4}$/.test(prefill.keychains ?? "") ? prefill.keychains! : emptyBooking.keychains,
       eventType: prefill.event ? eventFromCategory[prefill.event] ?? "" : "",
     };
   });

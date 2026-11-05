@@ -66,7 +66,7 @@ export default async function HomePage() {
         </div>
       </DepthReel>
 
-      <div className={styles.field}>
+      <div className="contact-sheet">
         <section className="section container" aria-labelledby="services-title">
           <header className={styles.head}>
             <h2 id="services-title" className={styles.headTitle}>

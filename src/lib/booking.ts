@@ -214,3 +214,7 @@ export function validateAll(b: Booking, now = new Date()): Errors {
 export function labelFor(list: { id: string; label: string }[], id: string) {
   return list.find((o) => o.id === id)?.label ?? id;
 }
+
+// Booking link for a part of the site: pre-selects the matching service in the form.
+const serviceForPillar: Record<string, string> = { "photo-film": "event-videography", content: "personal-brand", booth: "booth" };
+export const bookingHref = (pillar: string) => (serviceForPillar[pillar] ? `/book?service=${serviceForPillar[pillar]}` : "/book");

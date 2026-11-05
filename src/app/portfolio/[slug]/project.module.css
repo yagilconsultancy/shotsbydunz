@@ -1,39 +1,78 @@
 .head {
   display: grid;
   gap: var(--space-5);
-  padding-top: clamp(var(--space-7), 7vw, var(--space-9));
+  padding-top: clamp(var(--space-6), 6vw, var(--space-8));
   padding-bottom: clamp(var(--space-6), 4vw, var(--space-7));
 }
 
+.topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
 .back {
-  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
   color: var(--muted);
   text-decoration: none;
   font-size: var(--step--1);
+  font-weight: 600;
+  transition: color 150ms ease;
 }
 
-.back::before {
-  content: "← ";
+.back span {
+  color: var(--amber);
+  font-size: 1.3em;
+  line-height: 1;
+  transition: transform 180ms ease-out;
+}
+
+.position {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.position span {
+  margin-inline: 0.35em;
+  color: var(--amber);
 }
 
 .title {
-  font-size: clamp(3rem, 10vw, 8rem);
+  font-size: clamp(3rem, 9.5vw, 7.5rem);
   font-weight: 400;
-  line-height: 0.9;
-  letter-spacing: -0.035em;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  max-width: 14ch;
 }
 
+/* Credits on one hairline, label above value. */
 .credits {
-  margin: 0;
+  margin: var(--space-2) 0 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-4) var(--space-6);
   padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--line-strong);
+}
+
+.credits div {
+  display: grid;
+  gap: 4px;
 }
 
 .credits dt {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
@@ -41,12 +80,21 @@
   margin: 0;
 }
 
+/* Player: inset with a small radius, like the opening screen of the home page. */
+.playerWrap {
+  margin: 0 var(--space-3);
+  display: grid;
+  gap: var(--space-3);
+}
+
 .player {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 88svh;
-  background: #000;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
 }
 
 .player[data-orientation="tall"] {
@@ -62,14 +110,9 @@
 }
 
 .runtime {
-  position: absolute;
-  left: var(--gutter);
-  bottom: var(--space-4);
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(17, 13, 18, 0.7);
-  backdrop-filter: blur(6px);
-  font-size: 0.8rem;
+  padding-inline: calc(var(--gutter) - var(--space-3));
+  font-size: var(--step--1);
+  color: var(--muted);
 }
 
 .body {
@@ -97,6 +140,8 @@
   margin: 0;
   display: grid;
   gap: var(--space-2);
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--amber);
 }
 
 .quote p {
@@ -111,10 +156,152 @@
   font-size: var(--step--1);
 }
 
+.stillsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.h2 {
+  font-size: var(--step-3);
+}
+
+/* Next project: one wide photo with the title set over its lower edge. */
 .next {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
   padding-block: var(--space-8) clamp(var(--space-8), 10vw, var(--space-10));
+}
+
+.nextCard {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: clamp(280px, 38vw, 520px);
+  border-radius: 6px;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--bone);
+  text-decoration: none;
+  transition: transform 120ms ease-out;
+}
+
+.nextCard:active {
+  transform: scale(0.995);
+}
+
+.nextImage {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.nextImage :global(img) {
+  transition: transform 600ms ease-out;
+}
+
+.nextCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(17, 13, 18, 0) 35%, rgba(17, 13, 18, 0.85));
+}
+
+.nextText {
+  display: grid;
+  gap: var(--space-2);
+  padding: clamp(var(--space-5), 4vw, var(--space-7));
+  padding-right: 6rem;
+}
+
+.nextLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.nextTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.nextMeta {
+  font-size: var(--step--1);
+  color: rgba(240, 233, 223, 0.8);
+}
+
+.nextArrow {
+  position: absolute;
+  right: clamp(var(--space-5), 4vw, var(--space-7));
+  bottom: clamp(var(--space-5), 4vw, var(--space-7));
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(240, 233, 223, 0.4);
+  font-size: 1.8rem;
+  line-height: 1;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease-out;
+}
+
+.navRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.prev {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: var(--step--1);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.prev span {
+  color: var(--amber);
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover,
+  .prev:hover {
+    color: var(--bone);
+  }
+
+  .back:hover span {
+    transform: translateX(-3px);
+  }
+
+  .nextCard:hover .nextImage :global(img) {
+    transform: scale(1.03);
+  }
+
+  .nextCard:hover .nextArrow {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: var(--amber-ink);
+    transform: translateX(4px);
+  }
 }
 
 @media (min-width: 768px) {

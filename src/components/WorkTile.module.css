@@ -8,10 +8,16 @@
 .media {
   position: relative;
   overflow: hidden;
+  border-radius: 6px;
+  transition: transform 120ms ease-out;
 }
 
 .media :global(img) {
-  transition: transform 700ms var(--ease-out), filter 700ms var(--ease-out);
+  transition: transform 500ms ease-out;
+}
+
+.tile:active .media {
+  transform: scale(0.99);
 }
 
 .runtime {
@@ -21,26 +27,34 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: rgba(17, 13, 18, 0.62);
-  backdrop-filter: blur(6px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(17, 13, 18, 0.7);
   font-size: 0.75rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
+/* Number, title and details stacked; a "View" cue fades in on hover at the right. */
 .caption {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 2px var(--space-4);
+  position: relative;
+  display: grid;
+  gap: 2px;
+}
+
+.index {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--amber);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: var(--step-2);
+  font-size: clamp(1.15rem, 4.4vw, 1.5rem);
+  text-wrap: balance;
   line-height: 1.1;
   letter-spacing: -0.01em;
 }
@@ -54,9 +68,47 @@
   color: var(--muted);
 }
 
+.cue {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  gap: 6px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.cue span {
+  color: var(--amber);
+}
+
 @media (hover: hover) and (pointer: fine) {
+  .caption {
+    padding-right: 4rem;
+  }
+
+  .cue {
+    display: inline-flex;
+  }
+
   .tile:hover .media :global(img) {
-    transform: scale(1.035);
-    filter: brightness(1.08);
+    transform: scale(1.03);
+  }
+
+  .tile:hover .cue,
+  .tile:focus-visible .cue {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .runtime {
+    background: var(--ink);
   }
 }

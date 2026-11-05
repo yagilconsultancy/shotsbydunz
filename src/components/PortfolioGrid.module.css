@@ -1,6 +1,7 @@
 .filters {
+  position: relative;
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-6);
   overflow-x: auto;
   scrollbar-width: none;
   margin-inline: calc(var(--gutter) * -1);
@@ -14,15 +15,18 @@
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
+  min-height: 44px;
   padding: var(--space-3) 0 var(--space-4);
-  margin-bottom: -1px;
   border: 0;
-  border-bottom: 2px solid transparent;
   background: none;
   color: var(--muted);
   font: 500 var(--step-0) / 1 var(--font-body);
   cursor: pointer;
-  transition: color 160ms ease, border-color 160ms ease;
+  transition: color 150ms ease;
+}
+
+.filter[aria-pressed="true"] {
+  color: var(--bone);
 }
 
 .count {
@@ -30,9 +34,16 @@
   font-variant-numeric: tabular-nums;
 }
 
-.filter[aria-pressed="true"] {
-  color: var(--bone);
-  border-bottom-color: var(--amber);
+/* One underline that slides to the chosen tab. */
+.mark {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--amber);
+  transition:
+    transform 240ms ease-out,
+    width 240ms ease-out;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -66,5 +77,11 @@
 
   .item[data-lead="true"] {
     grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark {
+    transition: none;
   }
 }

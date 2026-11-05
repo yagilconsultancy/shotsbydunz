@@ -48,8 +48,8 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | About | `/about` | Dunz's story, three-part approach, off-camera facts, BTS clip |
 | Rates | `/services` | All six services with starting prices, raw footage add-ons, deposit/delivery/revision/travel rules |
 | Service detail | `/services/[service]` | Intro, ideal for, included, deliverables, examples, raw footage prices, common questions, "Book this service" (pre-fills the form) |
-| Work | `/portfolio` | Work filtered by All, Photo & Film, Content and SBD Booth, with counts. The filter is kept in the URL so it can be shared |
-| Project | `/portfolio/[project]` | Title, credits (client, event, year, location, role), full-width film or cover, story, quote, photo lightbox, next project |
+| Work | `/portfolio` | Work filtered by All, Photo & Film, Content and SBD Booth, with counts and a sliding underline; tiles glide to new places when the filter changes. The filter is kept in the URL so it can be shared |
+| Project | `/portfolio/[project]` | Back link and position counter, title, credits (client, event, year, location, role), inset film or cover, story, quote, pre-filled "Book something like this", stills with lightbox, next project panel with previous and All work links |
 | SBD Booths | `/booths` | Photo hero with quick facts, the booth story and event types, "Build your night" (package cards, hours and add-on price builder with a live total and deposit, pre-filled Book button), booking terms, prints, gallery, how it works, space and setup needs, video plus booth bundle, booth FAQ. Booth colour: champagne |
 | Book Me | `/book` | Four-step booking form (below) |
 | Request sent | `/book/thanks` | Confirmation and what happens next (separate wording after a booth deposit) |

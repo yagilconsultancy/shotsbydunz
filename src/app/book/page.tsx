@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   description: "Request a date for event videography, social content or an SBD Booth.",
 };
 
-type Props = { searchParams: Promise<{ service?: string; package?: string; event?: string; bundle?: string }> };
+type Props = {
+  searchParams: Promise<{ service?: string; package?: string; event?: string; bundle?: string; hours?: string; addons?: string; keychains?: string }>;
+};
 
 export default async function BookPage({ searchParams }: Props) {
   const q = await searchParams;
@@ -22,7 +24,9 @@ export default async function BookPage({ searchParams }: Props) {
         </p>
       </div>
       <div className={styles.formCol}>
-        <BookingForm prefill={{ service: q.service, pkg: q.package, event: q.event, bundle: q.bundle === "1" }} />
+        <BookingForm
+          prefill={{ service: q.service, pkg: q.package, event: q.event, bundle: q.bundle === "1", hours: q.hours, addons: q.addons, keychains: q.keychains }}
+        />
       </div>
     </section>
   );

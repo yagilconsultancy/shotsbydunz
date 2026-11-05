@@ -50,7 +50,7 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | Service detail | `/services/[service]` | Intro, ideal for, included, deliverables, examples, raw footage prices, common questions, "Book this service" (pre-fills the form) |
 | Work | `/portfolio` | Work filtered by All, Photo & Film, Content and SBD Booth, with counts. The filter is kept in the URL so it can be shared |
 | Project | `/portfolio/[project]` | Title, credits (client, event, year, location, role), full-width film or cover, story, quote, photo lightbox, next project |
-| SBD Booths | `/booths` | Booth hero, five features, both packages with prices, add-ons, event types, gallery, how it works, space and setup needs, video plus booth bundle, booth FAQ |
+| SBD Booths | `/booths` | Photo hero with quick facts, the booth story and event types, "Build your night" (package cards, hours and add-on price builder with a live total and deposit, pre-filled Book button), booking terms, prints, gallery, how it works, space and setup needs, video plus booth bundle, booth FAQ. Booth colour: champagne |
 | Book Me | `/book` | Four-step booking form (below) |
 | Request sent | `/book/thanks` | Confirmation and what happens next (separate wording after a booth deposit) |
 | Pay deposit | `/deposit/[link]` | Private 7-day link from a quote or a "new screenshot" request: quote, e-transfer details, proof upload |

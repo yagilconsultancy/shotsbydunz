@@ -18,10 +18,8 @@
   gap: var(--space-5);
   align-items: center;
   padding: clamp(var(--space-5), 4vw, var(--space-7));
-  border-radius: 28px;
-  background:
-    radial-gradient(70% 120% at 100% 0%, rgba(240, 176, 63, 0.14), transparent 60%),
-    var(--surface);
+  border-radius: 6px;
+  background: var(--surface);
   border: 1px solid var(--line);
 }
 
@@ -106,7 +104,7 @@
   position: absolute;
   bottom: -6px;
   padding: 1px 5px;
-  border-radius: 99px;
+  border-radius: 3px;
   background: var(--booth);
   color: var(--booth-ink);
   font-size: 0.55rem;

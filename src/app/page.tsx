@@ -56,9 +56,8 @@ export default async function HomePage() {
 
       <section className="section container" aria-labelledby="services-title">
         <header className={styles.head}>
-          <p className={styles.eyebrow}>What I do</p>
           <h2 id="services-title" className={styles.headTitle}>
-            Three ways to book me.
+            Three ways to book me
           </h2>
           <p className={styles.headLede}>Pick one or put them together. Every booking goes through the same simple form.</p>
         </header>
@@ -66,6 +65,7 @@ export default async function HomePage() {
           {pillars.map((p, i) => (
             <li key={p.id} data-reveal>
               <Link href={p.href} className={styles.service} data-pillar={p.id}>
+                <Frame src={doors[i]?.src ?? p.image} alt={doors[i]?.alt ?? p.imageAlt} className={styles.serviceImage} label={p.name} />
                 <span className={styles.serviceText}>
                   <span className={styles.serviceName}>{p.name}</span>
                   <span className={styles.serviceLine}>{p.line}</span>
@@ -73,7 +73,6 @@ export default async function HomePage() {
                     Learn more <span aria-hidden="true">›</span>
                   </span>
                 </span>
-                <Frame src={doors[i]?.src ?? p.image} alt={doors[i]?.alt ?? p.imageAlt} className={styles.serviceImage} label={p.name} />
               </Link>
             </li>
           ))}
@@ -82,28 +81,29 @@ export default async function HomePage() {
 
       <section className="section container" aria-labelledby="meet-title">
         <header className={styles.head}>
-          <p className={styles.eyebrow}>The person behind the camera</p>
           <h2 id="meet-title" className={styles.headTitle}>
-            Meet Dunz.
+            Meet Dunz
           </h2>
         </header>
         <div className={styles.bento}>
-          <div className={`${styles.card} ${styles.portraitCard}`} data-reveal>
+          <div className={styles.portraitCard} data-reveal>
             <Frame src={portrait.src} alt={portrait.alt} label="Dunz" className={styles.fill} />
           </div>
-          <div className={`${styles.card} ${styles.storyCard}`} data-reveal>
+          <div className={styles.storyCard} data-reveal>
             <p className={styles.story}>{homeIntro}</p>
             <Link href="/about" className={styles.chevron}>
               How I work <span aria-hidden="true">›</span>
             </Link>
           </div>
+        </div>
+        <dl className={styles.facts}>
           {homeFacts.map((f) => (
-            <div key={f.figure} className={`${styles.card} ${styles.factCard}`} data-reveal>
-              <span className={styles.figure}>{f.figure}</span>
-              <span className={styles.figureLabel}>{f.label}</span>
+            <div key={f.figure} className={styles.factCard} data-reveal>
+              <dt className={styles.figure}>{f.figure}</dt>
+              <dd className={styles.figureLabel}>{f.label}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </section>
 
       <section className="container" aria-labelledby="booth-title">
@@ -121,16 +121,15 @@ export default async function HomePage() {
 
       <section className="section container" aria-labelledby="how-title">
         <header className={styles.head}>
-          <p className={styles.eyebrow}>How it works</p>
           <h2 id="how-title" className={styles.headTitle}>
-            From first message to finished film.
+            From first message to finished film
           </h2>
         </header>
         <ol className={styles.steps}>
           {howItWorks.map((s, i) => (
-            <li key={s.title} className={`${styles.card} ${styles.step}`} data-reveal>
+            <li key={s.title} className={styles.step} data-reveal>
               <span className={styles.stepNum} aria-hidden="true">
-                {i + 1}
+                {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className={styles.stepTitle}>{s.title}</h3>
               <p className={styles.stepBody}>{s.body}</p>

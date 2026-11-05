@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-05: calmer home page
+
+The same restrained style as the booth page. All motion is kept.
+
+- Opening screen: small radius, plain background with no amber glow or gradient, smaller radii on cards and list photos.
+- **Three ways to book me:** the photo leads, with name, line and "Learn more" below, instead of a card holding a picture. Landscape photos on phones.
+- **Meet Dunz:** portrait beside the intro. The three facts sit on hairlines instead of in boxes.
+- **SBD Booth card:**
+  - flat champagne, with no shine or dot pattern
+  - feature labels as plain text with icons
+  - package switcher on a hairline, with "Popular" as text
+  - motion without overshoot
+- **How it works:** numbered columns on hairlines.
+- **Headings and footer:** section labels and trailing full stops removed from headings. The footer booking card is flat with a small radius.
+
 ## 2026-11-05: SBD Booth page redesign, champagne booth colour
 
 - **Booth colour is now champagne** (`--booth` #e4c48f, ink #231a0b) everywhere the booth appears: this page, the home booth card, booth buttons and the footer tag.

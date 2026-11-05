@@ -101,109 +101,90 @@
   max-width: 44ch;
 }
 
-/* Cards: one surface, one radius, one press response everywhere on the page */
-
-.card {
-  background: var(--surface);
-  border-radius: 24px;
-  overflow: hidden;
-}
-
-.service {
-  transition: transform 100ms ease-out;
-}
-
-.service:active {
-  transform: scale(0.98);
-}
-
-/* Services */
+/* Services: the photo leads, the name and line sit under it. One small radius site-wide. */
 
 .services {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-7) var(--space-5);
 }
 
 .service {
-  position: relative;
   display: grid;
-  grid-template-rows: auto 1fr;
-  min-height: 560px;
-  border-radius: 24px;
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--surface);
+  gap: var(--space-4);
   text-decoration: none;
   color: var(--bone);
+}
+
+.serviceImage {
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+}
+
+/* scale trims thin white borders some photos arrive with */
+.serviceImage :global(img),
+.portraitCard :global(img) {
+  scale: 1.04;
+  transition: transform 400ms ease-out;
 }
 
 .serviceText {
   display: grid;
   gap: var(--space-2);
   justify-items: start;
-  padding: var(--space-6) var(--space-6) 0;
 }
 
 .serviceName {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 3.4vw, 2.9rem);
-  line-height: 1;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 1.02;
   letter-spacing: -0.03em;
-}
-
-.service[data-pillar="booth"] .serviceName {
-  color: var(--booth);
 }
 
 .serviceLine {
   color: var(--muted);
-  max-width: 30ch;
+  max-width: 32ch;
 }
 
 .serviceCue {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: var(--space-2);
-  color: var(--amber);
+  margin-top: var(--space-1);
   font-weight: 600;
 }
 
 .serviceCue span {
-  font-size: 1.35em;
+  color: var(--amber);
+  font-size: 1.3em;
   line-height: 1;
-}
-
-.serviceImage {
-  margin: var(--space-6) var(--space-4) var(--space-4);
-  border-radius: 16px;
-  min-height: 300px;
-}
-
-.serviceImage :global(img) {
-  position: absolute;
-  inset: 0;
-  transition: transform 700ms var(--ease-out);
+  transition: transform 180ms ease-out;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .service:hover .serviceImage :global(img) {
-    transform: scale(1.04);
+    transform: scale(1.03);
+  }
+
+  .service:hover .serviceCue span {
+    transform: translateX(3px);
   }
 }
 
-/* Meet Dunz: portrait and story side by side, three facts underneath */
+/* Meet Dunz: portrait beside the story, three figures on a ruled line underneath */
 
 .bento {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-7);
+  align-items: end;
 }
 
 .portraitCard {
   aspect-ratio: 4 / 5;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .fill {
@@ -212,76 +193,80 @@
 
 .storyCard {
   display: grid;
-  align-content: space-between;
   justify-items: start;
   gap: var(--space-6);
-  padding: clamp(var(--space-6), 4vw, var(--space-8));
 }
 
 .story {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.5rem);
   line-height: 1.16;
   letter-spacing: -0.025em;
+  max-width: 24ch;
+}
+
+.facts {
+  margin: var(--space-8) 0 0;
+  display: grid;
+  border-top: 1px solid var(--line-strong);
 }
 
 .factCard {
   display: grid;
-  align-content: end;
   gap: var(--space-2);
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .figure {
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 4.8vw, 4rem);
+  font-size: clamp(2.6rem, 4.4vw, 3.75rem);
   line-height: 1;
   letter-spacing: -0.035em;
-  color: var(--amber);
 }
 
 .figureLabel {
+  margin: 0;
   color: var(--muted);
-  max-width: 24ch;
+  max-width: 26ch;
 }
 
-/* How it works */
+/* How it works: numbered columns on hairlines */
 
 .steps {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-4);
+  border-top: 1px solid var(--line-strong);
 }
 
 .step {
   display: grid;
-  align-content: start;
-  gap: var(--space-3);
-  padding: var(--space-6);
+  grid-template-columns: 3rem 1fr;
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--line);
 }
 
 .stepNum {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  margin-bottom: var(--space-4);
-  border-radius: 50%;
-  background: var(--amber);
-  color: var(--amber-ink);
-  font-weight: 700;
+  grid-row: span 2;
+  padding-top: 0.35em;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--amber);
   font-variant-numeric: tabular-nums;
 }
 
 .stepTitle {
   font-size: var(--step-2);
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .stepBody {
   color: var(--muted);
+  max-width: 40ch;
 }
 
 /* Quote */
@@ -313,50 +298,50 @@
 }
 
 @media (min-width: 640px) {
-  .bento {
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .portraitCard {
-    grid-column: span 3;
-  }
-
-  .storyCard {
-    grid-column: span 3;
-  }
-
-  .factCard {
-    grid-column: span 2;
-    min-height: 200px;
-  }
-
-  .steps {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1000px) {
   .services {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .service {
-    min-height: 640px;
+  .serviceImage {
+    aspect-ratio: 4 / 5;
   }
 
-  .portraitCard {
-    grid-column: span 2;
+  .bento {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--space-8);
   }
 
-  .storyCard {
-    grid-column: span 4;
+  .facts {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--space-6);
+    border-top: 0;
   }
 
-  .steps {
-    grid-template-columns: repeat(4, 1fr);
+  .factCard {
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 0;
   }
 }
 
+@media (min-width: 1100px) {
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: var(--space-6);
+    border-top: 0;
+  }
+
+  .step {
+    grid-template-columns: 1fr;
+    align-content: start;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 0;
+  }
+
+  .stepNum {
+    grid-row: auto;
+    padding: 0 0 var(--space-4);
+  }
+}
 
 @media (max-width: 899px) {
   .heroTitle {

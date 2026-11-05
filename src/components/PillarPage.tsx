@@ -8,6 +8,7 @@ import { getPillar, pillars, type PillarId } from "@/content/pillars";
 import { services } from "@/content/services";
 import { filterProjects, getProjects, photo } from "@/lib/media";
 import { policies } from "@/content/site";
+import { bookingHref } from "@/lib/booking";
 import styles from "./PillarPage.module.css";
 
 export default async function PillarPage({ id, heading }: { id: Exclude<PillarId, "booth">; heading: string }) {
@@ -72,7 +73,7 @@ export default async function PillarPage({ id, heading }: { id: Exclude<PillarId
       <section className={`container ${styles.cta}`}>
         <h2 className={styles.ctaTitle}>Have a date or an idea?</h2>
         <div className="btn-row">
-          <Link href={`/book?pillar=${id}`} className="btn btn-primary">
+          <Link href={bookingHref(id)} className="btn btn-primary">
             Book Me
           </Link>
           <Link href="/contact" className="btn btn-ghost">

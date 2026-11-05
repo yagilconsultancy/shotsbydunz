@@ -353,31 +353,3 @@
     display: none;
   }
 }
-
-/* The page below the opening screen sits on a contact sheet: faint registration crosses on a
-   wide grid over still film grain. It fades in from the top so it never meets the hero edge. */
-.field {
-  position: relative;
-  isolation: isolate;
-}
-
-.field::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144'%3E%3Cpath d='M72 66v12M66 72h12' stroke='%23f0e9df' stroke-opacity='.16' stroke-width='1'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .94 0 0 0 0 .91 0 0 0 0 .87 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.09'/%3E%3C/svg%3E");
-  background-size: 144px 144px, 220px 220px;
-  background-position: center top, 0 0;
-  mask-image: linear-gradient(180deg, transparent 0, #000 320px);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 320px);
-}
-
-@media (prefers-contrast: more) {
-  .field::before {
-    display: none;
-  }
-}

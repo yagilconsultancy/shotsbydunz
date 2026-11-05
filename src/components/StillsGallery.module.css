@@ -4,6 +4,12 @@
   gap: var(--space-4);
 }
 
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .thumb {
   padding: 0;
   border: 0;
@@ -15,8 +21,14 @@
   grid-column: 1 / -1;
 }
 
+.thumb > div {
+  border-radius: 6px;
+}
+
+/* scale trims thin white borders some photos arrive with */
 .thumb :global(img) {
-  transition: transform 600ms var(--ease-out);
+  scale: 1.04;
+  transition: transform 500ms ease-out;
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-05: Work page and project pages redesign
+
+- **Work page:**
+  - big "Work" title with intro and project count
+  - one sliding amber underline on the filter
+  - tiles glide to their new places when the filter changes (View Transitions API in Chrome, Edge and Safari; instant elsewhere and for reduced motion)
+  - screen readers hear how many projects are showing
+- **Project tiles, everywhere they appear:** small radius, "No." number, stacked title and details, "View" cue on hover, titles that fit two phone columns.
+- **Project pages:**
+  - "‹ section" back link and a "No. 01 / 08" counter
+  - credits on a hairline; inset player, with the sample-still note as a caption
+  - quote with an amber rule; "Stills" heading with photo count, three-column gallery
+  - large "Next project" panel, plus Previous and All work links
+- **Contact-sheet pattern** is now a shared `.contact-sheet` class in `globals.css`, used on Home, Work and project pages.
+- **Fix:** "Book something like this" (project pages) and "Book Me" (Photo & Film, Content) sent `?pillar=`, which the form ignores. Both now use `bookingHref()` in `lib/booking.ts`, which pre-selects event videography, personal brand content or the booth.
+
 ## 2026-11-05: contact-sheet pattern on the home page
 
 - Below the opening screen, the black background now carries faint "+" registration marks on a 144px grid over a still film grain, like a photographer's contact sheet.

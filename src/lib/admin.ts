@@ -7,7 +7,7 @@ import { overLimit, turnstileOk } from "./security";
 //   "ok"    password (or email link) and the two-step code both done
 //   "code"  two-step is set up, the code for this sign-in hasn't been entered yet
 //   "setup" signed in, but no authenticator app has been set up yet
-// emailProven: this sign-in used a link from the inbox (sign-in, set or reset password), not
+// emailProven: this sign-in used the set-password link from the inbox, not
 // only a password. Setting up two-step needs it, so a leaked password alone can't be used to
 // attach someone else's phone.
 type Gate = { email: string; step: "ok" | "code" | "setup"; emailProven: boolean } | null;

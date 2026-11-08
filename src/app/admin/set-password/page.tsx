@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { adminGate } from "@/lib/admin";
 import { PASSWORD_MIN, passwordRules } from "@/lib/password";
@@ -50,6 +51,11 @@ export default async function SetPasswordPage({ searchParams }: Props) {
           Save password
         </button>
       </form>
+      {gate.step === "setup" && (
+        <nav className={styles.links} aria-label="Other options">
+          <Link href="/admin/two-step/setup">Keep my current password and set up two-step</Link>
+        </nav>
+      )}
     </section>
   );
 }

@@ -76,7 +76,7 @@ Existing tables are unaffected.
 
 ## Password and two-step sign-in
 
-Since Plan 4, the dashboard uses a password plus a 6-digit code from an authenticator app.
+Since Plan 4, the dashboard uses a password plus a 6-digit code from an authenticator app. There is no email sign-in link; the only email is the one to set or reset a password.
 
 **Settings (one time):**
 
@@ -97,7 +97,7 @@ Since Plan 4, the dashboard uses a password plus a 6-digit code from an authenti
 **Lost phone:**
 
 1. **Authentication → Users →** their email → **MFA factors →** delete the authenticator.
-2. They sign in with **Email me a sign-in link instead** and set two-step up again on the new phone.
+2. They tap **First time, or forgot your password?**, open the email, keep or change their password, and set two-step up again on the new phone.
 
 **Leaked password protection** (checks passwords against known breaches) needs the Pro plan. Turn it on at the Pro upgrade.
 

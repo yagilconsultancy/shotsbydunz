@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-08: set-password email works on any device
+
+- The set-password link failed when opened in a different browser from the one that asked for it, for example tapping it in the Gmail app. It now goes to the new `/auth/confirm`, which uses a one-time token (Supabase's recommended method for this kind of site). It still works once, for an hour, and only for approved emails.
+- Needs the Supabase "Reset Password" email template updated (Supabase guide, step 4).
+- "Link didn't work" now shows the form to ask for a new one.
+
 ## 2026-11-08: sign-in link removed
 
 - No more "email me a sign-in link". Signing in is password plus authenticator code only.

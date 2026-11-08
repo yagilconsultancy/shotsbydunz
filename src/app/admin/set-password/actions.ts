@@ -7,7 +7,7 @@ import { passwordProblem } from "@/lib/password";
 
 export async function setPassword(fd: FormData) {
   const gate = await adminGate();
-  if (!gate) redirect("/admin/login?e=link");
+  if (!gate) redirect("/admin/login?m=reset&e=link");
   // With two-step on, a password change needs the code first, like everything else.
   if (gate.step === "code") redirect("/admin/two-step?next=password");
   if (await signInLimited("set-password", gate.email, 10)) redirect("/admin/set-password?e=slow");

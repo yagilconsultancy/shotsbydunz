@@ -86,6 +86,16 @@ Since Plan 4, the dashboard uses a password plus a 6-digit code from an authenti
    - Password requirements: **Lowercase, uppercase letters, digits and symbols**
    - Save
 2. **Authentication → Multi-Factor:** Authenticator app (TOTP) **Enabled**. It's on by default; just check it.
+3. **Authentication → URL Configuration:** **Site URL** is `https://shotsbydunz.vercel.app`. Change it to `https://shotsbydunz.ca` at launch.
+4. **Authentication → Emails → Reset Password:**
+   - Subject: `Set your ShotsByDunz dashboard password`
+   - In the message body, replace the link (the part in `href="..."`) with:
+     ```
+     {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery
+     ```
+   - Save
+
+   This makes the link work when opened from the Gmail app or on another device.
 
 **Add a person** (Supabase sign-ups are off, so each user is added by hand):
 

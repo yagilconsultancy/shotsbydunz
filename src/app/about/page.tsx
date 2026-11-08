@@ -75,27 +75,29 @@ export default async function AboutPage() {
         </ul>
       </section>
 
-      <section className="section-tight container" aria-labelledby="offcam">
-        <div className={styles.offCam}>
-          <Frame src={bts.src} alt={bts.alt} ratio="9 / 16" className={styles.bts} label="On set" />
-          <div className={styles.offText}>
-            <h2 id="offcam">Off camera</h2>
-            <ul className={styles.facts}>
-              {about.offCamera.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-            <div className="btn-row">
-              <Link href="/book" className="btn btn-primary">
-                Book Me
-              </Link>
-              <Link href="/portfolio" className={styles.chevron}>
-                See my work <span aria-hidden="true">›</span>
-              </Link>
+      {about.showOffCamera && (
+        <section className="section-tight container" aria-labelledby="offcam">
+          <div className={styles.offCam}>
+            <Frame src={bts.src} alt={bts.alt} ratio="9 / 16" className={styles.bts} label="On set" />
+            <div className={styles.offText}>
+              <h2 id="offcam">Off camera</h2>
+              <ul className={styles.facts}>
+                {about.offCamera.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+              <div className="btn-row">
+                <Link href="/book" className="btn btn-primary">
+                  Book Me
+                </Link>
+                <Link href="/portfolio" className={styles.chevron}>
+                  See my work <span aria-hidden="true">›</span>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

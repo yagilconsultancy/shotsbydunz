@@ -14,6 +14,8 @@ export const about = {
     { title: "The little details", body: "The things you might miss on the day, kept so you can relive them." },
     { title: "Made with love", body: "Creativity, attention to detail and a genuine love for what I do, on every booking." },
   ],
+  // Hidden until Dunz sends her own three facts; set to true to show the "Off camera" section.
+  showOffCamera: false,
   offCamera: [ // SAMPLE
     "Favourite shoot so far: a sunrise proposal at Springbank Park",
     "Main camera: Sony FX3",

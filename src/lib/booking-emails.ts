@@ -1,8 +1,8 @@
-import { addOnOptions, labelFor, money, packageOptions, serviceOptions } from "./booking";
+import { addOnOptions, labelFor, money, needsCall, packageOptions, serviceOptions } from "./booking";
 import { prettyDate, prettyTime, type BookingRow } from "./booking-status";
 import { renderEmail, type EmailParts, type Row } from "./email-layout";
 import { siteUrl } from "./supabase";
-import { etransfer, policies, site } from "@/content/site";
+import { bookingClauses, etransfer, policies, site } from "@/content/site";
 
 type Email = { subject: string; html: string; text: string };
 
@@ -61,6 +61,13 @@ function client(subject: string, parts: EmailParts): Email {
   return { subject: `${subject} · ${site.name}`, ...renderEmail(parts, { siteUrl: siteUrl() }) };
 }
 
+// Reasons come from the fixed list in content/site.ts, so they're safe to send; "Other" says nothing on its own.
+function declineNote(b: BookingRow) {
+  const reason = b.decline_reason && b.decline_reason !== "Other" ? `Reason: ${b.decline_reason}.` : "";
+  const text = [reason, b.status_note ?? ""].filter(Boolean).join("\n\n");
+  return text ? { label: "A note from Dunz", text } : undefined;
+}
+
 const ignore = "If you didn’t make this request, you can ignore this email.";
 
 export const clientEmails = {
@@ -74,6 +81,7 @@ export const clientEmails = {
         `I’m excited to hear about your event on ${prettyDate(b.event_date)}. I’ll check my availability and send your personal quote within 24 hours.`,
         "Nothing to pay yet. Your quote comes with a secure link to pay the deposit when you’re ready.",
       ],
+      note: needsCall(b) ? { label: "Please call to confirm", text: bookingClauses.photoCall } : undefined,
       details: details(b),
       next: {
         title: "What happens next",
@@ -156,6 +164,7 @@ export const clientEmails = {
           ? [`${policies.booth.balance}.`, "Plan a 3 m × 3 m space near a power outlet for the booth.", `${policies.booth.travel}.`]
           : [`${policies.video.balance}.`, "Send me the schedule of the day and any must-have moments.", `${policies.video.reschedule}.`],
       },
+      note: { label: "On the day", text: bookingClauses.timing },
     }),
 
   declined: (b: BookingRow) =>
@@ -164,7 +173,7 @@ export const clientEmails = {
       eyebrow: "Booking update",
       title: "Thank you for thinking of me.",
       intro: ["Unfortunately I can’t take this booking. I really appreciate you reaching out, and I hope to work with you another time."],
-      note: b.status_note ? { label: "A note from Dunz", text: b.status_note } : undefined,
+      note: declineNote(b),
       secondary: { href: `${siteUrl()}/portfolio`, label: "See recent work" },
     }),
 
@@ -216,7 +225,8 @@ function ownerRows(b: BookingRow): Row[] {
     ["Keychains", b.keychains ? String(b.keychains) : ""],
     ["Date", prettyDate(b.event_date)],
     ["Start time", prettyTime(b.start_time)],
-    ["Location", b.location],
+    ["Venue", b.venue ?? ""],
+    ["Address", b.location],
     ["Event type", b.event_type],
     ["Guests", b.guests ? String(b.guests) : ""],
     ["Songs", b.songs ?? ""],

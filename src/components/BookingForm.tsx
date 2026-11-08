@@ -23,10 +23,15 @@ import {
   serviceOptions,
   songMixOptions,
   validateStep,
+  bookingSpan,
+  clockLabel,
+  needsCall,
+  overlaps,
+  type Span,
   type Booking,
   type Errors,
 } from "@/lib/booking";
-import { policies } from "@/content/site";
+import { bookingClauses, policies } from "@/content/site";
 import Turnstile, { turnstileOn } from "./Turnstile";
 import EtransferBox from "./EtransferBox";
 import ProofUpload from "./ProofUpload";
@@ -83,6 +88,25 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
     headingRef.current?.focus();
   }, [step]);
 
+  // Times already taken on the chosen date (Plan 5). Only spans come back, never booking details.
+  const [taken, setTaken] = useState<{ date: string; spans: Span[] } | null>(null);
+  useEffect(() => {
+    if (!data.date) return;
+    let live = true;
+    fetch(`/api/availability?date=${encodeURIComponent(data.date)}`)
+      .then((r) => r.json())
+      .then((j: { taken?: Span[] }) => live && setTaken({ date: data.date, spans: Array.isArray(j.taken) ? j.taken : [] }))
+      .catch(() => live && setTaken(null));
+    return () => {
+      live = false;
+    };
+  }, [data.date]);
+  const takenToday = taken && taken.date === data.date ? taken.spans.filter((t) => t.to > 0 && t.from < 1440) : [];
+  const clash =
+    taken && taken.date === data.date && data.startTime && data.hours
+      ? taken.spans.find((t) => overlaps(bookingSpan(data.startTime, data.hours), t))
+      : undefined;
+
   const set = <K extends keyof Booking>(key: K, value: Booking[K]) => {
     setData((d) => ({ ...d, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
@@ -95,6 +119,8 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
 
   const next = () => {
     const e = validateStep(step, data);
+    if (step === 2 && clash && !e.startTime)
+      e.startTime = `That overlaps a booking that day (${clockLabel(clash.from)} – ${clockLabel(clash.to)}). Choose another start time.`;
     setErrors(e);
     if (Object.keys(e).length) {
       const first = document.querySelector<HTMLElement>(`[data-field="${Object.keys(e)[0]}"] input, [data-field="${Object.keys(e)[0]}"] select, [data-field="${Object.keys(e)[0]}"] textarea`);
@@ -131,7 +157,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         if (json.errors?.proof) setProofError(json.errors.proof);
         if (json.errors) {
           setErrors(json.errors);
-          const firstStep = [["name", "email", "phone", "contactMethod"], ["services", "boothPackage", "videos", "hours", "addOns", "keychains"], ["date", "startTime", "location", "eventType", "guests", "songMix"], ["budget", "referral", "agree"]].findIndex((keys) =>
+          const firstStep = [["name", "email", "phone", "contactMethod"], ["services", "boothPackage", "videos", "hours", "addOns", "keychains"], ["date", "startTime", "location", "venue", "eventType", "guests", "songMix"], ["budget", "referral", "agree", "callConfirm"]].findIndex((keys) =>
             keys.some((k) => k in json.errors),
           );
           if (firstStep >= 0) setStep(firstStep);
@@ -288,12 +314,22 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
             >
               <input id="date" type="date" min={earliestDate(data)} value={data.date} onChange={(e) => set("date", e.target.value)} />
             </Field>
-            <Field id="startTime" label="Start time" error={errors.startTime}>
-              <input id="startTime" type="time" value={data.startTime} onChange={(e) => set("startTime", e.target.value)} />
+            <Field id="startTime" label="Start time" error={errors.startTime} hint="When your event begins">
+              <input id="startTime" type="time" step={900} value={data.startTime} onChange={(e) => set("startTime", e.target.value)} />
             </Field>
           </div>
-          <Field id="location" label="Venue or city" error={errors.location} hint="A $50 travel fee applies outside London, Ontario.">
-            <input id="location" autoComplete="address-level2" value={data.location} onChange={(e) => set("location", e.target.value)} />
+          {data.date && taken?.date === data.date && (
+            <p className={styles.availability} role="status">
+              {takenToday.length === 0
+                ? "This day is open."
+                : `Already booked that day: ${takenToday.map((t) => `${clockLabel(t.from)} – ${clockLabel(t.to)}`).join(", ")}. Any start time that fits around this is available.`}
+            </p>
+          )}
+          <Field id="location" label="Event address" error={errors.location} hint="Street and city. A $50 travel fee applies outside London, Ontario.">
+            <input id="location" autoComplete="street-address" value={data.location} onChange={(e) => set("location", e.target.value)} />
+          </Field>
+          <Field id="venue" label="Venue name" optional>
+            <input id="venue" autoComplete="organization" value={data.venue} onChange={(e) => set("venue", e.target.value)} />
           </Field>
           <div className={styles.row}>
             <Field id="eventType" label="Type of event" error={errors.eventType}>
@@ -387,7 +423,10 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
               </div>
               <div>
                 <dt>Where</dt>
-                <dd>{data.location}</dd>
+                <dd>
+                  {data.venue && `${data.venue}, `}
+                  {data.location}
+                </dd>
               </div>
               {price ? (
                 <>
@@ -418,6 +457,26 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                 : "This is a request, not a payment. I’ll check availability and send your quote. You pay the deposit after you accept it."}
             </p>
           </section>
+
+          <section className={styles.clause} aria-label="Timing">
+            <h3>On the day</h3>
+            <p>{bookingClauses.timing}</p>
+          </section>
+
+          {needsCall(data) && (
+            <div data-field="callConfirm">
+              <label className={styles.check}>
+                <input
+                  type="checkbox"
+                  checked={data.callConfirm}
+                  onChange={(e) => set("callConfirm", e.target.checked)}
+                  aria-describedby={errors.callConfirm ? "call-error" : undefined}
+                />
+                <span>{bookingClauses.photoCall} I’ll call to confirm.</span>
+              </label>
+              {errors.callConfirm && <p id="call-error" className={styles.error}>{errors.callConfirm}</p>}
+            </div>
+          )}
 
           <div data-field="agree">
             <label className={styles.check}>

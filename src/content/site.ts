@@ -39,6 +39,21 @@ export const nav = [
   { href: "/about", label: "About" },
 ];
 
+// Plan 5: shown on the booking form, emails, deposit page and terms.
+export const bookingClauses = {
+  photoCall: `Photography bookings are confirmed by phone. Please call Dunz at ${site.phone} within 48 hours of booking to confirm your date.`,
+  timing:
+    "Dunz arrives early to set up. Your booked time starts counting 30 minutes after she arrives, so you have time to settle in if your programme isn’t ready yet. If your programme starts late, coverage ends no more than 30 minutes after your booked end time.",
+};
+
+export const declineReasons = [
+  "Date already booked",
+  "Outside my service area",
+  "Not the kind of event I cover",
+  "Timeline too short",
+  "Other",
+];
+
 export const policies = {
   video: {
     deposit: "70% deposit to secure your date, non-refundable",

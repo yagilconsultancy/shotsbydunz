@@ -1,6 +1,7 @@
 // SAMPLE prices: Dunz chose "starting from" pricing but hasn't sent the amounts yet.
 
 import type { PillarId } from "./pillars";
+import { bookingClauses } from "./site";
 
 export type Service = {
   slug: string;
@@ -13,6 +14,7 @@ export type Service = {
   deliverables: string[];
   turnaround: string;
   startingFrom: string;
+  note?: string;
 };
 
 export const services: Service[] = [
@@ -46,6 +48,7 @@ export const services: Service[] = [
     deliverables: ["Edited high-resolution gallery", "Web-sized copies for social media"],
     turnaround: "5 to 7 days",
     startingFrom: "$300", // SAMPLE: photography wasn't on the original list; confirm with Dunz
+    note: bookingClauses.photoCall,
   },
   {
     slug: "personal-brand",

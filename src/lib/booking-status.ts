@@ -32,6 +32,8 @@ export type BookingRow = {
   event_date: string;
   start_time: string;
   location: string;
+  venue: string | null;
+  decline_reason: string | null;
   event_type: string;
   guests: number | null;
   songs: string | null;

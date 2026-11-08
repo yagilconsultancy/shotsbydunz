@@ -1,3 +1,5 @@
+import { bookingClauses } from "./site";
+
 // Video terms are Dunz's own Terms & Conditions, lightly reworded for the web.
 // Booth terms combine her price list notes with SAMPLE items still to confirm.
 
@@ -10,7 +12,12 @@ export const videoTerms = [
       "The remaining balance is due on the day of the event.",
       "Payments are made by e-transfer to shotsbydunz@gmail.com.",
       "Payments are non-refundable.",
+      bookingClauses.photoCall,
     ],
+  },
+  {
+    title: "On the day",
+    points: [bookingClauses.timing],
   },
   {
     title: "Rescheduling and cancellations",
@@ -62,6 +69,10 @@ export const boothTerms = [
       "The balance is due the day before the event.",
       "Bookings must be confirmed and secured 72 hours before the event.",
     ],
+  },
+  {
+    title: "On the day",
+    points: [bookingClauses.timing],
   },
   {
     title: "Travel",

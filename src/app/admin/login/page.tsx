@@ -14,7 +14,7 @@ const errors: Record<string, string> = {
   wrong: "That email and password don’t match. Check both and try again.",
   slow: "Too many tries. Wait 15 minutes and try again.",
   bot: "Please complete the quick check above the button and try again.",
-  link: "That link didn’t work or has expired. Ask for a new one, and open it on this device.",
+  link: "That link didn’t work or has expired. Links work once, for an hour. Ask for a new one below.",
   setup: "Before turning on two-step sign-in, confirm it’s you: we’ll email you a link. Open it on this device, then set up your authenticator app.",
 };
 
@@ -31,8 +31,8 @@ export default async function LoginPage({ searchParams }: Props) {
       <section className={`container ${styles.wrap}`}>
         <h1 className={styles.title}>Check your email</h1>
         <p className="lede">
-          If that email has dashboard access, a link to set your password is on its way. Open it on this device. It works
-          once, within an hour.
+          If that email has dashboard access, a link to set your password is on its way. It works once, within an hour, on
+          any device.
         </p>
         <Link href="/admin/login" className={styles.alt}>
           Back to sign in

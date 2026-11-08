@@ -7,13 +7,13 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
   const base = siteUrl();
-  if (!code) return NextResponse.redirect(`${base}/admin/login?e=link`);
+  if (!code) return NextResponse.redirect(`${base}/admin/login?m=reset&e=link`);
   const supabase = await authClient();
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   const email = data.user?.email?.toLowerCase();
   if (error || !email || !adminEmails().includes(email)) {
     await supabase.auth.signOut();
-    return NextResponse.redirect(`${base}/admin/login?e=link`);
+    return NextResponse.redirect(`${base}/admin/login?m=reset&e=link`);
   }
   if (url.searchParams.get("next") === "password") return NextResponse.redirect(`${base}/admin/set-password`);
   return NextResponse.redirect(`${base}/admin`);

@@ -23,6 +23,7 @@ Approved by Yagil on 8 November 2026 ("Approved plan 4"; two-step: yes). Dunz's 
 - Wrong email and wrong password get the same message, so the page can't reveal who has access.
 - 5 tries per 15 minutes per address and per account for sign-in, codes and links (3 for password emails, 10 for choosing a password). Cloudflare's bot check is on the sign-in forms. Supabase also limits attempts on its side.
 - **Setting up two-step needs the set-password email.** You can only add an authenticator app after arriving through that link. Someone who signs in with a password but has no app yet is asked to confirm by email first, then may keep their password and set up the app. A password that leaked before two-step was on still can't attach someone else's phone.
+- **The set-password email works on any device.** It goes to `/auth/confirm` with a one-time token, so it opens correctly from the Gmail app or another phone. Supabase's "Reset Password" email template must point there (see the Supabase guide). Like before, it works once, for an hour, and only for approved emails.
 - **Email links only lead back to this site.** The "next" value is compared with one fixed word and is never used as an address.
 - The sign-in cookie stays as before: hidden from page scripts, HTTPS-only, a week without use.
 - **Lost phone:**
@@ -30,7 +31,7 @@ Approved by Yagil on 8 November 2026 ("Approved plan 4"; two-step: yes). Dunz's 
   2. The person uses "First time, or forgot your password?".
   3. They keep or change their password, then set up two-step again.
 
-## Tested (8 November 2026, stand-in database): 23 of 23 checks passed
+## Tested (8 November 2026, stand-in database): 27 of 27 checks passed
 
 - Strangers are sent to sign in.
 - A wrong password and an unknown email get the same message.
@@ -42,6 +43,8 @@ Approved by Yagil on 8 November 2026 ("Approved plan 4"; two-step: yes). Dunz's 
 - The setup page closes once two-step is on.
 - Signing in with a password alone can't set up two-step without the email. After it, the person can keep their password and set up the app.
 - There's no "email me a sign-in link" option on the page.
+- The set-password link opened in a different browser (for example, the Gmail app on a phone) works.
+- Used a second time, it's refused. Other link types and unknown accounts are refused too.
 - An email link can't redirect off the site.
 - The sixth wrong try is slowed down.
 

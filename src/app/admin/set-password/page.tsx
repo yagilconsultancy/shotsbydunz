@@ -19,7 +19,7 @@ const errors: Record<string, string> = {
 
 export default async function SetPasswordPage({ searchParams }: Props) {
   const gate = await adminGate();
-  if (!gate) redirect("/admin/login?e=link");
+  if (!gate) redirect("/admin/login?m=reset&e=link");
   if (gate.step === "code") redirect("/admin/two-step?next=password");
   const q = await searchParams;
   const error = q.e ? errors[q.e] : null;

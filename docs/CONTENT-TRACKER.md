@@ -12,7 +12,8 @@ Everything on the site that is still placeholder. Search the code for `SAMPLE` t
 | [ ] Portfolio project names, clients, dates, stories, quotes | **Dunz, in the dashboard:** Media, then Portfolio projects (`src/content/portfolio.ts` is only the fallback) | Invented |
 | [ ] Every site photo (home, doors, about, booth page, link preview) | **Dunz, in the dashboard:** Media, then each folder | AI-generated samples in `public/images` |
 | [ ] Event photography: offered? Starting price? | `src/content/services.ts` | Added at $300 as a sample |
-| [ ] Her story, approach and off-camera facts | `src/content/about.ts` | Written in her voice as a sample |
+| [x] Her story and approach | `src/content/about.ts` | Her own words, 8 Nov 2026 |
+| [ ] Off-camera facts | `src/content/about.ts`, `offCamera` | Samples |
 | [ ] 3 to 5 client reviews | `src/content/about.ts`, `testimonials` | Invented |
 | [ ] "Starting from" price for each video service | `src/content/services.ts`, `startingFrom` | $350, $250, $200, $200, $120 |
 | [ ] Service descriptions and deliverables | `src/content/services.ts` | Written by us from the PRD |

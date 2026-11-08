@@ -15,6 +15,9 @@ export default async function DashLayout({ children }: { children: React.ReactNo
           <Link href="/admin" className={styles.home}>
             Bookings
           </Link>
+          <Link href="/admin/blocks" className={styles.home}>
+            Blocked times
+          </Link>
           <Link href="/admin/media" className={styles.home}>
             Media
           </Link>

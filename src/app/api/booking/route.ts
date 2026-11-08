@@ -18,6 +18,7 @@ import { logEvent, readProof, uploadProof } from "@/lib/bookings";
 import { proofProblem } from "@/lib/proof";
 import { sendMail } from "@/lib/mail";
 import { clientEmails, ownerEmails } from "@/lib/booking-emails";
+import { clashFor } from "@/lib/availability";
 import type { BookingRow } from "@/lib/booking-status";
 import { site } from "@/content/site";
 
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
     date: clip(body.date, 10),
     startTime: clip(body.startTime, 5),
     location: clip(body.location, 300),
+    venue: clip(body.venue, 120),
     eventType: clip(body.eventType, 60),
     guests: clip(body.guests, 4),
     services: list(body.services, serviceOptions.map((s) => s.id)),
@@ -64,6 +66,7 @@ export async function POST(req: Request) {
     budget: clip(body.budget, 40),
     referral: clip(body.referral, 60),
     agree: body.agree === true,
+    callConfirm: body.callConfirm === true,
   };
 
   const errors = validateAll(b);
@@ -71,6 +74,14 @@ export async function POST(req: Request) {
 
   if (!dbConfigured())
     return fail(`Online booking isn’t switched on yet, so this wasn’t sent. Please email ${site.email} or text ${site.phone}.`, 503);
+
+  // The form checks this too, but someone may have confirmed that slot since the page loaded.
+  try {
+    if (await clashFor(b.date, b.startTime, b.hours))
+      return fail("That time was just booked. Choose another start time.", 409, { startTime: "That time is no longer available. Choose another start time." });
+  } catch {
+    console.error("Availability check failed");
+  }
 
   const fixed = isFixedPrice(b);
   const price = fixed ? boothPrice(b) : null;
@@ -106,6 +117,7 @@ export async function POST(req: Request) {
     event_date: b.date,
     start_time: b.startTime,
     location: b.location,
+    venue: orNull(b.venue),
     event_type: b.eventType,
     guests: b.guests ? Number(b.guests) : null,
     songs: orNull(b.songs),

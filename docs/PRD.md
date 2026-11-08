@@ -55,6 +55,7 @@ The earlier PRD suggested Webflow or Framer. We chose Next.js because the bookin
 | Request sent | `/book/thanks` | Confirmation and what happens next (separate wording after a booth deposit) |
 | Pay deposit | `/deposit/[link]` | Private 7-day link from a quote or a "new screenshot" request: quote, e-transfer details, proof upload |
 | Dashboard | `/admin` | Dunz's bookings: sign-in by email and password plus a two-step code from an authenticator app (email link as backup; set and reset password by email), lists, day view, booking page with proof and actions. Not in search results |
+| Blocked times | `/admin/blocks` | Upcoming held times (from confirmed bookings, linked) and Dunz's own blocks: add by date with from/to or all day and a private note, remove her own |
 | Media | `/admin/media` | Dunz's photo folders (replace, undo, descriptions) and portfolio projects (add, edit, reorder, hide, delete, cover, gallery, video link) |
 | FAQ | `/faq` | Questions grouped by Booking, Coverage, Delivery, Music, SBD Booths. Includes FAQ structured data for Google |
 | Contact | `/contact` | Call and text buttons, email, socials, service area, hours, short message form |
@@ -70,8 +71,8 @@ Every booking is made on the website. Steps, in order:
 
 1. **About you**: name, email, phone (all required), best way to reach you.
 2. **What you need**: services (one or more, required), booth package (required if booth chosen), number of videos (required if video chosen), hours (required), add-ons (raw footage for video; keychains with a quantity of 50 or more, guest books and prints upgrade for booth).
-3. **Your event**: date and start time (required), venue or city (required), event type (required), guest count (booth only), song choices and song mix (video only).
-4. **The details**: ideas, schedule of the day (video only), reference links, budget, how they found Dunz, a summary with the price or deposit rules, and a required terms and privacy checkbox.
+3. **Your event**: date and start time (required; times already taken that day are listed and overlapping starts refused), event address (required, street and city), venue name (optional), event type (required), guest count (booth only), song choices and song mix (video only).
+4. **The details**: ideas, schedule of the day (video only), reference links, budget, how they found Dunz, a summary with the price or deposit rules, the "On the day" timing clause, a required "I'll call to confirm" box when Event photography is chosen, and a required terms and privacy checkbox.
 5. **Deposit** (booth only): price breakdown, 50% deposit, e-transfer details with a reference code like `SBD-7KQ4P2` (also the security answer if autodeposit is off), and a required upload of the e-transfer screenshot or PDF.
 
 Services come before the date on purpose: the earliest allowed date depends on what's booked.
@@ -81,13 +82,15 @@ Services come before the date on purpose: the earliest allowed date depends on w
 - **Booth only (fixed price):** the site works out the total (package + hours over 3 at $100 + add-ons) and the 50% deposit. The client pays and uploads proof before submitting. Status: Deposit to check.
 - **Anything with video (quote first):** the client sends a request with no payment. Dunz sends a quote from the dashboard (total, deposit, optional note). The client gets a 7-day private link to pay the deposit and upload proof. Status: Requested, then Quote sent, then Deposit to check.
 
-Dunz checks her bank and confirms. Statuses: Requested → Quote sent → Deposit to check → Confirmed → Balance paid → Delivered, plus Proof needs fixing, Declined and Cancelled. Dates stay open: several bookings can share a date, and the booking page lists the others on that day so Dunz can spot clashes.
+Dunz checks her bank and confirms. Statuses: Requested → Quote sent → Deposit to check → Confirmed → Balance paid → Delivered, plus Proof needs fixing, Declined and Cancelled. Confirming a booking holds its time from 30 minutes before the start to 30 minutes after the end (Dunz can change the window). Other times that day stay open. Held and manually blocked times can't be chosen on the form, and the server checks again before saving. A confirm that overlaps a held time is stopped once with a warning, then allowed with "Confirm anyway". Declining needs a reason from a fixed list (Date already booked, Outside my service area, Not the kind of event I cover, Timeline too short, Other with a message); declining or cancelling frees the time.
 
 ### Rules the form enforces, in the browser and again on the server
 
 - Video bookings need at least 48 hours' notice; anything including a booth needs 72 hours.
 - Required fields as listed above; email and phone must look valid; every menu field only accepts its listed options; dates must be real and no more than two years ahead.
 - Proof files: JPG, PNG, HEIC or PDF, checked by their contents, up to 4 MB (Vercel's upload limit is 4.5 MB).
+- The start time plus booked hours (with 30 minutes either side) must not overlap a held or blocked time.
+- The address needs at least 6 characters; Event photography needs the call box ticked.
 - A hidden "website" field catches spam bots.
 - The server accepts forms only from the site itself, at most 5 times in 10 minutes from one address. Cloudflare Turnstile adds a bot check when its keys are set.
 
@@ -98,6 +101,9 @@ Links can pre-fill the form: `/book?service=event-videography`, `/book?service=b
 Each step emails the client and Dunz. Client emails use fixed wording plus menu choices, dates, amounts and Dunz's own notes; nothing the visitor typed. Dunz's emails carry every field and a link to the booking in her dashboard.
 
 ### Data
+
+Held and blocked times live in `blocked_times`. The public form asks `/api/availability` for a date and gets only start and end times (no names, events or notes), at most 60 times in 10 minutes from one address.
+
 
 Bookings and a history of every change live in Supabase (Canada). Proof files sit in a private bucket and Dunz sees them through links that expire after 5 minutes. Browsers can't read the database; only the website's server can, after checking that the visitor is signed in and on the `ADMIN_EMAILS` list.
 

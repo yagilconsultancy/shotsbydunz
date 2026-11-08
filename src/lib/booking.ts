@@ -43,6 +43,7 @@ export type Booking = {
   date: string;
   startTime: string;
   location: string;
+  venue: string;
   eventType: string;
   guests: string;
   services: string[];
@@ -59,6 +60,7 @@ export type Booking = {
   budget: string;
   referral: string;
   agree: boolean;
+  callConfirm: boolean;
   website?: string;
 };
 
@@ -70,6 +72,7 @@ export const emptyBooking: Booking = {
   date: "",
   startTime: "",
   location: "",
+  venue: "",
   eventType: "",
   guests: "",
   services: [],
@@ -86,6 +89,7 @@ export const emptyBooking: Booking = {
   budget: "",
   referral: "",
   agree: false,
+  callConfirm: false,
 };
 
 export const hasVideo = (b: Pick<Booking, "services">) => b.services.some((s) => s !== "booth");
@@ -193,7 +197,7 @@ export function validateStep(step: number, b: Booking, now = new Date()): Errors
     else if (b.date > latestDate(now)) e.date = "I take bookings up to two years ahead. Message me about dates further out.";
     else if (b.date < earliestDate(b, now))
       e.date = `${hasBooth(b) ? "Booth bookings need 72" : "Video bookings need 48"} hours' notice. Choose a later date, or message me to check last-minute availability.`;
-    if (!b.location.trim()) e.location = "Enter the venue or city.";
+    if (b.location.trim().length < 6) e.location = "Enter the event address, with street and city.";
     if (!oneOf(b.eventType, eventTypes)) e.eventType = "Choose the type of event.";
     if (!timeRe.test(b.startTime)) e.startTime = "Choose a start time.";
     if (b.guests && !(/^\d{1,4}$/.test(b.guests) && Number(b.guests) >= 1)) e.guests = "Enter the number of guests.";
@@ -203,12 +207,46 @@ export function validateStep(step: number, b: Booking, now = new Date()): Errors
     if (!optionalOneOf(b.budget, budgets)) e.budget = "Choose a budget range.";
     if (!optionalOneOf(b.referral, referralSources)) e.referral = "Choose how you found me.";
     if (!b.agree) e.agree = "Please agree to the terms and conditions to send your request.";
+    if (needsCall(b) && !b.callConfirm) e.callConfirm = "Please confirm you’ll call to confirm your photography booking.";
   }
   return e;
 }
 
 export function validateAll(b: Booking, now = new Date()): Errors {
   return { ...validateStep(0, b, now), ...validateStep(1, b, now), ...validateStep(2, b, now), ...validateStep(3, b, now) };
+}
+
+// Photography bookings are confirmed by a call from the client (Plan 5, #1).
+export const needsCall = (b: Pick<Booking, "services">) => b.services.includes("event-photography");
+
+// --- Availability (Plan 5, #2) ---
+// Times are minutes from midnight on the event date, so an evening that runs past midnight is
+// just a number above 1440. A booking holds Dunz from 30 minutes before the start (arrival and
+// setup) to 30 minutes after the booked hours (the overrun the timing policy allows).
+export const BLOCK_BEFORE = 30;
+export const BLOCK_AFTER = 30;
+
+export type Span = { from: number; to: number };
+
+export const minutesOf = (hhmm: string) => {
+  const [h, m] = hhmm.split(":").map(Number);
+  return h * 60 + m;
+};
+export const coverageHours = (hours: string) => (hours === "10+" ? 10 : Number(hours) || 3);
+
+export function bookingSpan(startTime: string, hours: string): Span {
+  const start = minutesOf(startTime);
+  return { from: start - BLOCK_BEFORE, to: start + coverageHours(hours) * 60 + BLOCK_AFTER };
+}
+
+export const overlaps = (a: Span, b: Span) => a.from < b.to && b.from < a.to;
+
+export function clockLabel(minutes: number) {
+  const day = Math.floor(minutes / 1440);
+  const m = ((minutes % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  const label = `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "am" : "pm"}`;
+  return day > 0 ? `${label} (next day)` : day < 0 ? `${label} (day before)` : label;
 }
 
 export function labelFor(list: { id: string; label: string }[], id: string) {

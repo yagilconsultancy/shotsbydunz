@@ -48,12 +48,22 @@ Only emails on the approved list can sign in. YAGIL adds or removes people.
 | **Quote sent** | Waiting for the client to pay | Nothing. You can **Send quote again** to change the price or give them a fresh link |
 | **Deposit to check** | The client paid and uploaded proof | Check your bank for the amount with the booking reference (for example `SBD-7KQ4P2`) in the message. If it's there, **Confirm booking**. If not, **Ask for a new screenshot** and say what's wrong |
 | **Proof needs fixing** | Waiting for a new screenshot | Nothing, or confirm if the money has arrived |
-| **Confirmed** | Date secured | Tap **Mark balance paid** when the balance arrives |
+| **Confirmed** | Date secured; its time is now held (see below) | Tap **Mark balance paid** when the balance arrives |
 | **Balance paid** | All paid | Tap **Mark delivered** when the photos or video are delivered |
 
 Booth-only bookings skip the quote: the price is fixed, so clients pay the 50% deposit and upload proof as they book.
 
 Every button sends the client a short email. Their replies come to your inbox.
+
+**Declining:** open **Decline this booking**, pick a reason, and add a message if you like (needed for "Other"). The client sees both.
+
+## Held and blocked times
+
+- **When you confirm a booking**, its time is held automatically: from 30 minutes before the start to 30 minutes after the booked hours end. Nobody else can pick a start time that overlaps it. The rest of the day stays open.
+- **To change the window** (say you need longer to set up), use **Held time** on the booking page. An end time earlier than the start means past midnight.
+- **If a booking you're confirming overlaps one already held**, you'll see a warning. Check the Same day list; if it's fine, tick **Confirm anyway**.
+- **Days off or outside jobs:** open the **Blocked times** tab, choose the date and the hours (or **All day**), add a note for yourself and tap **Block this time**. Clients only see that the time is taken, never your note. Tap **Remove** to open it again.
+- Declining or cancelling a booking frees its time.
 
 ## Photos and portfolio (Media tab)
 

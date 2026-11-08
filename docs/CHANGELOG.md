@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-08: Dunz's booking requests (Plan 5)
+
+- **Photography:** clients tick that they'll call Dunz within 48 hours to confirm. The line is also on the Event photography page, in the request email and in the terms.
+- **Blocked times:** confirming a booking holds 30 minutes before its start to 30 minutes after its end. Dunz can change the window, and block days or hours by hand in the new **Blocked times** tab. The booking form lists taken times and refuses overlapping starts; the server checks again before saving and when confirming ("Confirm anyway" for a deliberate overlap). Declining or cancelling frees the time.
+- **Decline reasons:** a reason from a fixed list is required ("Other" needs a message). It's emailed to the client and kept in the history.
+- **Address:** "Event address" (street and city) is required, with an optional venue name.
+- **On the day clause:** booked time starts 30 minutes after Dunz arrives; a late programme can run at most 30 minutes over. Shown on the review step, the confirmed email, the deposit page and the terms.
+- **Needs:** `docs/supabase/004_availability.sql` run once in Supabase.
+- Details and test results in `docs/plans/PLAN-5-DUNZ-REQUESTS.md`.
+
 ## 2026-11-08: set-password email works on any device
 
 - The set-password link failed when opened in a different browser from the one that asked for it, for example tapping it in the Gmail app. It now goes to the new `/auth/confirm`, which uses a one-time token (Supabase's recommended method for this kind of site). It still works once, for an hour, and only for approved emails.

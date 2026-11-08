@@ -4,7 +4,7 @@ import { findByToken } from "@/lib/bookings";
 import { dbConfigured } from "@/lib/supabase";
 import { labelFor, money, packageOptions, serviceOptions } from "@/lib/booking";
 import { prettyDate, prettyTime } from "@/lib/booking-status";
-import { policies, site } from "@/content/site";
+import { bookingClauses, policies, site } from "@/content/site";
 import EtransferBox from "@/components/EtransferBox";
 import DepositForm from "@/components/DepositForm";
 import styles from "@/components/BookingForm.module.css";
@@ -72,6 +72,7 @@ export default async function DepositPage({ params }: Props) {
               <dd>{money(b.deposit_cents)} now. {b.services.some((s) => s !== "booth") ? policies.video.balance : policies.booth.balance}.</dd>
             </div>
           </dl>
+          <p className={styles.small}>{bookingClauses.timing}</p>
           {fixing && b.status_note && <p className={styles.small}>What I need: {b.status_note}</p>}
           {!fixing && b.quote_note && <p className={styles.small}>A note from me: {b.quote_note}</p>}
         </section>

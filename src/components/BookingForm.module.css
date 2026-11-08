@@ -308,3 +308,29 @@
   font-weight: 600;
   border-bottom: 0;
 }
+
+.availability {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--amber);
+  background: var(--surface);
+  font-size: var(--step--1);
+}
+
+.clause {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+}
+
+.clause h3 {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 600;
+}
+
+.clause p {
+  color: var(--muted);
+}

@@ -41,6 +41,7 @@ export default async function ServicePage({ params }: Params) {
           <span className={styles.price}>{isCustom ? "Custom quote" : `From ${service.startingFrom}`}</span>
           <span className="muted">Delivered in {service.turnaround.toLowerCase()}</span>
         </div>
+        {service.note && <p className="muted">{service.note}</p>}
         <div className="btn-row">
           <Link href={`/book?service=${service.slug}`} className="btn btn-primary">
             Book this service

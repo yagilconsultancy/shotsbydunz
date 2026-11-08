@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-08: About page in Dunz's own words
+
+- Headline, story and "How I work" now use Dunz's own introduction (Adedunni, the creative behind ShotsByDunz), lightly edited for the web.
+- Refreshed About layout: portrait beside the story with three quick facts, numbered "How I work" cards, kind words, and an "Off camera" panel.
+- The "Off camera" section is hidden until Dunz sends her own facts (`showOffCamera` in `src/content/about.ts`).
+- Still samples: the photos (Dunz replaces those in Media).
+
 ## 2026-11-08: Dunz's booking requests (Plan 5)
 
 - **Photography:** clients tick that they'll call Dunz within 48 hours to confirm. The line is also on the Event photography page, in the request email and in the terms.

@@ -64,7 +64,7 @@ Database changes come as numbered files in `docs/supabase/`. Run each one once, 
 | `001_booking_setup.sql` | Tables, private proof storage, access rules | Done (re-run on shotsbydunz-ca 3 Nov 2026) |
 | `002_keychains.sql` | Adds the keychain quantity | Done (re-run on shotsbydunz-ca 3 Nov 2026) |
 | `003_media.sql` | Photo folders, portfolio projects, the public `site-media` storage, and a copy of the 8 sample projects | Done 3 Nov 2026 |
-| `004_availability.sql` | Held and blocked times (`blocked_times`), venue name and decline reason on bookings | **Run before Plan 5 goes live** |
+| `004_availability.sql` | Held and blocked times (`blocked_times`), venue name and decline reason on bookings | Done 8 Nov 2026 |
 
 ## Locking future tables
 

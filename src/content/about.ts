@@ -1,20 +1,24 @@
-// SAMPLE: the story, approach and facts below are placeholders written in Dunz's voice.
-// Replace with her own words once she sends them.
+// Story and approach are Dunz's own words (sent 8 November 2026), lightly edited for the web.
+// The off-camera facts are still SAMPLE placeholders.
 
 export const about = {
-  headline: "I'm Dunz. I film the moments people talk about the next day.",
+  headline: "Hi, I’m Adedunni, the creative behind ShotsByDunz.",
   story: [
-    "I picked up a camera to film my friends' birthdays and never put it down. What started as phone clips for the group chat turned into ShotsByDunz: event films, social content and, later, a photobooth business of its own.",
-    "I'm based in London, Ontario, and I shoot weddings, birthdays, launches and personal brands across the province. Every booking gets the same thing: someone who shows up early, notices the small moments and delivers on time.",
+    "I’m a storyteller at heart. I love capturing genuine moments and turning beautiful memories into something you can relive.",
+    "What started as a passion for creating meaningful content has grown into a business that lets me be part of people’s special moments: videography, and photo booth experiences with SBD Booths.",
+    "For me, it’s more than capturing moments. It’s preserving the laughter, the little details, the emotions and everything in between.",
+    "I’m glad you’re here, and I’d love to be part of your next celebration.",
   ],
   approach: [
-    { title: "Story first", body: "Every edit has a beginning, middle and end, even a 30-second reel." },
-    { title: "Candid over posed", body: "I film the laugh after the photo, not just the photo." },
-    { title: "On time, every time", body: "Your film lands within 5 to 7 days, not 5 to 7 weeks." },
+    { title: "Genuine moments", body: "The real laughter and emotion of the day, not only the posed shots." },
+    { title: "The little details", body: "The things you might miss on the day, kept so you can relive them." },
+    { title: "Made with love", body: "Creativity, attention to detail and a genuine love for what I do, on every booking." },
   ],
-  offCamera: [
+  // Hidden until Dunz sends her own three facts; set to true to show the "Off camera" section.
+  showOffCamera: false,
+  offCamera: [ // SAMPLE
     "Favourite shoot so far: a sunrise proposal at Springbank Park",
-    "Main camera: Sony FX3", // SAMPLE
+    "Main camera: Sony FX3",
     "Never leaves home without spare batteries and a lint roller",
   ],
 };

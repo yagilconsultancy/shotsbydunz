@@ -14,7 +14,7 @@ export default async function TwoStepSetupPage({ searchParams }: Props) {
   const gate = await adminGate();
   if (!gate) redirect("/admin/login");
   if (gate.step !== "setup") redirect("/admin");
-  if (!gate.emailProven) redirect("/admin/login?m=link&e=setup");
+  if (!gate.emailProven) redirect("/admin/login?m=reset&e=setup");
   const q = await searchParams;
   const supabase = await authClient();
   const { data: list } = await supabase.auth.mfa.listFactors();

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-08: sign-in link removed
+
+- No more "email me a sign-in link". Signing in is password plus authenticator code only.
+- **First time** (and after a lost phone or forgotten password): "First time, or forgot your password?" → email → choose a password (or keep the current one) → set up the authenticator.
+- Someone with a password but no authenticator app yet is asked to confirm by email before setting one up.
+
 ## 2026-11-08: password sign-in with two-step (Plan 4)
 
 - **Dashboard sign-in** is now email and password, plus a 6-digit code from an authenticator app. Email-link sign-in stays as a backup.

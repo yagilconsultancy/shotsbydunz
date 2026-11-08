@@ -29,7 +29,7 @@ export async function confirmSetup(fd: FormData) {
   const gate = await adminGate();
   if (!gate) redirect("/admin/login");
   if (gate.step !== "setup") redirect("/admin");
-  if (!gate.emailProven) redirect("/admin/login?m=link&e=setup");
+  if (!gate.emailProven) redirect("/admin/login?m=reset&e=setup");
   if (await signInLimited("setup", gate.email)) redirect("/admin/two-step/setup?e=slow");
   const code = codeFrom(fd);
   const factorId = String(fd.get("factor") ?? "");

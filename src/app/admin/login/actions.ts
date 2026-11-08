@@ -20,20 +20,6 @@ export async function signInWithPassword(fd: FormData) {
   redirect("/admin");
 }
 
-export async function sendLoginLink(fd: FormData) {
-  const email = emailFrom(fd);
-  if (await signInLimited("link", email)) redirect("/admin/login?m=link&e=slow");
-  if (!(await botCheckPassed(fd))) redirect("/admin/login?m=link&e=bot");
-  if (dbConfigured() && adminEmails().includes(email)) {
-    const supabase = await authClient();
-    await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: false, emailRedirectTo: `${siteUrl()}/auth/callback` },
-    });
-  }
-  redirect("/admin/login?sent=link");
-}
-
 // Used both the first time (to choose a password) and when the password is forgotten.
 export async function sendPasswordLink(fd: FormData) {
   const email = emailFrom(fd);

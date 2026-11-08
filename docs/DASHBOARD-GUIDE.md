@@ -26,7 +26,7 @@ Your bookings live at **/admin** on the website, for example `shotsbydunz.vercel
 You stay signed in on that device while you use it. After a week without using the dashboard, you sign in again. Tap **Sign out** on shared computers.
 
 - **Change your password:** the **Password** tab at the top of the dashboard. It asks for your code first.
-- **Lost your phone?** Ask YAGIL to reset two-step. Then sign in with **Email me a sign-in link instead** and set it up on your new phone.
+- **Lost your phone?** Ask YAGIL to reset two-step. Then tap **First time, or forgot your password?**, open the email, choose **Keep my current password** (or set a new one) and set up the app on your new phone.
 - **Never share your password or codes.** Nobody from ShotsByDunz or YAGIL will ever ask for them.
 
 Only emails on the approved list can sign in. YAGIL adds or removes people.

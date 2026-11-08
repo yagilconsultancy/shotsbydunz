@@ -12,7 +12,7 @@ const views = {
 };
 type View = keyof typeof views;
 
-type Props = { searchParams: Promise<{ view?: string; date?: string }> };
+type Props = { searchParams: Promise<{ view?: string; date?: string; m?: string }> };
 
 export default async function AdminHome({ searchParams }: Props) {
   await requireAdmin();
@@ -29,8 +29,15 @@ export default async function AdminHome({ searchParams }: Props) {
   const { data } = await query;
   const rows = (data ?? []) as BookingRow[];
 
+  const notice = q.m === "password" ? "Password saved." : q.m === "two-step" ? "Two-step sign-in is on. You’ll be asked for a code from your app each time you sign in." : null;
+
   return (
     <>
+      {notice && (
+        <p className={styles.flash} role="status">
+          {notice}
+        </p>
+      )}
       <nav className={styles.tabs} aria-label="Booking views">
         {(Object.keys(views) as View[]).map((v) => (
           <Link key={v} href={`/admin?view=${v}`} aria-current={!day && v === view ? "page" : undefined}>

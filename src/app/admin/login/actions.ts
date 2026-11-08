@@ -1,21 +1,29 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { adminEmails, authClient, dbConfigured, siteUrl } from "@/lib/supabase";
+import { botCheckPassed, signInLimited } from "@/lib/admin";
 
-const tries = new Map<string, number[]>();
+const emailFrom = (fd: FormData) => String(fd.get("email") ?? "").trim().toLowerCase().slice(0, 200);
 
-export async function sendLoginLink(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase().slice(0, 200);
-  const h = await headers();
-  const ip = h.get("x-real-ip") || h.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
-  const now = Date.now();
-  const recent = (tries.get(ip) ?? []).filter((t) => now - t < 15 * 60 * 1000);
-  tries.set(ip, [...recent, now]);
-  if (recent.length >= 5) redirect("/admin/login?e=slow");
+// Wrong email and wrong password get the same answer, so the page can't be used to find out
+// which emails have dashboard access.
+export async function signInWithPassword(fd: FormData) {
+  const email = emailFrom(fd);
+  const password = String(fd.get("password") ?? "").slice(0, 200);
+  if (await signInLimited("password", email)) redirect("/admin/login?e=slow");
+  if (!(await botCheckPassed(fd))) redirect("/admin/login?e=bot");
+  if (!dbConfigured() || !adminEmails().includes(email) || !password) redirect("/admin/login?e=wrong");
+  const supabase = await authClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) redirect("/admin/login?e=wrong");
+  redirect("/admin");
+}
 
-  // Same answer whether or not the email is allowed, so the page can't be used to discover it.
+export async function sendLoginLink(fd: FormData) {
+  const email = emailFrom(fd);
+  if (await signInLimited("link", email)) redirect("/admin/login?m=link&e=slow");
+  if (!(await botCheckPassed(fd))) redirect("/admin/login?m=link&e=bot");
   if (dbConfigured() && adminEmails().includes(email)) {
     const supabase = await authClient();
     await supabase.auth.signInWithOtp({
@@ -23,7 +31,19 @@ export async function sendLoginLink(formData: FormData) {
       options: { shouldCreateUser: false, emailRedirectTo: `${siteUrl()}/auth/callback` },
     });
   }
-  redirect("/admin/login?sent=1");
+  redirect("/admin/login?sent=link");
+}
+
+// Used both the first time (to choose a password) and when the password is forgotten.
+export async function sendPasswordLink(fd: FormData) {
+  const email = emailFrom(fd);
+  if (await signInLimited("reset", email, 3)) redirect("/admin/login?m=reset&e=slow");
+  if (!(await botCheckPassed(fd))) redirect("/admin/login?m=reset&e=bot");
+  if (dbConfigured() && adminEmails().includes(email)) {
+    const supabase = await authClient();
+    await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${siteUrl()}/auth/callback?next=password` });
+  }
+  redirect("/admin/login?sent=reset");
 }
 
 export async function signOut() {

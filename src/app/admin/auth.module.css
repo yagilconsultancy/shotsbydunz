@@ -1,0 +1,164 @@
+/* Sign-in, password and two-step pages: one narrow column on the contact-sheet background. */
+
+.wrap {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 520px;
+  padding-top: clamp(var(--space-7), 8vw, var(--space-9));
+  padding-bottom: clamp(var(--space-8), 10vw, var(--space-10));
+}
+
+.title {
+  font-size: clamp(2.6rem, 7vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line-strong);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field input {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--bone);
+  font: 400 1rem / 1.4 var(--font-body);
+  color-scheme: dark;
+  transition: border-color 150ms ease;
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-color: var(--amber);
+}
+
+.field input.code {
+  max-width: 220px;
+  font-size: 1.6rem;
+  letter-spacing: 0.3em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.error {
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--tally);
+  background: var(--surface);
+}
+
+.links {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.links a,
+.alt,
+.textButton {
+  width: fit-content;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  font-size: var(--step--1);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.textButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.rules {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 4px;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* Two-step setup: the QR code on a light tile so phones can read it in a dark room. */
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-5);
+  counter-reset: step;
+}
+
+.steps > li {
+  display: grid;
+  gap: var(--space-3);
+  padding-left: 2.4rem;
+  position: relative;
+  counter-increment: step;
+}
+
+.steps > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--amber);
+}
+
+.qr {
+  width: 200px;
+  height: 200px;
+  padding: 12px;
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.secret {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  word-break: break-all;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 6px;
+  border: 1px dashed var(--line-strong);
+  user-select: all;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .links a:hover,
+  .alt:hover,
+  .textButton:hover {
+    color: var(--bone);
+  }
+}

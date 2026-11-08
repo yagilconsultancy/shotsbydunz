@@ -27,7 +27,7 @@ function sameOrigin(req: Request) {
 // Per-instance memory only, so it slows a single bot rather than stopping a crowd. The
 // Vercel firewall rule in docs/security/ACCOUNT-CHECKLIST.md is the real limit.
 const hits = new Map<string, number[]>();
-function overLimit(key: string, max: number, windowMs: number) {
+export function overLimit(key: string, max: number, windowMs: number) {
   const now = Date.now();
   const recent = (hits.get(key) ?? []).filter((t) => now - t < windowMs);
   recent.push(now);
@@ -36,7 +36,7 @@ function overLimit(key: string, max: number, windowMs: number) {
   return recent.length > max;
 }
 
-async function turnstileOk(token: unknown, ip: string) {
+export async function turnstileOk(token: unknown, ip: string) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) return true;
   if (typeof token !== "string" || !token || token.length > 2048) return false;

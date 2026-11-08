@@ -18,6 +18,9 @@ export default async function DashLayout({ children }: { children: React.ReactNo
           <Link href="/admin/media" className={styles.home}>
             Media
           </Link>
+          <Link href="/admin/set-password" className={styles.home}>
+            Password
+          </Link>
         </nav>
         <form action={signOut} className={styles.who}>
           <span className="muted">{email}</span>

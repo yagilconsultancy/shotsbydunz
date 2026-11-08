@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-08: password sign-in with two-step (Plan 4)
+
+- **Dashboard sign-in** is now email and password, plus a 6-digit code from an authenticator app. Email-link sign-in stays as a backup.
+- **New pages:** choose / reset password, two-step setup (QR code), two-step code, and a Password tab in the dashboard.
+- **Protection:**
+  - every dashboard page and action now needs the code for this sign-in
+  - setting up two-step needs an email link
+  - wrong email and wrong password look the same
+  - attempt limits and the bot check on all sign-in forms
+  - email links can only return to this site
+- New: `lib/password.ts` (password rules), `components/admin/FormCheck.tsx`. `lib/admin.ts` checks the two-step level.
+- Details and test results in `docs/plans/PLAN-4-PASSWORD-SIGN-IN.md`.
+
 ## 2026-11-05: Work page and project pages redesign
 
 - **Work page:**

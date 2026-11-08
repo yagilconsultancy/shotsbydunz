@@ -74,6 +74,33 @@ Since 3 Nov 2026, **Automatically expose new tables** is off (Project Settings �
 
 Existing tables are unaffected.
 
+## Password and two-step sign-in
+
+Since Plan 4, the dashboard uses a password plus a 6-digit code from an authenticator app.
+
+**Settings (one time):**
+
+1. **Authentication → Sign In / Providers → Email:**
+   - Email: on
+   - Minimum password length: **12**
+   - Password requirements: **Lowercase, uppercase letters, digits and symbols**
+   - Save
+2. **Authentication → Multi-Factor:** Authenticator app (TOTP) **Enabled**. It's on by default; just check it.
+
+**Add a person** (Supabase sign-ups are off, so each user is added by hand):
+
+1. **Authentication → Users → Add user → Create new user.**
+2. Enter their email, tick **Auto Confirm User**, and type any long random password. Don't save it anywhere; they'll replace it.
+3. In Vercel, add the email to `ADMIN_EMAILS` (comma-separated, Production and Preview), then redeploy.
+4. Tell them to open `/admin` → **First time, or forgot your password?**
+
+**Lost phone:**
+
+1. **Authentication → Users →** their email → **MFA factors →** delete the authenticator.
+2. They sign in with **Email me a sign-in link instead** and set two-step up again on the new phone.
+
+**Leaked password protection** (checks passwords against known breaches) needs the Pro plan. Turn it on at the Pro upgrade.
+
 ## Your monthly check (5 minutes)
 
 1. Home: project is running, and usage is well under the free limits (500 MB database, 1 GB files).

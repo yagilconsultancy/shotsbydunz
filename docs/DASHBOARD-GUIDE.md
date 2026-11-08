@@ -4,9 +4,30 @@ Your bookings live at **/admin** on the website, for example `shotsbydunz.vercel
 
 ## Signing in
 
-1. Go to `/admin` and enter your email.
-2. Open the "sign in" email on the **same phone or computer** and tap the link. It works once, within an hour.
-3. You stay signed in on that device while you use it. After a week without using the dashboard, you get a new sign-in link the same way. Tap **Sign out** on shared computers.
+**The first time** (or if you forget your password):
+
+1. Go to `/admin` and tap **First time, or forgot your password?**
+2. Enter your email. Open the email on the **same phone or computer** and tap the link. It works once, within an hour.
+3. Choose your password:
+   - at least 12 characters
+   - letters, at least one number and one symbol
+   - three random words with a number and a symbol works well
+   
+   Only you know it.
+4. **Turn on two-step sign-in:**
+   1. Install a free authenticator app: Google Authenticator, Microsoft Authenticator or 1Password.
+   2. In the app, tap **+**, scan the QR code on the screen, and type the 6-digit code it shows.
+
+**Every time after that:**
+
+1. Go to `/admin`, enter your email and password.
+2. Open your authenticator app and type the 6-digit code for ShotsByDunz. The code changes every 30 seconds.
+
+You stay signed in on that device while you use it. After a week without using the dashboard, you sign in again. Tap **Sign out** on shared computers.
+
+- **Change your password:** the **Password** tab at the top of the dashboard. It asks for your code first.
+- **Lost your phone?** Ask YAGIL to reset two-step. Then sign in with **Email me a sign-in link instead** and set it up on your new phone.
+- **Never share your password or codes.** Nobody from ShotsByDunz or YAGIL will ever ask for them.
 
 Only emails on the approved list can sign in. YAGIL adds or removes people.
 

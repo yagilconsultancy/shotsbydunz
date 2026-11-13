@@ -103,8 +103,7 @@ export default async function ProjectPage({ params }: Params) {
           </div>
           {!project.video && project.runtime && (
             <figcaption className={styles.runtime}>
-              Film, {project.runtime}. Sample still shown until the real film is
-              uploaded.
+              Film, {project.runtime}
             </figcaption>
           )}
         </figure>

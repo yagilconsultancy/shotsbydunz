@@ -19,7 +19,7 @@ export const pillars: Pillar[] = [
     href: "/photo-film",
     line: "Weddings, milestones and launches, photographed and filmed.",
     intro:
-      "I cover the whole day without directing it: the arrivals, the speeches, the dance floor at midnight. You get a film and a gallery that feel like the night did.",
+      "I cover the whole day without directing it, from the speeches to the dance floor late at night. Afterwards you get a film and a photo gallery of the day as it happened.",
     image: "/images/anniversary.jpg",
     imageAlt: "Family clapping around a couple dancing at an anniversary party",
   },
@@ -29,7 +29,7 @@ export const pillars: Pillar[] = [
     href: "/content",
     line: "Reels, brand shoots and behind-the-scenes, made to post.",
     intro:
-      "For creators, stylists and small businesses who need steady, good-looking content without filming it themselves. One session, a month of posts.",
+      "For creators, stylists and small businesses who need steady, good-looking content without filming it themselves. We film in one session and you get enough clips to post for a month.",
     image: "/images/braider.jpg",
     imageAlt: "Close-up of hands braiding hair in warm window light",
   },
@@ -37,9 +37,9 @@ export const pillars: Pillar[] = [
     id: "booth",
     name: "SBD Booth",
     href: "/booths",
-    line: "The photobooth your guests line up for, run by our team.",
+    line: "A photobooth for your event, run by our team.",
     intro:
-      "Instant sharing, unlimited prints, keychains and guest books, styled to your event and staffed from setup to the last print.",
+      "Guests send photos to their phones straight away. Packages can add unlimited prints, keychains and guest books, and our attendant stays with the booth for the whole booking.",
     image: "/images/booth-wedding.jpg",
     imageAlt: "Newlyweds and friends laughing at the SBD photobooth",
   },

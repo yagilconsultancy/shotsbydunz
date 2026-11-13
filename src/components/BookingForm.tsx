@@ -120,7 +120,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
   const next = () => {
     const e = validateStep(step, data);
     if (step === 2 && clash && !e.startTime)
-      e.startTime = `That overlaps a booking that day (${clockLabel(clash.from)} – ${clockLabel(clash.to)}). Choose another start time.`;
+      e.startTime = `That overlaps a booking that day (${clockLabel(clash.from)} to ${clockLabel(clash.to)}). Choose another start time.`;
     setErrors(e);
     if (Object.keys(e).length) {
       const first = document.querySelector<HTMLElement>(`[data-field="${Object.keys(e)[0]}"] input, [data-field="${Object.keys(e)[0]}"] select, [data-field="${Object.keys(e)[0]}"] textarea`);
@@ -322,7 +322,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
             <p className={styles.availability} role="status">
               {takenToday.length === 0
                 ? "This day is open."
-                : `Already booked that day: ${takenToday.map((t) => `${clockLabel(t.from)} – ${clockLabel(t.to)}`).join(", ")}. Any start time that fits around this is available.`}
+                : `Already booked that day: ${takenToday.map((t) => `${clockLabel(t.from)} to ${clockLabel(t.to)}`).join(", ")}. Any start time that fits around this is available.`}
             </p>
           )}
           <Field id="location" label="Event address" error={errors.location} hint="Street and city. A $50 travel fee applies outside London, Ontario.">

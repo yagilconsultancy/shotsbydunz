@@ -1,5 +1,13 @@
 type Mail = { to: string; subject: string; html: string; text: string; replyTo?: string };
 
+// BOOKING_TO_EMAIL can hold several addresses separated by commas, so alerts reach everyone who runs the business.
+const recipients = (to: string) =>
+  to
+    .split(",")
+    .map((a) => a.trim())
+    .filter(Boolean)
+    .slice(0, 10);
+
 export type MailResult = { ok: boolean; notConfigured?: boolean };
 
 // Without a Resend key, local development prints the message so the form can be tested end
@@ -22,7 +30,7 @@ export async function sendMail(mail: Mail): Promise<MailResult> {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, html: mail.html, text: mail.text, reply_to: mail.replyTo }),
+      body: JSON.stringify({ from, to: recipients(mail.to), subject: mail.subject, html: mail.html, text: mail.text, reply_to: mail.replyTo }),
       signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok) console.error("Resend error", res.status);

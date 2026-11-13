@@ -38,7 +38,7 @@ export default async function BoothsPage() {
           <Frame src={hero.src} alt={hero.alt} priority className={styles.heroImage} />
         </div>
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>A ShotsByDunz experience</p>
+          <p className={styles.eyebrow}>By ShotsByDunz</p>
           <SplitText tag="h1" className={styles.title} text="SBD Booth" splitType="words" delay={0.2} />
           <p className={styles.heroLine}>{boothPage.heroLine}</p>
           <div className={styles.heroCtas}>

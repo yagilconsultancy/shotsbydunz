@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-13: Copy clean-up
+
+- Dunz approved the site's text as it stands. Lines that read as AI-written were rewritten in plain language with the same meaning: home hero and booth panel, the three section intros, service summaries, booth page story and bundle line, two portfolio stories, and the booth page eyebrow.
+- Removed stock phrasing ("scroll-stopping", "from setup to the last print", "one team, one booking, both sides of the night") and swapped dash ranges for "to" (5 to 7 days, booked times, portfolio years).
+- No photos or videos changed.
+
 ## 2026-11-08: About page in Dunz's own words
 
 - Headline, story and "How I work" now use Dunz's own introduction (Adedunni, the creative behind ShotsByDunz), lightly edited for the web.

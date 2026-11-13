@@ -49,7 +49,7 @@ export const projects: Project[] = [
     cover: "/images/hero-wedding.jpg",
     coverAlt: "Guests dancing around the couple under warm string lights",
     story:
-      "A traditional ceremony in the morning and a reception that ran past midnight. The film follows both families from getting ready to the last song, and the booth kept the dance floor's energy going in the corner all night.",
+      "A traditional ceremony in the morning and a reception that ran past midnight. The film follows both families through the whole day, and the booth was busy in the corner of the hall all night.",
     stills: [
       { src: "/images/booth-wedding.jpg", alt: "The couple laughing with friends at the photobooth", orientation: "tall" },
       { src: "/images/booth-prints.jpg", alt: "Photo strips and keychains printed on the night", orientation: "tall" },
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     cover: "/images/studio-launch.jpg",
     coverAlt: "The owner cutting a gold ribbon as friends cheer",
     story:
-      "Opening night for a new beauty studio: the ribbon, the first clients and a room full of people who'd been waiting for it. One event film, plus three reels cut for launch week.",
+      "Opening night for a new beauty studio, with the ribbon cutting and its first clients in the chair. I made one event film and three reels for launch week.",
     stills: [],
     runtime: "02:40",
     featured: true,
@@ -173,7 +173,7 @@ export const projects: Project[] = [
     orientation: "tall",
     cover: "/images/booth-setup.jpg",
     coverAlt: "The SBD booth set up with a sequin backdrop and balloon garland",
-    story: "A season of weddings, birthdays and launches through the booth's lens.",
+    story: "Weddings, birthdays and launches from one season at the booth.",
     stills: [
       { src: "/images/booth-prints.jpg", alt: "Printed strips and keychains", orientation: "tall" },
       { src: "/images/booth-wedding.jpg", alt: "Guests mid-laugh at the booth", orientation: "tall" },

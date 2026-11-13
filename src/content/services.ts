@@ -22,9 +22,9 @@ export const services: Service[] = [
     slug: "event-videography",
     pillar: "photo-film",
     name: "Event videography",
-    summary: "The whole day, cut into a film you'll rewatch every year.",
+    summary: "Your event, edited into a highlight film.",
     intro:
-      "I cover your event from first arrivals to the last dance, then cut it into a highlight film with the speeches, the surprises and the people who made it.",
+      "I film your event from the first guests arriving to the last dance, then edit a highlight film around the speeches and the big moments.",
     idealFor: ["Weddings", "Milestone birthdays", "Baby showers", "Corporate events"],
     included: [
       "Coverage for the hours you book",
@@ -82,7 +82,7 @@ export const services: Service[] = [
     name: "Highlight videos",
     summary: "A 60 to 90 second recap made to be shared.",
     intro:
-      "Short, fast and made for the group chat. A highlight video captures the feel of your event in about a minute, ready to post the same week.",
+      "A highlight video sums up your event in about a minute. It's short enough for the group chat and ready to post within a week.",
     idealFor: ["Birthdays", "Parties", "Graduations", "Community events"],
     included: ["Coverage for the hours you book", "Licensed music, or a song you choose", "One round of revisions"],
     deliverables: ["60 to 90 second recap, in vertical or wide format"],
@@ -93,7 +93,7 @@ export const services: Service[] = [
     slug: "reels",
     pillar: "content",
     name: "Reels and short-form",
-    summary: "Scroll-stopping vertical edits for Instagram and TikTok.",
+    summary: "Vertical edits for Instagram and TikTok.",
     intro:
       "Single reels or bundles, edited to trend formats and your own style. Bring a reference you love and I'll match the pace and feel.",
     idealFor: ["Instagram", "TikTok", "YouTube Shorts"],
@@ -106,7 +106,7 @@ export const services: Service[] = [
     slug: "custom",
     pillar: "photo-film",
     name: "Custom packages",
-    summary: "Something different in mind? Let's build it together.",
+    summary: "For anything that isn't on this list.",
     intro:
       "Mix services, combine video with an SBD Booth, or plan something that doesn't fit a box. Tell me what you have in mind and I'll put together a quote.",
     idealFor: ["Multi-day events", "Video plus photobooth", "Ongoing content"],

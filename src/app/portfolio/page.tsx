@@ -17,7 +17,7 @@ export default async function PortfolioPage({ searchParams }: Props) {
 
   const projects = await getProjects();
   const ys = projects.map((p) => Number(p.year)).filter(Boolean);
-  const years = ys.length ? (Math.min(...ys) === Math.max(...ys) ? `${ys[0]}` : `${Math.min(...ys)}–${Math.max(...ys)}`) : "";
+  const years = ys.length ? (Math.min(...ys) === Math.max(...ys) ? `${ys[0]}` : `${Math.min(...ys)} to ${Math.max(...ys)}`) : "";
 
   return (
     <div className="contact-sheet">

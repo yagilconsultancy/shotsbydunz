@@ -7,7 +7,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileBookBar from "@/components/MobileBookBar";
-import PreviewBanner from "@/components/PreviewBanner";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/content/site";
 import { photo } from "@/lib/media";
@@ -48,7 +47,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <PreviewBanner />
         <Header />
         <main id="main">{children}</main>
         <Footer />

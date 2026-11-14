@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-14: Logo mark
+
+- Dunz's gold "D" aperture mark replaces the red dot beside the name in the header, footer and emails, and is the new browser-tab and phone home-screen icon (`public/brand/sbd-mark.svg`, `src/app/icon.svg`, `src/app/apple-icon.png`).
+- Traced from a screenshot of her logo, so the edges are slightly soft; swap in the designer's original SVG when it arrives (same file names).
+
+## 2026-11-13: Booking alerts to more than one inbox
+
+- `BOOKING_TO_EMAIL` accepts several addresses separated by commas, so Yagil and Dunz both get booking alerts.
+
 ## 2026-11-13: Copy clean-up
 
 - Dunz approved the site's text as it stands. Lines that read as AI-written were rewritten in plain language with the same meaning: home hero and booth panel, the three section intros, service summaries, booth page story and bundle line, two portfolio stories, and the booth page eyebrow.

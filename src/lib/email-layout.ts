@@ -82,7 +82,7 @@ export function renderEmail(p: EmailParts, opts: { siteUrl: string }) {
 
 <tr><td style="background:${c.ink};border-radius:14px 14px 0 0;padding:26px 32px">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-    <td style="font:400 24px/1 ${serif};color:#f5efe7"><span style="color:${c.tally};font-size:18px;vertical-align:3px">&#9679;</span>&nbsp;Shots<i>by</i>Dunz</td>
+    <td style="font:400 24px/1 ${serif};color:#f5efe7"><img src="${e(opts.siteUrl)}/brand/sbd-mark.png" width="24" height="27" alt="" style="vertical-align:-4px;border:0">&nbsp;Shots<i>by</i>Dunz</td>
     <td align="right" style="font:600 11px/1 ${sans};letter-spacing:1.5px;text-transform:uppercase;color:${c.amber}">${e(p.eyebrow)}</td>
   </tr></table>
 </td></tr>

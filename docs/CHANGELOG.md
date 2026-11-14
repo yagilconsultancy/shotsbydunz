@@ -3,7 +3,7 @@
 ## 2026-11-14: Logo mark
 
 - Dunz's gold "D" aperture mark replaces the red dot beside the name in the header, footer and emails, and is the new browser-tab and phone home-screen icon (`public/brand/sbd-mark.svg`, `src/app/icon.svg`, `src/app/apple-icon.png`).
-- Traced from a screenshot of her logo, so the edges are slightly soft; swap in the designer's original SVG when it arrives (same file names).
+- Redrawn for sharp edges: the outer ring and the aperture blades are clean geometric lines (circle fitted to the original), and the D and its script strokes are smoothed curves traced from her logo.
 
 ## 2026-11-13: Booking alerts to more than one inbox
 

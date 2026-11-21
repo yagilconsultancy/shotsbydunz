@@ -55,7 +55,7 @@ export default async function TwoStepPage({ searchParams }: Props) {
             Not you? Sign out
           </button>
         </form>
-        <p className={styles.hint}>Lost your phone? Ask YAGIL Digital Studio to reset two-step for you.</p>
+        <p className={styles.hint}>Lost your phone? Ask YAGIL Digital Studios to reset two-step for you.</p>
       </nav>
     </section>
   );

@@ -158,9 +158,8 @@ export default function Footer() {
               <Link href="/privacy">Privacy</Link>
             </li>
             <li>
-              Site by{" "}
-              <a href="https://www.yagildigitalstudios.com" rel="noopener" target="_blank">
-                YAGIL Digital Studio
+              <a href="https://yagildigitalstudios.com" target="_blank" rel="noopener noreferrer">
+                Designed &amp; Developed by YAGIL Digital Studios
               </a>
             </li>
           </ul>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Service } from "@/content/services";
 import styles from "./OfferList.module.css";
+import { focusOf } from "@/lib/focus";
 
 type Offer = Pick<Service, "slug" | "name" | "summary" | "idealFor" | "included" | "deliverables" | "turnaround" | "startingFrom"> & {
   image: { src: string; alt: string };
@@ -130,7 +131,7 @@ export default function OfferList({ offers }: { offers: Offer[] }) {
                   <div className={styles.panelBody}>
                     <div className={styles.photo}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={o.image.src} alt={o.image.alt} loading="lazy" decoding="async" />
+                      <img src={o.image.src} alt={o.image.alt} loading="lazy" decoding="async" style={{ objectPosition: focusOf(o.image.src) }} />
                     </div>
                     <div className={styles.details}>
                       <div>
@@ -178,7 +179,7 @@ export default function OfferList({ offers }: { offers: Offer[] }) {
       <div ref={preview} className={styles.preview} data-show={showPreview ? "" : undefined} aria-hidden="true">
         {offers.map((o, i) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={o.slug} src={o.image.src} alt="" data-active={hover === i ? "" : undefined} loading="lazy" decoding="async" />
+          <img key={o.slug} src={o.image.src} alt="" data-active={hover === i ? "" : undefined} loading="lazy" decoding="async" style={{ objectPosition: focusOf(o.image.src) }} />
         ))}
       </div>
     </div>

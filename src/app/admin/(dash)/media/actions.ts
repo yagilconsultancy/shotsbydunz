@@ -142,6 +142,30 @@ export async function saveDetails(fd: FormData) {
   back(fd, "saved");
 }
 
+// The spot Dunz taps on a photo: every frame on the site crops around it. "Reset" clears it,
+// so the photo goes back to the site default (a quarter of the way down).
+export async function setFocus(fd: FormData) {
+  const actor = await requireAdmin();
+  const id = String(fd.get("id") ?? "");
+  if (!uuid.test(id)) back(fd, "error");
+  const reset = fd.get("reset") === "yes";
+  const pct = (v: FormDataEntryValue | null) => {
+    const n = Math.round(Number(v));
+    return Number.isFinite(n) && n >= 0 && n <= 100 ? n : null;
+  };
+  const x = pct(fd.get("x"));
+  const y = pct(fd.get("y"));
+  if (!reset && (x === null || y === null)) back(fd, "error");
+  const { error } = await db()
+    .from("media")
+    .update(reset ? { focus_x: null, focus_y: null } : { focus_x: x, focus_y: y })
+    .eq("id", id)
+    .is("replaced_at", null);
+  if (error) back(fd, "nofocus");
+  await log(reset ? "photo focus reset" : "photo focus set", actor);
+  back(fd, "focus");
+}
+
 export async function removePhoto(fd: FormData) {
   const actor = await requireAdmin();
   const id = String(fd.get("id") ?? "");

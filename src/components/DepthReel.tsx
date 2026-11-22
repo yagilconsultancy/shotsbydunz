@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Noise from "./bits/Noise";
 import styles from "./DepthReel.module.css";
+import { focusOf } from "@/lib/focus";
 
 export type ReelItem = { slug: string; title: string; meta: string; runtime?: string; src: string; alt: string };
 
@@ -249,7 +250,7 @@ export default function DepthReel({ items, children }: { items: ReelItem[]; chil
           {items.map((it, i) => (
             <div key={it.slug} ref={(n) => void (cards.current[i] = n)} className={styles.card} data-card={i}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={it.src} alt="" draggable={false} decoding="async" loading={i < 3 ? "eager" : "lazy"} />
+              <img src={it.src} alt="" draggable={false} decoding="async" loading={i < 3 ? "eager" : "lazy"} style={{ objectPosition: focusOf(it.src) }} />
             </div>
           ))}
         </div>

@@ -8,6 +8,7 @@ import { getProjectBySlug, getProjects } from "@/lib/media";
 import { getPillar } from "@/content/pillars";
 import { bookingHref } from "@/lib/booking";
 import styles from "./project.module.css";
+import { plainSrc } from "@/lib/focus";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: project.title,
     description: project.story,
-    openGraph: { images: [project.cover] },
+    openGraph: { images: [plainSrc(project.cover)] },
   };
 }
 

@@ -28,6 +28,11 @@
   object-position: var(--focus, 50% 50%);
 }
 
+/* Photos crop from higher up so faces stay in; a photo's own focus point still wins. */
+.still :global(img) {
+  object-position: var(--focus, 50% 25%);
+}
+
 .media::after {
   content: "";
   position: absolute;

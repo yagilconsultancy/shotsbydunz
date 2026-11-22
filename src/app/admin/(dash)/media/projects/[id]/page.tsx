@@ -6,13 +6,20 @@ import { mediaUrl, type MediaRow, type ProjectRow } from "@/lib/media";
 import { fileTypes, projectFolders } from "@/content/media-folders";
 import { pillars } from "@/content/pillars";
 import PhotoUpload from "@/components/admin/PhotoUpload";
+import FocusPicker from "@/components/admin/FocusPicker";
+import { DEFAULT_FOCUS } from "@/lib/focus";
 import ProjectForm from "@/components/admin/ProjectForm";
 import { deleteProject, movePhoto, removePhoto, saveDetails, saveProject, setProjectHidden, undoPhoto } from "../../actions";
 import styles from "../../../../admin.module.css";
 
+// How a thumbnail crops: the photo's focus point, or the site default.
+const pos = (r: MediaRow) => (r.focus_x != null && r.focus_y != null ? `${r.focus_x}% ${r.focus_y}%` : DEFAULT_FOCUS);
+
 const messages: Record<string, string> = {
   created: "Project created. It stays hidden until you add a cover photo and press Show on site.",
   saved: "Project saved.",
+  focus: "Focus point saved. The site now crops this photo around it on every screen.",
+  nofocus: "The focus point couldn’t be saved. Ask Yagil to run the focus-point database update.",
   title: "Give the project a title.",
   pillars: "Tick at least one category.",
   video: "That video link isn’t a YouTube or Vimeo link. Copy the address from the video page and paste it again.",
@@ -132,8 +139,11 @@ export default async function ProjectEditor({ params, searchParams }: Props) {
                 <figure className={styles.spot}>
                   <div className={styles.spotImage}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={mediaUrl(cover.path)} alt="" />
+                    <img src={mediaUrl(cover.path)} alt="" style={{ objectPosition: pos(cover) }} />
                   </div>
+                  <FocusPicker id={cover.id} src={mediaUrl(cover.path)} x={cover.focus_x} y={cover.focus_y}>
+                    {hidden(projectFolders.cover.key)}
+                  </FocusPicker>
                   <form action={saveDetails} className={styles.altForm}>
                     {hidden(projectFolders.cover.key)}
                     <input type="hidden" name="id" value={cover.id} />
@@ -163,8 +173,11 @@ export default async function ProjectEditor({ params, searchParams }: Props) {
                   <figure key={g.id} className={styles.spot}>
                     <div className={styles.spotImage}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={mediaUrl(g.path)} alt="" />
+                      <img src={mediaUrl(g.path)} alt="" style={{ objectPosition: pos(g) }} />
                     </div>
+                    <FocusPicker id={g.id} src={mediaUrl(g.path)} x={g.focus_x} y={g.focus_y}>
+                      {hidden(projectFolders.gallery.key)}
+                    </FocusPicker>
                     <form action={saveDetails} className={styles.altForm}>
                       {hidden(projectFolders.gallery.key)}
                       <input type="hidden" name="id" value={g.id} />

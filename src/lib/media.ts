@@ -3,6 +3,7 @@ import { db, dbConfigured } from "./supabase";
 import { getFolder, type FolderPhoto } from "@/content/media-folders";
 import { projects as sampleProjects, type CategoryId, type Project, type Still } from "@/content/portfolio";
 import type { PillarId } from "@/content/pillars";
+import { withFocus } from "./focus";
 
 export const MEDIA_BUCKET = "site-media";
 
@@ -16,6 +17,8 @@ export type MediaRow = {
   caption: string | null;
   width: number | null;
   height: number | null;
+  focus_x?: number | null;
+  focus_y?: number | null;
   created_at: string;
 };
 
@@ -54,19 +57,19 @@ const orientationOf = (w: number | null, h: number | null): Still["orientation"]
 const liveMedia = cache(async (): Promise<MediaRow[] | null> => {
   if (!dbConfigured()) return null;
   try {
-    const { data, error } = await db()
-      .from("media")
-      .select("id, folder, project_id, position, path, alt, caption, width, height, created_at")
-      .is("replaced_at", null)
-      .order("position", { ascending: true });
-    return error ? null : (data as MediaRow[]);
+    const read = (cols: string) => db().from("media").select(cols).is("replaced_at", null).order("position", { ascending: true });
+    const base = "id, folder, project_id, position, path, alt, caption, width, height, created_at";
+    let { data, error } = await read(`${base}, focus_x, focus_y`);
+    // Before docs/supabase/005_media_focus.sql is run there are no focus columns; read without them.
+    if (error) ({ data, error } = await read(base));
+    return error ? null : (data as unknown as MediaRow[]);
   } catch {
     return null;
   }
 });
 
 const toPhoto = (r: MediaRow): FolderPhoto => ({
-  src: mediaUrl(r.path),
+  src: withFocus(mediaUrl(r.path), r.focus_x, r.focus_y),
   alt: r.alt,
   caption: r.caption ?? undefined,
   orientation: orientationOf(r.width, r.height),
@@ -92,7 +95,7 @@ function toProject(p: ProjectRow, rows: MediaRow[]): Project | null {
   if (!cover) return null;
   const stills = rows
     .filter((r) => r.project_id === p.id && r.folder === "project-gallery")
-    .map((r) => ({ src: mediaUrl(r.path), alt: r.alt, orientation: orientationOf(r.width, r.height) }));
+    .map((r) => ({ src: withFocus(mediaUrl(r.path), r.focus_x, r.focus_y), alt: r.alt, orientation: orientationOf(r.width, r.height) }));
   return {
     slug: p.slug,
     title: p.title,
@@ -103,7 +106,7 @@ function toProject(p: ProjectRow, rows: MediaRow[]): Project | null {
     location: p.location ?? "",
     role: p.role,
     orientation: p.orientation,
-    cover: mediaUrl(cover.path),
+    cover: withFocus(mediaUrl(cover.path), cover.focus_x, cover.focus_y),
     coverAlt: cover.alt,
     story: p.story ?? "",
     stills,

@@ -25,6 +25,7 @@ const messages: Record<string, string> = {
   "reason-other": "Add a message to the client when the reason is “Other”.",
   hold: "Held time updated. Those hours are now closed on the booking form.",
   "hold-bad": "Enter both times for the held window.",
+  nomail: "Saved, but the email to the client didn’t send. Contact them directly, or tell Yagil so he can check the email service.",
 };
 
 const hhmm = (minutes: number) => {
@@ -89,7 +90,7 @@ export default async function BookingPage({ params, searchParams }: Props) {
         ← All bookings
       </Link>
       {m && messages[m] && (
-        <p className={styles.flash} role="status">
+        <p className={m === "nomail" ? `${styles.flash} ${styles.flashError}` : styles.flash} role={m === "nomail" ? "alert" : "status"}>
           {messages[m]}
         </p>
       )}

@@ -1,6 +1,7 @@
 type Mail = { to: string; subject: string; html: string; text: string; replyTo?: string };
 
 // BOOKING_TO_EMAIL can hold several addresses separated by commas, so alerts reach everyone who runs the business.
+// Used for both "to" and "reply_to": Resend refuses a comma-joined string as one address.
 const recipients = (to: string) =>
   to
     .split(",")
@@ -30,10 +31,14 @@ export async function sendMail(mail: Mail): Promise<MailResult> {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to: recipients(mail.to), subject: mail.subject, html: mail.html, text: mail.text, reply_to: mail.replyTo }),
+      body: JSON.stringify({ from, to: recipients(mail.to), subject: mail.subject, html: mail.html, text: mail.text, reply_to: mail.replyTo ? recipients(mail.replyTo) : undefined }),
       signal: AbortSignal.timeout(10_000),
     });
-    if (!res.ok) console.error("Resend error", res.status);
+    if (!res.ok) {
+      // Resend's reason (e.g. "Invalid `reply_to` field"), without the message or addresses.
+      const err = await res.json().catch(() => null);
+      console.error("Resend error", res.status, err?.name ?? "", err?.message ?? "");
+    }
     return { ok: res.ok };
   } catch {
     console.error("Resend unreachable");

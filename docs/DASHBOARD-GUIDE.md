@@ -53,7 +53,7 @@ Only emails on the approved list can sign in. YAGIL adds or removes people.
 
 Booth-only bookings skip the quote: the price is fixed, so clients pay the 50% deposit and upload proof as they book.
 
-Every button sends the client a short email. Their replies come to your inbox.
+Every button sends the client a short email. Their replies come to your inbox. If an email doesn't go through, you'll see a red message saying so: contact the client directly and tell YAGIL.
 
 **Declining:** open **Decline this booking**, pick a reason, and add a message if you like (needed for "Other"). The client sees both.
 
@@ -82,6 +82,16 @@ Tap **Media** at the top of the dashboard. Each folder is a place on the website
 4. Tap **Put it on the site**. The change is live straight away.
 
 Changed your mind? **Undo to previous** brings back the last photo.
+
+**Keeping faces in the frame (focus point)**
+
+The website shows photos in frames of different shapes, and the shape changes between phones, tablets and computers. To fit, it trims the edges of the photo.
+
+- Under each photo you've uploaded, tap the part that must always show, like a face. A gold dot marks the spot, and it saves straight away.
+- Every frame on the site then trims around that spot, on every screen.
+- With no focus point, the site keeps the upper part of the photo, which suits most portrait shots.
+- **Reset focus point** goes back to that default.
+- The small preview above the photo shows how it will be trimmed.
 
 **Accepted files:** JPG, PNG or WebP. iPhone photos (HEIC) work when you upload from your iPhone.
 **Not accepted:**

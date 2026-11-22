@@ -10,6 +10,7 @@ import MobileBookBar from "@/components/MobileBookBar";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/content/site";
 import { photo } from "@/lib/media";
+import { plainSrc } from "@/lib/focus";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: site.name,
       description: site.tagline,
-      images: [share.src],
+      images: [plainSrc(share.src)],
       siteName: site.name,
       locale: "en_CA",
       type: "website",

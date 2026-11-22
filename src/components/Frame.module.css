@@ -9,6 +9,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Same as DEFAULT_FOCUS in src/lib/focus.ts. A photo's own focus point overrides it. */
+  object-position: 50% 25%;
 }
 
 .missing {

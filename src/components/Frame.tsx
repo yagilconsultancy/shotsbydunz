@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { focusOf } from "@/lib/focus";
 import styles from "./Frame.module.css";
 
 type Props = {
@@ -40,6 +41,7 @@ export default function Frame({ src, alt, ratio, priority, label, className }: P
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : undefined}
           decoding="async"
+          style={{ objectPosition: focusOf(src) }}
           onError={() => setFailed(true)}
         />
       )}

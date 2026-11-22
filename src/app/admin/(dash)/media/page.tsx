@@ -4,6 +4,8 @@ import { db } from "@/lib/supabase";
 import { mediaUrl, type MediaRow, type ProjectRow } from "@/lib/media";
 import { fileTypes, mediaFolders, shapeHelp, type MediaFolder } from "@/content/media-folders";
 import PhotoUpload from "@/components/admin/PhotoUpload";
+import FocusPicker from "@/components/admin/FocusPicker";
+import { DEFAULT_FOCUS } from "@/lib/focus";
 import { moveProject, movePhoto, removePhoto, saveDetails, setProjectHidden, undoPhoto } from "./actions";
 import styles from "../../admin.module.css";
 
@@ -12,6 +14,8 @@ type Row = MediaRow & { replaced_at: string | null };
 const messages: Record<string, string> = {
   undone: "Previous photo is back on the site.",
   saved: "Description saved.",
+  focus: "Focus point saved. The site now crops this photo around it on every screen.",
+  nofocus: "The focus point couldn’t be saved. Ask Yagil to run the focus-point database update.",
   removed: "Photo removed from the site.",
   moved: "Order updated.",
   hidden: "Project hidden from the site.",
@@ -231,7 +235,7 @@ function Spot({
     <figure className={styles.spot}>
       <div className={styles.spotImage} style={{ aspectRatio: shapeHelp[folder.shape].ratio }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt="" />
+        <img src={src} alt="" style={{ objectPosition: row?.focus_x != null && row?.focus_y != null ? `${row.focus_x}% ${row.focus_y}%` : DEFAULT_FOCUS }} />
       </div>
       <figcaption>
         <strong>{title}</strong> {builtIn && <span className="muted">(built-in sample)</span>}
@@ -246,6 +250,12 @@ function Spot({
           captionLabel={folder.captions}
           defaultCaption={row?.caption ?? fallbackCaption ?? ""}
         />
+      )}
+
+      {row && (
+        <FocusPicker id={row.id} src={src} x={row.focus_x} y={row.focus_y}>
+          {hidden}
+        </FocusPicker>
       )}
 
       {row && (

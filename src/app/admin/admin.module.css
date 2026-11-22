@@ -525,3 +525,44 @@
   padding-bottom: var(--space-2);
   border-bottom: 1px solid var(--line);
 }
+
+/* Focus point picker on the Media pages */
+.focusPicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.focusHelp {
+  margin: 0;
+  font-size: var(--step--1);
+}
+
+.focusStage {
+  position: relative;
+  align-self: flex-start;
+  max-width: 100%;
+  line-height: 0;
+}
+
+.focusStage img {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  width: auto;
+  height: auto;
+  border-radius: 6px;
+  cursor: crosshair;
+}
+
+.focusDot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(240, 176, 63, 0.85);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}

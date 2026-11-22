@@ -36,7 +36,13 @@ async function move(b: BookingRow, from: Status[], patch: Partial<BookingRow> & 
 }
 
 const ownerEmail = () => process.env.BOOKING_TO_EMAIL || site.email;
-const tell = (b: BookingRow, mail: { subject: string; html: string; text: string }) => sendMail({ to: b.email, replyTo: ownerEmail(), ...mail });
+// Emails the client, then returns to the booking. If Resend refuses the email, the change is
+// still saved, but Dunz is told the client wasn't emailed instead of seeing a success message.
+async function tell(b: BookingRow, mail: { subject: string; html: string; text: string }, m: string, actor: string) {
+  const sent = await sendMail({ to: b.email, replyTo: ownerEmail(), ...mail });
+  if (!sent.ok) await logEvent(b.id, "email to client failed", actor).catch(() => null);
+  redirect(`/admin/b/${b.id}?m=${sent.ok ? m : "nomail"}`);
+}
 
 export async function sendQuote(fd: FormData) {
   const { actor, b } = await load(fd);
@@ -46,8 +52,7 @@ export async function sendQuote(fd: FormData) {
   const updated = await move(b, ["requested", "quoted"], { status: "quoted", total_cents: total, deposit_cents: deposit, quote_note: note(fd) });
   const token = await issueDepositLink(b.id);
   await logEvent(b.id, b.status === "quoted" ? "quote re-sent" : "quote sent", actor);
-  await tell(updated, clientEmails.quote(updated, `${siteUrl()}/deposit/${token}`));
-  redirect(`/admin/b/${b.id}?m=quote`);
+  await tell(updated, clientEmails.quote(updated, `${siteUrl()}/deposit/${token}`), "quote", actor);
 }
 
 const isClock = (v: string) => /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
@@ -65,8 +70,7 @@ export async function confirmBooking(fd: FormData) {
   await clearDepositLink(b.id);
   await holdBooking(b.id, b.event_date, b.start_time.slice(0, 5), b.hours).catch(() => console.error("Couldn't hold the time"));
   await logEvent(b.id, "confirmed", actor);
-  await tell(updated, clientEmails.confirmed(updated));
-  redirect(`/admin/b/${b.id}?m=confirmed`);
+  await tell(updated, clientEmails.confirmed(updated), "confirmed", actor);
 }
 
 export async function proofNeedsFixing(fd: FormData) {
@@ -74,8 +78,7 @@ export async function proofNeedsFixing(fd: FormData) {
   const updated = await move(b, ["deposit_submitted", "proof_needs_fixing"], { status: "proof_needs_fixing", status_note: note(fd) });
   const token = await issueDepositLink(b.id);
   await logEvent(b.id, "asked for new proof", actor);
-  await tell(updated, clientEmails.proofNeedsFixing(updated, `${siteUrl()}/deposit/${token}`));
-  redirect(`/admin/b/${b.id}?m=fix`);
+  await tell(updated, clientEmails.proofNeedsFixing(updated, `${siteUrl()}/deposit/${token}`), "fix", actor);
 }
 
 export async function declineBooking(fd: FormData) {
@@ -92,8 +95,7 @@ export async function declineBooking(fd: FormData) {
   await clearDepositLink(b.id);
   await releaseBooking(b.id).catch(() => null);
   await logEvent(b.id, `declined: ${reason}`, actor);
-  await tell(updated, clientEmails.declined(updated));
-  redirect(`/admin/b/${b.id}?m=declined`);
+  await tell(updated, clientEmails.declined(updated), "declined", actor);
 }
 
 export async function cancelBooking(fd: FormData) {
@@ -101,24 +103,21 @@ export async function cancelBooking(fd: FormData) {
   const updated = await move(b, ["confirmed", "balance_paid"], { status: "cancelled", status_note: note(fd) });
   await releaseBooking(b.id).catch(() => null);
   await logEvent(b.id, "cancelled", actor);
-  await tell(updated, clientEmails.cancelled(updated));
-  redirect(`/admin/b/${b.id}?m=cancelled`);
+  await tell(updated, clientEmails.cancelled(updated), "cancelled", actor);
 }
 
 export async function markBalancePaid(fd: FormData) {
   const { actor, b } = await load(fd);
   const updated = await move(b, ["confirmed"], { status: "balance_paid", balance_paid_at: new Date().toISOString() });
   await logEvent(b.id, "balance paid", actor);
-  await tell(updated, clientEmails.balancePaid(updated));
-  redirect(`/admin/b/${b.id}?m=paid`);
+  await tell(updated, clientEmails.balancePaid(updated), "paid", actor);
 }
 
 export async function markDelivered(fd: FormData) {
   const { actor, b } = await load(fd);
   const updated = await move(b, ["confirmed", "balance_paid"], { status: "delivered", delivered_at: new Date().toISOString() });
   await logEvent(b.id, "delivered", actor);
-  await tell(updated, clientEmails.delivered(updated));
-  redirect(`/admin/b/${b.id}?m=delivered`);
+  await tell(updated, clientEmails.delivered(updated), "delivered", actor);
 }
 
 // The held window for a confirmed booking. An end earlier than the start means past midnight.

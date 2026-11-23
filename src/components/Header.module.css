@@ -124,6 +124,8 @@
 .sheet {
   position: fixed;
   inset: var(--header-h) 0 0 0;
+  /* Above the floating Book Me bar (--z-sticky). */
+  z-index: var(--z-header);
   background: var(--ink);
   padding-top: 24px;
   overflow-y: auto;

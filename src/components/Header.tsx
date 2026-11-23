@@ -30,40 +30,44 @@ export default function Header() {
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
+  // The menu sheet sits outside <header>: the header's frosted blur (backdrop-filter) would
+  // otherwise trap the fixed sheet inside the header's own box, squeezing it to nothing.
   return (
-    <header className={styles.header}>
-      <div className={`container ${styles.bar}`}>
-        <Logo />
-        <nav className={styles.desktopNav} aria-label="Main">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={styles.link}
-              aria-current={isActive(item.href) ? "page" : undefined}
+    <>
+      <header className={styles.header}>
+        <div className={`container ${styles.bar}`}>
+          <Logo />
+          <nav className={styles.desktopNav} aria-label="Main">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={styles.link}
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className={styles.actions}>
+            <Magnet>
+              <Link href="/book" className={`btn btn-primary ${styles.book}`}>
+                Book Me
+              </Link>
+            </Magnet>
+            <button
+              type="button"
+              className={styles.menuBtn}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((v) => !v)}
             >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className={styles.actions}>
-          <Magnet>
-            <Link href="/book" className={`btn btn-primary ${styles.book}`}>
-              Book Me
-            </Link>
-          </Magnet>
-          <button
-            type="button"
-            className={styles.menuBtn}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span className="visually-hidden">{open ? "Close menu" : "Open menu"}</span>
-            <span className={styles.burger} data-open={open} aria-hidden="true" />
-          </button>
+              <span className="visually-hidden">{open ? "Close menu" : "Open menu"}</span>
+              <span className={styles.burger} data-open={open} aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
       <div id="mobile-menu" className={styles.sheet} data-open={open} hidden={!open} data-lenis-prevent>
         <nav aria-label="Mobile" className="container">
           {[{ href: "/", label: "Home" }, ...nav, { href: "/contact", label: "Contact" }].map((item) => (
@@ -78,6 +82,6 @@ export default function Header() {
           ))}
         </nav>
       </div>
-    </header>
+    </>
   );
 }

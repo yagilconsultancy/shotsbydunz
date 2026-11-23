@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ProofUpload from "./ProofUpload";
+import TermsText, { type TermsSection } from "./TermsText";
 import Turnstile, { turnstileOn } from "./Turnstile";
 import { proofProblem } from "@/lib/proof";
 import styles from "./BookingForm.module.css";
 
-export default function DepositForm({ token, terms }: { token: string; terms: string }) {
+// Terms first, then how to pay, then the proof upload, so nobody pays before reading the terms.
+export default function DepositForm({ token, terms, sections, payment }: { token: string; terms: string; sections: TermsSection[]; payment: React.ReactNode }) {
   const router = useRouter();
   const [proof, setProof] = useState<File | null>(null);
   const [agree, setAgree] = useState(false);
@@ -41,14 +43,9 @@ export default function DepositForm({ token, terms }: { token: string; terms: st
 
   return (
     <form className={styles.fields} onSubmit={submit} noValidate>
-      <ProofUpload
-        file={proof}
-        error={errors.proof}
-        onFile={(f) => {
-          setProof(f);
-          setErrors((x) => ({ ...x, proof: undefined }));
-        }}
-      />
+      <h3>Terms and conditions</h3>
+      <p className={styles.small}>Please read these again before you pay. They cover deposits, timing, cancellations and how your photos and videos are used.</p>
+      <TermsText sections={sections} />
       <div data-field="agree">
         <label className={styles.check}>
           <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
@@ -66,6 +63,15 @@ export default function DepositForm({ token, terms }: { token: string; terms: st
         </label>
         {errors.agree && <p className={styles.error}>{errors.agree}</p>}
       </div>
+      {payment}
+      <ProofUpload
+        file={proof}
+        error={errors.proof}
+        onFile={(f) => {
+          setProof(f);
+          setErrors((x) => ({ ...x, proof: undefined }));
+        }}
+      />
       <Turnstile key={attempt} onToken={setCaptcha} />
       {sendError && (
         <p className={styles.sendError} role="alert">

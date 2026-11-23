@@ -1,0 +1,62 @@
+.wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.box {
+  max-height: min(55vh, 520px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 22px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--raise);
+}
+
+.box:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.section + .section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.h3 {
+  font-size: var(--step-2);
+  margin-bottom: 14px;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.3em;
+  display: grid;
+  gap: 18px;
+}
+
+.list > li::marker {
+  color: var(--amber);
+}
+
+.list h4 {
+  font-size: var(--step-0);
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.list ul {
+  margin: 0;
+  padding-left: 1.1em;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.small {
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--muted);
+}

@@ -34,6 +34,7 @@ import {
 import { bookingClauses, policies } from "@/content/site";
 import Turnstile, { turnstileOn } from "./Turnstile";
 import EtransferBox from "./EtransferBox";
+import TermsText from "./TermsText";
 import ProofUpload from "./ProofUpload";
 import { proofProblem } from "@/lib/proof";
 import styles from "./BookingForm.module.css";
@@ -53,6 +54,8 @@ const eventFromCategory: Record<string, string> = {
 export default function BookingForm({ prefill }: { prefill: Prefill }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  // The terms come first: nothing else shows until the client has read and ticked them.
+  const [termsStep, setTermsStep] = useState(true);
   const [errors, setErrors] = useState<Errors>({});
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
@@ -86,7 +89,8 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
       return;
     }
     headingRef.current?.focus();
-  }, [step]);
+    window.scrollTo({ top: 0 });
+  }, [step, termsStep]);
 
   // Times already taken on the chosen date (Plan 5). Only spans come back, never booking details.
   const [taken, setTaken] = useState<{ date: string; spans: Span[] } | null>(null);
@@ -131,8 +135,19 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
     setStep((s) => s + 1);
   };
 
+  const acceptTerms = () => {
+    if (!data.agree) {
+      setErrors((e) => ({ ...e, agree: "Please read the terms and tick the box to continue." }));
+      document.querySelector<HTMLInputElement>('[data-field="agree"] input')?.focus();
+      return;
+    }
+    setErrors((e) => ({ ...e, agree: undefined }));
+    setTermsStep(false);
+  };
+
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
+    if (termsStep) return acceptTerms();
     if (step < steps.length - 1) return next();
     const e = validateStep(Math.min(step, baseSteps.length - 1), data);
     setErrors(e);
@@ -177,14 +192,17 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
   const booth = hasBooth(data);
   const fixed = isFixedPrice(data);
   const steps = fixed ? [...baseSteps, "Deposit"] : baseSteps;
+  const shownSteps = ["Terms", ...steps];
+  const shownStep = termsStep ? 0 : step + 1;
+  const boothFirst = prefill.service === "booth" || !!prefill.pkg;
   const price = fixed ? boothPrice(data) : null;
   const visibleAddOns = addOnOptions.filter((a) => (a.group === "video" && video) || (a.group === "booth" && booth));
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
       <ol className={styles.progress} aria-label="Booking steps">
-        {steps.map((s, i) => (
-          <li key={s} data-state={i < step ? "done" : i === step ? "current" : "todo"} aria-current={i === step ? "step" : undefined}>
+        {shownSteps.map((s, i) => (
+          <li key={s} data-state={i < shownStep ? "done" : i === shownStep ? "current" : "todo"} aria-current={i === shownStep ? "step" : undefined}>
             <span className={styles.bar} />
             <span className={styles.stepLabel}>{s}</span>
           </li>
@@ -193,9 +211,9 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
 
       <h2 ref={headingRef} tabIndex={-1} className={styles.stepTitle}>
         <span className="visually-hidden">
-          Step {step + 1} of {steps.length}:{" "}
+          Step {shownStep + 1} of {shownSteps.length}:{" "}
         </span>
-        {steps[step]}
+        {termsStep ? "Terms and conditions" : steps[step]}
       </h2>
 
       <div className={styles.honey} aria-hidden="true">
@@ -205,7 +223,21 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </label>
       </div>
 
-      {step === 0 && (
+      {termsStep && (
+        <div className={styles.fields}>
+          <p className={styles.small}>Please read these before you book. They cover deposits, timing, cancellations and how your photos and videos are used.</p>
+          <TermsText sections={boothFirst ? ["booth", "video"] : ["video", "booth"]} />
+          <div data-field="agree">
+            <label className={styles.check}>
+              <input type="checkbox" checked={data.agree} onChange={(e) => set("agree", e.target.checked)} aria-describedby={errors.agree ? "agree-error" : undefined} />
+              <span>I’ve read and agree to the terms and conditions and the privacy policy.</span>
+            </label>
+            {errors.agree && <p id="agree-error" className={styles.error}>{errors.agree}</p>}
+          </div>
+        </div>
+      )}
+
+      {!termsStep && step === 0 && (
         <div className={styles.fields}>
           <Field id="name" label="Full name" error={errors.name}>
             <input id="name" autoComplete="name" value={data.name} onChange={(e) => set("name", e.target.value)} />
@@ -230,7 +262,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </div>
       )}
 
-      {step === 1 && (
+      {!termsStep && step === 1 && (
         <div className={styles.fields}>
           <fieldset className={styles.fieldset} data-field="services" aria-describedby={errors.services ? "services-error" : undefined}>
             <legend>Services you’re interested in</legend>
@@ -303,7 +335,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </div>
       )}
 
-      {step === 2 && (
+      {!termsStep && step === 2 && (
         <div className={styles.fields}>
           <div className={styles.row}>
             <Field
@@ -369,7 +401,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </div>
       )}
 
-      {step === 3 && (
+      {!termsStep && step === 3 && (
         <div className={styles.fields}>
           <Field id="details" label="Ideas and special requests" optional>
             <textarea id="details" rows={4} value={data.details} onChange={(e) => set("details", e.target.value)} />
@@ -493,12 +525,13 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
                 .
               </span>
             </label>
+            {data.agree && <p className={styles.small}>Ticked because you agreed on the first step.</p>}
             {errors.agree && <p id="agree-error" className={styles.error}>{errors.agree}</p>}
           </div>
         </div>
       )}
 
-      {step === 4 && price && (
+      {!termsStep && step === 4 && price && (
         <div className={styles.fields}>
           <section className={styles.summary} aria-label="Price">
             <h3>Your booth booking</h3>
@@ -534,7 +567,7 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
         </div>
       )}
 
-      {step === steps.length - 1 && <Turnstile key={attempt} onToken={setToken} />}
+      {!termsStep && step === steps.length - 1 && <Turnstile key={attempt} onToken={setToken} />}
 
       {sendError && (
         <p className={styles.sendError} role="alert">
@@ -543,13 +576,15 @@ export default function BookingForm({ prefill }: { prefill: Prefill }) {
       )}
 
       <div className={styles.nav}>
-        {step > 0 && (
-          <button type="button" className="btn btn-ghost" onClick={() => setStep((s) => s - 1)}>
+        {!termsStep && (
+          <button type="button" className="btn btn-ghost" onClick={() => (step === 0 ? setTermsStep(true) : setStep((s) => s - 1))}>
             Back
           </button>
         )}
         <button type="submit" className={`btn ${booth && !video ? "btn-booth" : "btn-primary"} ${styles.nextBtn}`} disabled={sending}>
-          {step < steps.length - 1
+          {termsStep
+            ? "Agree and continue"
+            : step < steps.length - 1
             ? step === baseSteps.length - 1 && fixed
               ? "Continue to deposit"
               : "Continue"

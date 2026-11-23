@@ -76,8 +76,15 @@ export default async function DepositPage({ params }: Props) {
           {fixing && b.status_note && <p className={styles.small}>What I need: {b.status_note}</p>}
           {!fixing && b.quote_note && <p className={styles.small}>A note from me: {b.quote_note}</p>}
         </section>
-        <EtransferBox reference={b.ref} depositCents={b.deposit_cents} />
-        <DepositForm token={token} terms={b.services.length === 1 && b.services[0] === "booth" ? "/terms#booth" : "/terms"} />
+        <DepositForm
+          token={token}
+          payment={<EtransferBox reference={b.ref} depositCents={b.deposit_cents} />}
+          terms={b.services.length === 1 && b.services[0] === "booth" ? "/terms#booth" : "/terms"}
+          sections={[
+            ...(b.services.some((s) => s !== "booth") ? (["video"] as const) : []),
+            ...(b.services.includes("booth") ? (["booth"] as const) : []),
+          ]}
+        />
       </div>
     </section>
   );
